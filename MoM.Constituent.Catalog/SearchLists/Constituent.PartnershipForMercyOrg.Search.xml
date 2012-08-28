@@ -15,6 +15,7 @@
 	History:
 	Date            Modified By     Comments
 	23-Aug-2012		CMayeda			Initial Version
+	27-Aug-2012		CMayeda			Removed USR_USP_GETCODETABLEITEMID_DYNAMIC
 	-->
 
 	<!-- describe the SP used to fetch the results from the given filters.  Note that the @MAXROWS parameter is required, and should be 
@@ -39,7 +40,15 @@ as
 	set @CITY = replace(@CITY,'*','%');
 	
 	declare @partnerConstituentCodeID uniqueidentifier
-	exec dbo.USR_USP_GETCODETABLEITEMID_DYNAMIC @partnerConstituentCodeID output, 'Partner for Mercy', 'dbo.CONSTITUENCYCODE', 1
+	begin try
+		select @partnerConstituentCodeID = ID from dbo.CONSTITUENCYCODE where DESCRIPTION = lower ('Partnership for Mercy')
+		if @partnerConstituentCodeID is null 
+			RAISERROR 1000000 'Could not find "Partnership for Mercy" constituency code'
+	end try
+	begin catch
+	    exec dbo.USP_RAISE_ERROR
+		return 1	
+	end catch
 	
 	select	top(@MAXROWS)
 			org.ID,
@@ -47,7 +56,6 @@ as
 			org.NAME, 
 			addr.CITY, 
 			st.DESCRIPTION as STATENAME
-			--st.ABBREVIATION as STATEABBREVIATION
 				
 	  from	dbo.CONSTITUENT org
  left join	dbo.ADDRESS addr on 
@@ -61,8 +69,9 @@ as
 	  and (org.LOOKUPID LIKE @LOOKUPID)
 	  and (addr.CITY like @CITY)
 	  and (@STATEID is null or @STATEID = addr.STATEID)
-	order by 
-		NAME asc
+	order by NAME asc
+
+return 0
 			]]>
 		</common:CreateProcedureSQL>
 	</SPSearchList>

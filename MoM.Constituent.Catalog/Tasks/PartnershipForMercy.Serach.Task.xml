@@ -1,0 +1,27 @@
+﻿<TaskSpec 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	ID="04045a5e-35bc-4869-aadc-e658c2198270" 
+	Name="Partnership for mercy search" 
+	Description="Find a partnership for Mercy organization" 
+	Author="Cary Mayeda" 
+	ImageKey="CATALOG:Blackbaud.AppFx.Constituent.Catalog,Blackbaud.AppFx.Constituent.Catalog.mergedconstituentsearch.png" 
+	FunctionalAreaID="00050ce8-8abb-4a86-b9af-70a035ce0582" 	
+	TaskGroup="Organizations" 
+	Sequence="19"
+	xmlns="bb_appfx_task">
+
+	<!-- 
+	Remarks:    Created in UI and copied spec
+
+	History:
+	Date            Modified By     Comments
+	27-Aug-2012		CMayeda			Initial Version
+	-->
+
+	<ShowPage PageID="88159265-2b7e-4c7b-82a2-119d01ecd40f" TabID="00000000-0000-0000-0000-000000000000" xmlns="bb_appfx_commontypes">
+		<ActionContext>
+			<SearchListReturnValue SearchListID="a00235ec-b143-4f50-ad74-4c653d605cdf" />
+		</ActionContext>
+	</ShowPage>
+</TaskSpec>

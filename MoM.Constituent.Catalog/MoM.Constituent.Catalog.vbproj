@@ -75,13 +75,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
-    <Folder Include="Tasks\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Catalog.ruleset" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="SearchLists\Constituent.PartnerForMercyOrg.Search.xml" />
+    <EmbeddedResource Include="SearchLists\Constituent.PartnershipForMercyOrg.Search.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="DataLists\Constituent.PackageVersion.DataList.xml" />
@@ -91,6 +90,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Pages\Constituent.Page.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Tasks\PartnershipForMercy.Serach.Task.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
