@@ -92,7 +92,7 @@
     <EmbeddedResource Include="Pages\Constituent.Page.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Tasks\PartnershipForMercy.Serach.Task.xml" />
+    <EmbeddedResource Include="Tasks\PartnershipForMercy.Search.Task.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
