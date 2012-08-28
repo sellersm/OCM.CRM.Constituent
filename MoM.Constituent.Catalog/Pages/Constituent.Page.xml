@@ -1,0 +1,84 @@
+﻿<PageDefinitionSpec 
+    xmlns="bb_appfx_pagedefinition" 
+    xmlns:common="bb_appfx_commontypes"
+    ID="20183b5a-4cd1-4aac-a223-24d60ef49bb5"
+    Name="AlterConstituent Page"
+    Description="AlterPage for Constituent Page"
+    Author="memphis-PC\Administrator"
+    ContextRecordType="Constituent"	
+    >
+
+	<!-- 
+	Remarks:    This is just a 'dummy' page to hold the AlterPage specs for customizing the Constituent Page.
+
+	History:
+	Date            Modified By     Comments
+	25-Aug-2012		Memphis			Initial Version: hiding the normal add sponsorship, adding "Add a New Sponsorship" custom action
+	-->	
+	
+	
+	<!-- Note:  A page can optionally have a view form associated with it as the "Expression form".  While implemented as a view data form,
+	this form has no UI in this context, and is simply used as a way of loading additional information associated with the page.  The fields
+	returned by the expression form can be used as expressions in various properties throughout the page.  To specify an expression form for this
+	page, add the following attribute:		ExpressionDataFormID="<some guid>"-->
+
+	<!-- define how the page header should appear -->
+	<PageHeader Caption="REPLACE_WITH_CAPTION" ImageKey="REPLACE_WITH_IMAGEKEY" />
+
+	
+	<AlterExistingPages>
+		<AlterPages>
+			<!-- Alter the Add Sponsorship task to hide the out-of-the-box action-->
+			<AlterPage PageID="88159265-2b7e-4c7b-82a2-119d01ecd40f">
+				<AlterPageActionGroups>
+					<!-- The Tasks action group -->
+					<AlterPageActionGroup PageActionGroupID="6459a910-09ae-44bd-9240-31d2ebbafa7c">
+						<AlterActions>
+							<AddAction>
+								<!-- Hide the original Action-->
+								<Action ID="d223623d-c88b-4777-92ca-a30d32f825cc" Caption="Add Sponsorship" ImageKey="CATALOG:Blackbaud.AppFx.Sponsorship.Catalog,Blackbaud.AppFx.Sponsorship.Catalog.sponsor_new_32.png" Visible="False">
+									<ShowAddDataForm DataFormID="8a73db30-db6b-4f03-869e-3a649887fba7" xmlns="bb_appfx_commontypes">
+										<ActionContext>
+											<PageContextID />
+										</ActionContext>
+										<PostActionEvent>
+											<RefreshPage />
+										</PostActionEvent>
+									</ShowAddDataForm>
+								</Action>
+							</AddAction>
+							
+							<!-- Add the custom action -->
+							<AddAction>
+								<Action ID="936e39a1-651c-49ba-a233-a62b5029a175" Caption="Add a New Sponsorship" ImageKey="CATALOG:Blackbaud.AppFx.Sponsorship.Catalog,Blackbaud.AppFx.Sponsorship.Catalog.sponsor_new_32.png">
+									<ShowAddDataForm DataFormID="bd01386b-95f1-47d4-aab5-49822ed9126f" xmlns="bb_appfx_commontypes">
+										<ActionContext>
+											<PageContextID />
+										</ActionContext>
+										<PostActionEvent>
+											<RefreshPage />
+										</PostActionEvent>
+									</ShowAddDataForm>
+								</Action>									
+							</AddAction>
+						</AlterActions>
+						
+					</AlterPageActionGroup>
+				</AlterPageActionGroups>
+
+			</AlterPage>
+		</AlterPages>
+	</AlterExistingPages>
+
+
+
+	<!-- define the tabs for the page - note that if only one tab is present, then that tab's sections are promoted to the page level (ie., the tab
+	itself isn't shown -->
+	<!--<Tabs>
+	</Tabs>-->
+
+	<!-- define page-level actions groups which appear in the explorer bar area of the shell -->
+	<!--<PageActionGroups>
+	</PageActionGroups>-->
+	
+</PageDefinitionSpec>
