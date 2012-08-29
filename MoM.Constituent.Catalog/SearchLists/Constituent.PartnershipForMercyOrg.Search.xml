@@ -16,6 +16,7 @@
 	Date            Modified By     Comments
 	23-Aug-2012		CMayeda			Initial Version
 	27-Aug-2012		CMayeda			Removed USR_USP_GETCODETABLEITEMID_DYNAMIC
+	28-Aug-2012		CMayeda			Fixed null comparisons (Thanks to Memphis)
 	-->
 
 	<!-- describe the SP used to fetch the results from the given filters.  Note that the @MAXROWS parameter is required, and should be 
@@ -32,11 +33,11 @@ create procedure dbo.USP_SEARCHLIST_PARTNERFORMERCYORG
 	@MAXROWS smallint = 500
 )
 as
-	set @NAME = '%' + coalesce(@NAME,'') + '%' ;
+	--set @NAME = '%' + coalesce(@NAME,'') + '%' ;
 	set @NAME = replace(@NAME,'*','%');
-	set @LOOKUPID = coalesce(@LOOKUPID,'') + '%' ;
+	--set @LOOKUPID = coalesce(@LOOKUPID,'') + '%' ;
 	set @LOOKUPID = replace(@LOOKUPID,'*','%');
-	set @CITY = '%' + coalesce(@CITY,'') + '%' ;
+	--set @CITY = '%' + coalesce(@CITY,'') + '%' ;
 	set @CITY = replace(@CITY,'*','%');
 	
 	declare @partnerConstituentCodeID uniqueidentifier
@@ -65,10 +66,16 @@ as
 				
 	where org.ISORGANIZATION = 1 
 	  and exists (select CONSTITUENTID from dbo.CONSTITUENCY where CONSTITUENCYCODEID = @partnerConstituentCodeID and CONSTITUENTID = org.ID)
-	  and (org.NAME LIKE @NAME)
+	  and (@STATEID is null or @STATEID = addr.STATEID)
+	  and (org.NAME LIKE coalesce('%'+@NAME+'%','%'))
+	  and IsNull(org.LOOKUPID, IsNull(@LOOKUPID,'')) LIKE IsNull(@LOOKUPID,'') + '%'
+	  and isNull(addr.CITY, IsNull(@CITY,'')) LIKE  '%'+IsNull(@CITY,'') + '%'
+
+	  
+	  /*and (org.NAME LIKE @NAME)
 	  and (org.LOOKUPID LIKE @LOOKUPID)
 	  and (addr.CITY like @CITY)
-	  and (@STATEID is null or @STATEID = addr.STATEID)
+	  */
 	order by NAME asc
 
 return 0
