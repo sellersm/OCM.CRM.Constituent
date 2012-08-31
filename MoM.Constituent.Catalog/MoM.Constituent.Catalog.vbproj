@@ -94,6 +94,15 @@
   <ItemGroup>
     <EmbeddedResource Include="Tasks\Constituent.PartnershipForMercy.Search.Task.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SQL\Stored Procedures\USR_USP_ADD_CONSTITUENT_CONSTITUENCYCODE.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SQL\Functions\USR_UFN_CONSTITUENT_HAS_CONSTITUENCYCODE.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SQL\Functions\USR_UFN_CONSTITUENT_HAS_RELATIONSHIP.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
