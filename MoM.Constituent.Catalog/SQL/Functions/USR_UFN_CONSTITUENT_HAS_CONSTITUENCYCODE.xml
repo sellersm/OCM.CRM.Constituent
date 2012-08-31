@@ -1,0 +1,45 @@
+﻿<SQLFunctionSpec
+	xmlns="bb_appfx_sqlfunction"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="8c36d2f4-c11e-46f8-beb8-7d382ac491d7"
+	Name="USR_UFN_CONSTITUENT_HAS_CONSTITUENCYCODE"
+	Description="Checks if a given constituent has the given constituency code"
+	Author="Memphis Sellers"
+	DBFunctionName="USR_UFN_CONSTITUENT_HAS_CONSTITUENCYCODE"
+	>
+
+	<CreateFunctionSQL>
+		<![CDATA[
+create function dbo.USR_UFN_CONSTITUENT_HAS_CONSTITUENCYCODE(
+	@CONSTITUENTID uniqueidentifier,		-- con id of the constituent
+	@CONSTITUENCYCODEID uniqueidentifier	-- constituency code id to look for
+)
+RETURNS int
+with execute as caller
+AS
+BEGIN
+	-- Declare the return variable here
+	DECLARE @Result int
+	declare @ID uniqueidentifier
+
+	-- Add the T-SQL statements to compute the return value here
+	select @ID = ID
+	from dbo.CONSTITUENCY
+	where CONSTITUENTID = @CONSTITUENTID
+	and CONSTITUENCYCODEID = @CONSTITUENCYCODEID
+	and (DATEFROM is null or DATEFROM <= GETDATE())
+	and (DATETO is null or GETDATE() <= DATETO)
+	
+	if @ID is null
+		set @Result = 0;
+	else
+		set @Result = 1;
+		
+	-- Return the result of the function
+	RETURN @Result
+
+END
+		]]>
+	</CreateFunctionSQL>
+
+</SQLFunctionSpec>

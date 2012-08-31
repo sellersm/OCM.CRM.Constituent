@@ -1,0 +1,59 @@
+﻿<SQLFunctionSpec
+	xmlns="bb_appfx_sqlfunction"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="626f4d30-d158-4ef9-9ac9-954512f47181"
+	Name="USR_UFN_CONSTITUENT_HAS_RELATIONSHIP"
+	Description="Checks if a given constituent has a relationship with the given org"
+	Author="Memphis Sellers"
+	DBFunctionName="USR_UFN_CONSTITUENT_HAS_RELATIONSHIP"
+	>
+
+	<!-- 
+	Remarks:    Checks if a given constituent has a relationship with the given org based on the following fields:
+					RELATIONSHIPCONSTITUENTID
+					RECIPROCALCONSTITUENTID
+					RELATIONSHIPTYPECODEID
+					RECIPROCALTYPECODEID
+				
+	History:
+	Date            Modified By     Comments
+	30-Aug-2012		Memphis			Initial Version. FoxBugz Case 785
+	-->
+
+	<CreateFunctionSQL>
+		<![CDATA[
+create function dbo.USR_UFN_CONSTITUENT_HAS_RELATIONSHIP(
+	@RELATIONSHIPCONSTITUENTID uniqueidentifier,	-- id of the constituent that we're checking for the relationship
+	@RECIPROCALCONSTITUENTID uniqueidentifier,	-- id of the org that has the relationship with the constituent above
+	@RELATIONSHIPTYPECODEID uniqueidentifier,	-- type of relationship on the constituent for which we're checking
+	@RECIPROCALTYPECODEID uniqueidentifier		-- type of relationship on the related org that has a relationship with this constituent
+)
+returns bit
+with execute as caller
+as begin
+	-- do work here and return a value
+	declare @Result int
+	declare @ID uniqueidentifier
+	
+	select @ID = ID
+	from dbo.RELATIONSHIP
+	where RELATIONSHIPCONSTITUENTID = @RELATIONSHIPCONSTITUENTID
+	and RECIPROCALCONSTITUENTID = @RECIPROCALCONSTITUENTID
+	and RELATIONSHIPTYPECODEID = @RELATIONSHIPTYPECODEID
+	and RECIPROCALTYPECODEID = @RECIPROCALTYPECODEID
+	and (STARTDATE is null or STARTDATE <= GETDATE())
+	and (ENDDATE is null or GETDATE() <= ENDDATE)
+
+	if @ID is null
+		set @Result = 0;
+	else
+		set @Result = 1;
+		
+	-- Return the result of the function
+	RETURN @Result
+
+end
+		]]>
+	</CreateFunctionSQL>
+
+</SQLFunctionSpec>

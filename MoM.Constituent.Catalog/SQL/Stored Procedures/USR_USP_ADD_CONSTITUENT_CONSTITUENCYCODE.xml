@@ -1,0 +1,78 @@
+﻿<SQLStoredProcedureSpec
+	xmlns="bb_appfx_sqlstoredprocedure"
+	xmlns:common="bb_appfx_commontypes"
+	ID="82b84a9d-8f5b-416c-bce3-6869870acfcc"
+	Name="USR_USP_ADD_CONSTITUENT_CONSTITUENCYCODE"
+	Description="Adds the given Constituency Code to the given Constituent"
+	Author="Memphis Sellers"
+	SPName="USR_USP_ADD_CONSTITUENT_CONSTITUENCYCODE"
+	>
+
+	<!-- 
+	Remarks:    This adds a Constituency Code to the given Constituent. Currently called from Add a Sponsorship Custom form.
+				
+	History:
+	Date            Modified By     Comments
+	29-Aug-2012		Memphis			Initial Version. FoxBugz Case 785
+	-->
+
+
+	<CreateProcedureSQL>
+		<![CDATA[
+create procedure dbo.USR_USP_ADD_CONSTITUENT_CONSTITUENCYCODE
+(
+	@ID uniqueidentifier = null output,
+	@CHANGEAGENTID uniqueidentifier = null,	
+	@CONSTITUENTID uniqueidentifier,
+	@CONSTITUENCYCODEID uniqueidentifier,
+	@DATEFROM date = null,
+	@DATETO date = null
+)
+as
+begin
+	-- do work
+	set nocount on;
+						
+	declare @CURRENTDATE datetime;
+						
+	if @ID is null
+		set @ID = newid();
+								
+	if @CHANGEAGENTID is null  
+		exec dbo.USP_CHANGEAGENT_GETORCREATECHANGEAGENT @CHANGEAGENTID output;
+							
+	set @CURRENTDATE = getdate();
+			
+	insert into dbo.CONSTITUENCY
+	(
+		[ID],
+		[CONSTITUENTID],
+		[CONSTITUENCYCODEID],
+		[DATEFROM],
+		[DATETO],
+		[ADDEDBYID],
+		[CHANGEDBYID],
+		[DATEADDED],
+		[DATECHANGED]
+	)
+	values
+	(
+		@ID,
+		@CONSTITUENTID,
+		@CONSTITUENCYCODEID,
+		@DATEFROM,
+		@DATETO,
+		@CHANGEAGENTID,
+		@CHANGEAGENTID,
+		@CURRENTDATE,
+		@CURRENTDATE
+	);
+						
+	return 0;	
+end
+
+
+		]]>
+	</CreateProcedureSQL>
+
+</SQLStoredProcedureSpec>
