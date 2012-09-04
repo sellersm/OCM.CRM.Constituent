@@ -70,9 +70,9 @@
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.PartnershipForMercy.Search.Task.xml" />
 		
 		<!-- SQL, sprocs, functions -->
-		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.USR_UFN_CONSTITUENT_HAS_CONSTITUENCYCODE.xml" />
-		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.USR_USP_ADD_CONSTITUENT_CONSTITUENCYCODE.xml" />
-		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.USR_UFN_CONSTITUENT_HAS_RELATIONSHIP.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.USR_UFN_CONSTITUENT_HAS_CONSTITUENCYCODE.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.USR_USP_ADD_CONSTITUENT_CONSTITUENCYCODE.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.USR_UFN_CONSTITUENT_HAS_RELATIONSHIP.xml" />
 
 		<!-- Package Versions -->
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.PackageVersion.DataList.xml" />
