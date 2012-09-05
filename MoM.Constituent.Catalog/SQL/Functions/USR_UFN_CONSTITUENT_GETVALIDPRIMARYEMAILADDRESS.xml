@@ -1,0 +1,46 @@
+﻿<SQLFunctionSpec
+	xmlns="bb_appfx_sqlfunction"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="e9daba24-6c48-4603-81ba-d07e82bcf666"
+	Name="USR_UFN_CONSTITUENT_GETVALIDPRIMARYEMAILADDRESS"
+	Description="Get the primary email address of a constituent if it is okay to use"
+	Author="Cary Mayeda"
+	DBFunctionName="USR_UFN_CONSTITUENT_GETVALIDPRIMARYEMAILADDRESS" >
+
+	<!-- 
+	Remarks:    This only returns the email address if Bounced is false, DONOTEMAIL is false, and the constituent doesn't have the Do not email solicit code.
+
+	History:
+	Date            Modified By     Comments
+	04-Sep-2012		CMayeda			Initial Version
+	-->
+
+
+	<CreateFunctionSQL>
+		<![CDATA[
+create function dbo.USR_UFN_CONSTITUENT_GETVALIDPRIMARYEMAILADDRESS (
+	@constituentID uniqueidentifier = null
+)
+returns nvarchar(100)
+with execute as caller
+as begin
+	declare @solicitCode_DoNotEmail nvarchar(100) = 'Do not email'
+	declare @emailAddress nvarchar(100) = ''
+	
+	select	@emailAddress = EMAILADDRESS
+	  from	dbo.V_QUERY_CONSTITUENTEMAILADDRESS email
+	 where	email.CONSTITUENTID = @constituentID
+	   and	ISPRIMARY = 1
+	   and	DONOTEMAIL = 0
+	   and	BOUNCED = 0
+	   and	not exists (select CONSTITUENTSOLICITCODE.ID from dbo.CONSTITUENTSOLICITCODE 
+						  join dbo.SOLICITCODE on CONSTITUENTSOLICITCODE.SOLICITCODEID=SOLICITCODE.ID 
+						 where (lower (SOLICITCODE.DESCRIPTION) = lower (@solicitCode_DoNotEmail)) and (CONSTITUENTSOLICITCODE.CONSTITUENTID = @constituentID))
+
+
+	return @emailAddress
+end
+		]]>
+	</CreateFunctionSQL>
+
+</SQLFunctionSpec>
