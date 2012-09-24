@@ -14,6 +14,7 @@
 	History:
 	Date            Modified By     Comments
 	25-Aug-2012		Memphis			Initial Version: hiding the normal add sponsorship, adding "Add a New Sponsorship" custom action
+	23-Sep-2012		Memphis			Added tasks for adding a prospect sponsorship, adding an unavailable sponsorship
 	-->	
 	
 	
@@ -50,7 +51,7 @@
 							
 							<!-- Add the custom action -->
 							<AddAction>
-								<Action ID="936e39a1-651c-49ba-a233-a62b5029a175" Caption="Add a New Sponsorship" ImageKey="CATALOG:Blackbaud.AppFx.Sponsorship.Catalog,Blackbaud.AppFx.Sponsorship.Catalog.sponsor_new_32.png">
+								<Action ID="936e39a1-651c-49ba-a233-a62b5029a175" Caption="Add a sponsorship -ocm" ImageKey="CATALOG:Blackbaud.AppFx.Sponsorship.Catalog,Blackbaud.AppFx.Sponsorship.Catalog.sponsor_new_32.png">
 									<ShowAddDataForm DataFormID="bd01386b-95f1-47d4-aab5-49822ed9126f" xmlns="bb_appfx_commontypes">
 										<ActionContext>
 											<PageContextID />
@@ -61,8 +62,29 @@
 									</ShowAddDataForm>
 								</Action>									
 							</AddAction>
-						</AlterActions>
 						
+						<!-- add the action for adding a prospect sponsorship -->
+							<AddAction>
+								<Action ID="6b40ffd0-239a-4d88-adbb-c24559475d41" Caption="Add prospect sponsorship" ImageKey="CATALOG:Blackbaud.AppFx.Sponsorship.Catalog,Blackbaud.AppFx.Sponsorship.Catalog.sponsor_new_32.png">
+									<ShowAddDataForm DataFormID="54a5433c-2d47-4c21-921b-1edac0478f1f" xmlns="bb_appfx_commontypes">
+										<ActionContext>
+											<PageContextID />
+										</ActionContext>
+									</ShowAddDataForm>
+								</Action>
+							</AddAction>						
+						<!-- add the action for adding an unavailable sponsorship -->
+							<AddAction>
+								<Action ID="69ee72ac-b6dc-4ffb-9d4b-b27c2c0e87e4" Caption="Add unavailable sponsorship" ImageKey="CATALOG:Blackbaud.AppFx.Sponsorship.Catalog,Blackbaud.AppFx.Sponsorship.Catalog.sponsor_new_32.png">
+									<ShowAddDataForm DataFormID="58bb4565-dd08-4e06-a29c-904188103f25" xmlns="bb_appfx_commontypes">
+										<ActionContext>
+											<PageContextID />
+										</ActionContext>
+									</ShowAddDataForm>
+								</Action>
+							</AddAction>
+							
+						</AlterActions>
 					</AlterPageActionGroup>
 				</AlterPageActionGroups>
 
