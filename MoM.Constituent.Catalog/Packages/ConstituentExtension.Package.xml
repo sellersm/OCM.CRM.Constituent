@@ -15,6 +15,7 @@
 	29-Aug-2012		Memphis			Added the sproc to add constituency code: USR_USP_ADD_CONSTITUENT_CONSTITUENCYCODE.xml FoxBugz Case 785
 	29-Aug-2012		Memphis			Added the user function that's called from the sproc above. USR_UFN_CONSTITUENT_HAS_CONSTITUENCYCODE.xml
 	30-Aug-2012		Memphis			Added user function: USR_UFN_CONSTITUENT_HAS_RELATIONSHIP.xml
+	25-Sep-2012		Memphis			Added user function: USR_UFN_CONSTITUENT_HAS_CONSTITUENCYCODE_CHECKENDDATE.xml
 	-->
 
 	<!-- Note:  the order of the items listed here is important.  For example, you won't be able to load a data form that references 
@@ -71,6 +72,7 @@
 		
 		<!-- SQL, sprocs, functions -->
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.USR_UFN_CONSTITUENT_HAS_CONSTITUENCYCODE.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.USR_UFN_CONSTITUENT_HAS_CONSTITUENCYCODE_CHECKENDDATE.xml" />
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.USR_USP_ADD_CONSTITUENT_CONSTITUENCYCODE.xml" />
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.USR_UFN_CONSTITUENT_HAS_RELATIONSHIP.xml" />
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.USR_UFN_CONSTITUENT_GETVALIDPRIMARYEMAILADDRESS.xml" />

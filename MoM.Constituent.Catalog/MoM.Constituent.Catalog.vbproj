@@ -98,13 +98,18 @@
     <EmbeddedResource Include="SQL\Stored Procedures\USR_USP_ADD_CONSTITUENT_CONSTITUENCYCODE.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="SQL\Functions\USR_UFN_CONSTITUENT_HAS_CONSTITUENCYCODE.xml" />
+    <EmbeddedResource Include="SQL\Functions\USR_UFN_CONSTITUENT_HAS_CONSTITUENCYCODE.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SQL\Functions\USR_UFN_CONSTITUENT_HAS_RELATIONSHIP.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SQL\Functions\USR_UFN_CONSTITUENT_GETVALIDPRIMARYEMAILADDRESS.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SQL\Functions\USR_UFN_CONSTITUENT_HAS_CONSTITUENCYCODE_CHECKENDDATE.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
