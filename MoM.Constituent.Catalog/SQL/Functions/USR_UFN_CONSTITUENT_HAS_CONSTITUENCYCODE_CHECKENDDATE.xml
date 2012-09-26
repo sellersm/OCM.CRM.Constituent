@@ -1,0 +1,67 @@
+﻿<SQLFunctionSpec
+	xmlns="bb_appfx_sqlfunction"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="65f80683-8730-4899-9b31-899dddc868b3"
+	Name="USR_UFN_CONSTITUENT_HAS_CONSTITUENCYCODE_CHECKENDDATE"
+	Description="Checks for a given constituency code, taking into consideration the current date and enddate to see if they match."
+	Author="Memphis Sellers"
+	DBFunctionName="USR_UFN_CONSTITUENT_HAS_CONSTITUENCYCODE_CHECKENDDATE"
+	>
+
+	<!-- 
+	Remarks:     Checks for a given constituency code, taking into consideration the current date and enddate to see if they match
+				 we need to inform the caller if the code exists and it ends today
+				 otherwise inform user that the code exists or not
+				   0 means con doesn't have this code: 
+				   1 means con has this code and it ends in the future:  
+				   2 means con has this code and it ends today!
+				Called from the various Add Sponsorship forms
+	History:
+	Date            Modified By     Comments
+	25-Sep-2012		Memphis			Initial Version. FoxBugz Case 845
+	-->
+	
+	<CreateFunctionSQL>
+		<![CDATA[
+CREATE FUNCTION USR_UFN_CONSTITUENT_HAS_CONSTITUENCYCODE_CHECKENDDATE
+(
+	@CONSTITUENTID uniqueidentifier,		-- con id of the constituent
+	@CONSTITUENCYCODEID uniqueidentifier	-- constituency code id to look for
+)
+RETURNS tinyint
+AS
+BEGIN
+	declare @compareDate date = CONVERT(VARCHAR, GETDATE(), 101)	-- only the date portion, not time
+	declare @toDate date
+	declare @fromDate date
+	declare @resultCode tinyint = 0
+
+	select  @fromDate = DATEFROM, 
+			@toDate =  DATETO
+	from dbo.CONSTITUENCY
+	where CONSTITUENTID = @CONSTITUENTID
+	and CONSTITUENCYCODEID = @CONSTITUENCYCODEID
+	and (DATEFROM is null or DATEFROM <= @compareDate)
+	and (DATETO is null or @compareDate <= DATETO)
+
+	if (@fromDate is null) And (@toDate is null)
+		set @resultCode = 0
+	else
+	begin
+		if @toDate is null Or @toDate > @compareDate
+			set @resultCode = 1
+		else
+		begin
+			if @toDate = @compareDate
+				set @resultCode = 2
+		end
+	end
+	
+	-- Return the result of the function
+	RETURN @resultCode;
+
+END
+]]>
+	</CreateFunctionSQL>
+
+</SQLFunctionSpec>
