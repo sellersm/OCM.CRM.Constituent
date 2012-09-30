@@ -48,10 +48,10 @@
 									</ShowAddDataForm>
 								</Action>
 							</AddAction>
-							
+
 							<!-- Add the custom action -->
 							<AddAction>
-								<Action ID="936e39a1-651c-49ba-a233-a62b5029a175" Caption="Add a sponsorship -ocm" ImageKey="CATALOG:Blackbaud.AppFx.Sponsorship.Catalog,Blackbaud.AppFx.Sponsorship.Catalog.sponsor_new_32.png">
+								<Action ID="936e39a1-651c-49ba-a233-a62b5029a175" Caption="Add a sponsorship -ocm" ImageKey="CATALOG:Blackbaud.AppFx.Sponsorship.Catalog,Blackbaud.AppFx.Sponsorship.Catalog.sponsor_new_32.png" Visible="=((Not Page.Fields!CURRENTPROSPECTSPONSOR) And (Page.Fields!CURRENTSPONSOR)) Or ((Not Page.Fields!CURRENTPROSPECTSPONSOR ) And ( Not Page.Fields!CURRENTSPONSOR ))">
 									<ShowAddDataForm DataFormID="bd01386b-95f1-47d4-aab5-49822ed9126f" xmlns="bb_appfx_commontypes">
 										<ActionContext>
 											<PageContextID />
@@ -60,16 +60,19 @@
 											<RefreshPage />
 										</PostActionEvent>
 									</ShowAddDataForm>
-								</Action>									
+								</Action>
 							</AddAction>
 						
 						<!-- add the action for adding a prospect sponsorship -->
 							<AddAction>
-								<Action ID="6b40ffd0-239a-4d88-adbb-c24559475d41" Caption="Add prospect sponsorship" ImageKey="CATALOG:Blackbaud.AppFx.Sponsorship.Catalog,Blackbaud.AppFx.Sponsorship.Catalog.sponsor_new_32.png">
+								<Action ID="6b40ffd0-239a-4d88-adbb-c24559475d41" Caption="Add prospect sponsorship" ImageKey="CATALOG:Blackbaud.AppFx.Sponsorship.Catalog,Blackbaud.AppFx.Sponsorship.Catalog.sponsor_new_32.png" Visible="=(Page.Fields!CURRENTPROSPECTSPONSOR) Or ((Not Page.Fields!CURRENTSPONSOR) And (Not Page.Fields!CURRENTPROSPECTSPONSOR ))">
 									<ShowAddDataForm DataFormID="54a5433c-2d47-4c21-921b-1edac0478f1f" xmlns="bb_appfx_commontypes">
 										<ActionContext>
 											<PageContextID />
 										</ActionContext>
+										<PostActionEvent>
+											<RefreshPage />
+										</PostActionEvent>
 									</ShowAddDataForm>
 								</Action>
 							</AddAction>						
@@ -80,6 +83,23 @@
 										<ActionContext>
 											<PageContextID />
 										</ActionContext>
+										<PostActionEvent>
+											<RefreshPage />
+										</PostActionEvent>
+									</ShowAddDataForm>
+								</Action>
+							</AddAction>
+
+							<!-- add the project sponsorship -->
+							<AddAction>
+								<Action ID="640e8097-30ce-458c-bc49-b1b6e0fa747c" Caption="Add project sponsorship">
+									<ShowAddDataForm DataFormID="0eaaf756-2faa-4798-b445-60000ad298f5" xmlns="bb_appfx_commontypes">
+										<ActionContext>
+											<PageContextID />
+										</ActionContext>
+										<PostActionEvent>
+											<RefreshPage />
+										</PostActionEvent>
 									</ShowAddDataForm>
 								</Action>
 							</AddAction>
