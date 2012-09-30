@@ -1,0 +1,30 @@
+﻿<SQLFunctionSpec
+	xmlns="bb_appfx_sqlfunction"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="7b4299ab-27a8-4a97-ba30-35f46558080d"
+	Name="USR_UFN_CONSTITUENT_GETID_FORCODE"
+	Description="Gets ID for the given constituency code."
+	Author="Memphis Sellers"
+	DBFunctionName="USR_UFN_CONSTITUENT_GETID_FORCODE"
+	>
+
+	<CreateFunctionSQL>
+		<![CDATA[
+create function dbo.USR_UFN_CONSTITUENT_GETID_FORCODE(
+	@CONSTITUENCYCODE nvarchar(100)
+)
+returns uniqueidentifier
+with execute as caller
+as begin
+	declare @ID uniqueidentifier;
+	
+	select @ID = ID
+	from dbo.CONSTITUENCYCODE
+	where lower([DESCRIPTION]) = lower(@CONSTITUENCYCODE)	
+	
+	return @ID;
+end
+		]]>
+	</CreateFunctionSQL>
+
+</SQLFunctionSpec>
