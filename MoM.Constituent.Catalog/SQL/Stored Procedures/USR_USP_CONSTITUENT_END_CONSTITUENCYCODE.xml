@@ -1,0 +1,35 @@
+﻿<SQLStoredProcedureSpec
+	xmlns="bb_appfx_sqlstoredprocedure"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="5794a6aa-fa4d-4436-a351-b680a81a398a"
+	Name="USR_USP_CONSTITUENT_END_CONSTITUENCYCODE"
+	Description="Ends the constituency code by setting the end date."
+	Author="Memphis Sellers"
+	SPName="USR_USP_CONSTITUENT_END_CONSTITUENCYCODE"
+	>
+
+	<CreateProcedureSQL>
+		<![CDATA[
+create procedure dbo.USR_USP_CONSTITUENT_END_CONSTITUENCYCODE (
+	@CONSTITUENTID uniqueidentifier,
+	@CONSTITUENCYCODE nvarchar(100)
+)
+as
+begin
+	-- get the CONSTITUENCYCODEID for the given text CONSTITUENCYCODE description:
+	declare @CONSTITUENCYCODEID uniqueidentifier;	
+	set @CONSTITUENCYCODEID = dbo.USR_UFN_CONSTITUENT_GETID_FORCODE(@CONSTITUENCYCODE);
+	
+	-- set the end date for the given record that matches the constituentid and the given constituencycode
+	update dbo.CONSTITUENCY
+	set DATETO = GETDATE()
+	where (CONSTITUENTID = @CONSTITUENTID 
+	and CONSTITUENCYCODEID = @CONSTITUENCYCODEID)
+
+	return 0;
+end
+
+		]]>
+	</CreateProcedureSQL>
+
+</SQLStoredProcedureSpec>
