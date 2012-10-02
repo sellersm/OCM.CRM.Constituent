@@ -15,6 +15,7 @@
 	Date            Modified By     Comments
 	25-Aug-2012		Memphis			Initial Version: hiding the normal add sponsorship, adding "Add a New Sponsorship" custom action
 	23-Sep-2012		Memphis			Added tasks for adding a prospect sponsorship, adding an unavailable sponsorship
+	02-Oct-2012		Memphis			Added task for cancelling a sponsorship on the Deceasing Options Page.
 	-->	
 	
 	
@@ -109,6 +110,39 @@
 				</AlterPageActionGroups>
 
 			</AlterPage>
+
+			<!-- This alters the deceasing options page to insert our custom Cancel action -->
+			<AlterPage PageID="88159265-2b7e-4c7b-82a2-119d01ecd40f">
+				<AlterTabs>
+					<AlterTab TabID="e04faf5e-e082-4087-b30a-21fcfe0439a4">
+						<AlterSections>
+							<AlterDataListSection SectionID="c9189a2d-dbd9-40dd-a0b9-e151fbbeda20" DataListID="b87f9b24-91e9-40c2-b54a-f6fbcc09f6f0">
+								<AlterActions>
+									<AddAction>
+										<Action ID="dc8cefd0-a641-487f-8961-c1a3dc95ac6c" Caption="Cancel" ImageKey="res:do_not_symbol">
+											<ShowDataForm DataFormID="3e5de54f-e0f7-4187-bdd1-0bfff1156e2d" xmlns="bb_appfx_commontypes">
+												<ActionContext>
+													<SectionField>CONTEXTSPONSORSHIPID</SectionField>
+												</ActionContext>
+												<PostActionEvent>
+													<RefreshSection />
+												</PostActionEvent>
+											</ShowDataForm>
+										</Action>
+									</AddAction>
+									<!-- Remove the OOB cancel action -->
+									<RemoveActionGroupAction ActionID="dc8cefd0-a641-487f-8961-c1a3dc95ac6c"/>
+								</AlterActions>
+								
+							</AlterDataListSection>
+							
+						</AlterSections>
+						
+					</AlterTab>
+					</AlterTabs>
+
+			</AlterPage>
+
 		</AlterPages>
 	</AlterExistingPages>
 
