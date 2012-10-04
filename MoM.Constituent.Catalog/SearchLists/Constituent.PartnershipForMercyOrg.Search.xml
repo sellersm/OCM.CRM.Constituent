@@ -2,8 +2,8 @@
     xmlns="bb_appfx_searchlist"
     xmlns:common="bb_appfx_commontypes"
     ID="a00235ec-b143-4f50-ad74-4c653d605cdf"
-    Name="Partner for Mercy Organization Search"
-    Description="Find organizations that have the constituency Partner for Mercy"
+    Name="Partner Organization Search"
+    Description="Find organizations that have the partner constituency"
     Author="Cary Mayeda"
     RecordType="CONSTITUENT"
     TranslationFunctionID="ec1bc00b-fc28-435a-a6ad-07938211558f" 
@@ -18,6 +18,7 @@
 	27-Aug-2012		CMayeda			Removed USR_USP_GETCODETABLEITEMID_DYNAMIC
 	28-Aug-2012		CMayeda			Fixed null comparisons (Thanks to Memphis)
 	29-Aug-2012		CMayeda			Changed Constituency name to 'Partnership for Mercy - Partner'
+	03-Oct-2012		CMayeda			Added "Partner - Group" and "Partner - Church" - FogBugz Case 877
 	-->
 
 	<!-- describe the SP used to fetch the results from the given filters.  Note that the @MAXROWS parameter is required, and should be 
@@ -41,11 +42,22 @@ as
 	--set @CITY = '%' + coalesce(@CITY,'') + '%' ;
 	set @CITY = replace(@CITY,'*','%');
 	
-	declare @partnerConstituentCodeID uniqueidentifier
+	declare @partnerConstituentCodeID uniqueidentifier = null
+	declare @partnerChurchConstituentCodeID uniqueidentifier = null
+	declare @partnerGroupConstituentCodeID uniqueidentifier = null
+	
 	begin try
 		select @partnerConstituentCodeID = ID from dbo.CONSTITUENCYCODE where DESCRIPTION = lower ('Partnership for Mercy - Partner')
 		if @partnerConstituentCodeID is null 
 			RAISERROR 1000000 'Could not find "Partnership for Mercy - Partner" constituency code'
+
+	select @partnerChurchConstituentCodeID = ID from dbo.CONSTITUENCYCODE where DESCRIPTION = lower ('Partner - Church')
+		if @partnerChurchConstituentCodeID is null 
+			RAISERROR 1000000 'Could not find "Partner - Church" constituency code'
+
+	select @partnerGroupConstituentCodeID = ID from dbo.CONSTITUENCYCODE where DESCRIPTION = lower ('Partner - Group')
+		if @partnerGroupConstituentCodeID is null 
+			RAISERROR 1000000 'Could not find "Partner - Group" constituency code'
 	end try
 	begin catch
 	    exec dbo.USP_RAISE_ERROR
@@ -66,7 +78,11 @@ as
 				st.ID = addr.STATEID
 				
 	where org.ISORGANIZATION = 1 
-	  and exists (select CONSTITUENTID from dbo.CONSTITUENCY where CONSTITUENCYCODEID = @partnerConstituentCodeID and CONSTITUENTID = org.ID)
+	  and exists (select CONSTITUENTID 
+	                from dbo.CONSTITUENCY 
+	               where CONSTITUENCYCODEID in (@partnerConstituentCodeID, @partnerChurchConstituentCodeID, @partnerGroupConstituentCodeID)
+					 and CONSTITUENTID = org.ID)
+	  
 	  and (@STATEID is null or @STATEID = addr.STATEID)
 	  and (org.NAME LIKE coalesce('%'+@NAME+'%','%'))
 	  and IsNull(org.LOOKUPID, IsNull(@LOOKUPID,'')) LIKE IsNull(@LOOKUPID,'') + '%'
