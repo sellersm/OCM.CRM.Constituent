@@ -18,6 +18,7 @@
 	25-Sep-2012		Memphis			Added user function: USR_UFN_CONSTITUENT_HAS_CONSTITUENCYCODE_CHECKENDDATE.xml
 	29-Sep-2012		Memphis			Added new function, view for FogBugz Case 856.
 	30-Sep-2012		Memphis			Added USR_USP_CONSTITUENT_END_CONSTITUENCYCODE.xml
+	05-Oct-2012		Memphis			Added USR_UFN_GET_PARTNERCONSTITUENCYCODES_TABLE_FORCONSTITUENT.xml
 	-->
 
 	<!-- Note:  the order of the items listed here is important.  For example, you won't be able to load a data form that references 
@@ -80,6 +81,7 @@
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.USR_UFN_CONSTITUENT_HAS_RELATIONSHIP.xml" />
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.USR_UFN_CONSTITUENT_GETVALIDPRIMARYEMAILADDRESS.xml" />
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.USR_UFN_CONSTITUENT_GETID_FORCODE.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.USR_UFN_GET_PARTNERCONSTITUENCYCODES_TABLE_FORCONSTITUENT.xml" />
 
 		<!-- Page Expressions -->
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.ConstituentSponsor.PageExpressionDataForm.View.xml" />

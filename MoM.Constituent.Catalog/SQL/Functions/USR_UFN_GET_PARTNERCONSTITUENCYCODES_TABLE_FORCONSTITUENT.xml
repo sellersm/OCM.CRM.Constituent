@@ -1,0 +1,29 @@
+﻿<SQLFunctionSpec
+	xmlns="bb_appfx_sqlfunction"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="af0f8615-4457-4546-987d-0b2670cc102a"
+	Name="USR_UFN_GET_PARTNERCONSTITUENCYCODES_TABLE_FORCONSTITUENT"
+	Description="Returns a table of Partner-type constituency codes for a given constituent."
+	Author="Memphis Sellers"
+	DBFunctionName="USR_UFN_GET_PARTNERCONSTITUENCYCODES_TABLE_FORCONSTITUENT"
+	>
+
+	<CreateFunctionSQL>
+		<![CDATA[
+create function dbo.USR_UFN_GET_PARTNERCONSTITUENCYCODES_TABLE_FORCONSTITUENT(	@CONSTITUENTID uniqueidentifier)
+RETURNS TABLE 
+AS
+RETURN 
+(
+	-- Add the SELECT statement with parameter references here
+	select cc.[DESCRIPTION] as CodeDescription,  count(cc.DESCRIPTION) as CodeCount
+	from dbo.CONSTITUENCY c
+	join dbo.CONSTITUENCYCODE cc on c.CONSTITUENCYCODEID = cc.ID
+	where cc.DESCRIPTION like ('%Partner%')
+	and c.CONSTITUENTID = @CONSTITUENTID
+	group by cc.DESCRIPTION
+);	
+]]>
+	</CreateFunctionSQL>
+
+</SQLFunctionSpec>
