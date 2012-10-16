@@ -19,14 +19,15 @@
 	28-Aug-2012		CMayeda			Fixed null comparisons (Thanks to Memphis)
 	29-Aug-2012		CMayeda			Changed Constituency name to 'Partnership for Mercy - Partner'
 	03-Oct-2012		CMayeda			Added "Partner - Group" and "Partner - Church" - FogBugz Case 877
+	16-Oct-2012		CMayeda			Renamed with prefix "USR"	
 	-->
 
 	<!-- describe the SP used to fetch the results from the given filters.  Note that the @MAXROWS parameter is required, and should be 
 	used to limit the number of rows returned to a reasonable number. -->
-	<SPSearchList SPName="USP_SEARCHLIST_PARTNERFORMERCYORG">
+	<SPSearchList SPName="USR_USP_SEARCHLIST_PARTNERFORMERCYORG">
 		<common:CreateProcedureSQL>
 			<![CDATA[
-create procedure dbo.USP_SEARCHLIST_PARTNERFORMERCYORG
+create procedure dbo.USR_USP_SEARCHLIST_PARTNERFORMERCYORG
 (
 	@NAME nvarchar(100) = null,
 	@LOOKUPID nvarchar(10) = null,
