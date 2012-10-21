@@ -20,6 +20,7 @@
 	29-Aug-2012		CMayeda			Changed Constituency name to 'Partnership for Mercy - Partner'
 	03-Oct-2012		CMayeda			Added "Partner - Group" and "Partner - Church" - FogBugz Case 877
 	16-Oct-2012		CMayeda			Renamed with prefix "USR"	
+	21-Oct-2012		CMayeda			Limited addresses to Primary only and added distinct
 	-->
 
 	<!-- describe the SP used to fetch the results from the given filters.  Note that the @MAXROWS parameter is required, and should be 
@@ -65,7 +66,7 @@ as
 		return 1	
 	end catch
 	
-	select	top(@MAXROWS)
+	select	distinct top(@MAXROWS)
 			org.ID,
 			org.LOOKUPID, 
 			org.NAME, 
@@ -84,11 +85,11 @@ as
 	               where CONSTITUENCYCODEID in (@partnerConstituentCodeID, @partnerChurchConstituentCodeID, @partnerGroupConstituentCodeID)
 					 and CONSTITUENTID = org.ID)
 	  
+      and addr.ISPRIMARY = 1
 	  and (@STATEID is null or @STATEID = addr.STATEID)
 	  and (org.NAME LIKE coalesce('%'+@NAME+'%','%'))
 	  and IsNull(org.LOOKUPID, IsNull(@LOOKUPID,'')) LIKE IsNull(@LOOKUPID,'') + '%'
 	  and isNull(addr.CITY, IsNull(@CITY,'')) LIKE  '%'+IsNull(@CITY,'') + '%'
-
 	  
 	  /*and (org.NAME LIKE @NAME)
 	  and (org.LOOKUPID LIKE @LOOKUPID)
