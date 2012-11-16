@@ -1,0 +1,47 @@
+﻿<SmartFieldSpec
+	xmlns="bb_appfx_smartfield"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="c3ec1e22-9922-4e09-88ac-84489fdec7e9"
+	Name="Number Of Active Child Sponsorships Smart Field"
+	Description="Count of active child sponsorships for this Constituent."
+	Author="Memphis Sellers"
+	SPName="USR_USP_SMARTFIELD_NUMBEROFACTIVECHILDSPONSORSHIPSFORCONSTITUENT"
+	DataType="Integer" 
+	RecordType="Constituent" 
+	DisplayName="Number of child sponsorships" 
+	SmartFieldFolder="Constituent"
+	>
+
+	<!-- describe the SP used to calculate the smart field values -->
+	<CreateProcedureSQL>
+		<![CDATA[
+create procedure dbo.USR_USP_SMARTFIELD_NUMBEROFACTIVECHILDSPONSORSHIPSFORCONSTITUENT
+(
+	@ASOF datetime 
+)
+as
+	-- write sql to calculate the smart field values based on the parameters and ASOF date
+	select 
+		distinct(ID) as CONSTITUENTID,
+		dbo.USR_UFN_SPONSORSHIP_GETACTIVECHILDSPONSORSHIPSFORSPONSOR(ID) as [Child Sponsorship Count]
+	from dbo.CONSTITUENT
+
+
+		]]>
+	</CreateProcedureSQL>
+	
+	
+	<!-- describe any parameters (other than the ASOF date) defined on the SP -->
+	<!--<common:FormMetaData>
+		<common:FormFields>
+			<common:FormField Caption="Constituent ID" FieldID="CONSTITUENTID" DataType="Guid"/>
+		</common:FormFields>
+
+		--><!-- optionally indicate the client-side component for the user interface --><!--
+		--><!--<common:FormUIComponent FormUIComponentType="CustomComponent">
+			<common:CustomComponentID AssemblyName="REPLACE_WITH_ASSEMBLYNAME" ClassName="REPLACE_WITH_FULLCLASSNAME" />
+		</common:FormUIComponent>--><!--
+
+	</common:FormMetaData>-->
+
+</SmartFieldSpec>

@@ -19,6 +19,9 @@
 	29-Sep-2012		Memphis			Added new function, view for FogBugz Case 856.
 	30-Sep-2012		Memphis			Added USR_USP_CONSTITUENT_END_CONSTITUENCYCODE.xml
 	05-Oct-2012		Memphis			Added USR_UFN_GET_PARTNERCONSTITUENCYCODES_TABLE_FORCONSTITUENT.xml
+	15-Nov-2012		Memphis			Added Smart Fields:  **NOTE** These have a dependency on the UFN in Sponsorship!!
+										AverageDaysDelinquent.SmartField.xml
+										NumberOfActiveChildSponsorships.SmartField.xml
 	-->
 
 	<!-- Note:  the order of the items listed here is important.  For example, you won't be able to load a data form that references 
@@ -85,7 +88,11 @@
 
 		<!-- Page Expressions -->
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.ConstituentSponsor.PageExpressionDataForm.View.xml" />
-
+		
+		<!-- Smart Fields: these have a dependency on a UFN in Sponsorship -->
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.AverageDaysDelinquent.SmartField.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.NumberOfActiveChildSponsorships.SmartField.xml" />
+		
 		<!-- Package Versions -->
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.PackageVersion.DataList.xml" />
 	</common:DependencyList>
