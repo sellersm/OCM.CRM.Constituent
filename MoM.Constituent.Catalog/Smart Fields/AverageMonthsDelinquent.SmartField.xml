@@ -1,0 +1,47 @@
+﻿<SmartFieldSpec
+	xmlns="bb_appfx_smartfield"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="9a7fa78c-4c2a-4157-8117-eaa1403ecfd4"
+	Name="Average Months Delinquent Smart Field"
+	Description="Average months delinquent for constituent."
+	Author="Memphis Sellers"
+	SPName="USR_USP_SMARTFIELD_AVERAGEMONTHSDELINQUENT"
+	DataType="Integer" 
+	RecordType="Constituent" 
+	DisplayName="Average months delinquent smart field" 
+	SmartFieldFolder="Constituent"
+	>
+
+	<!-- describe the SP used to calculate the smart field values -->
+	<CreateProcedureSQL>
+		<![CDATA[
+create procedure dbo.USR_USP_SMARTFIELD_AVERAGEMONTHSDELINQUENT
+(
+	@ASOF datetime 
+)
+as
+	-- write sql to calculate the smart field values based on the parameters and ASOF date
+	select 
+		s.CONSTITUENTID,
+		AVG(dbo.USR_UFN_CALCULATE_NTD_DELINQUENCY(CONVERT(Date,dbo.USR_UFN_SPONSORSHIP_GET_NEXT_TRANSACTIONDATE_BY_SPONSORSHIPID(s.ID)))) as AvgMonthsDelinquent
+	from dbo.SPONSORSHIP s 
+	group by s.CONSTITUENTID
+
+		]]>
+	</CreateProcedureSQL>
+
+	<!-- describe any parameters (other than the ASOF date) defined on the SP -->
+	<!--<common:FormMetaData>
+		<common:FormFields>
+			<common:FormField Caption="Parameter 1" FieldID="PARAMETER1" DataType="Integer"/>
+			<common:FormField Caption="Parameter 2" FieldID="PARAMETER2" DataType="Money"/>
+		</common:FormFields>
+
+		--><!-- optionally indicate the client-side component for the user interface --><!--
+		<common:FormUIComponent FormUIComponentType="CustomComponent">
+			<common:CustomComponentID AssemblyName="REPLACE_WITH_ASSEMBLYNAME" ClassName="REPLACE_WITH_FULLCLASSNAME" />
+		</common:FormUIComponent>
+
+	</common:FormMetaData>-->
+
+</SmartFieldSpec>

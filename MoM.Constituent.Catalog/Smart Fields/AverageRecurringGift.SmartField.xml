@@ -1,31 +1,44 @@
 ﻿<SmartFieldSpec
 	xmlns="bb_appfx_smartfield"
 	xmlns:common="bb_appfx_commontypes" 
-	ID="9a7fa78c-4c2a-4157-8117-eaa1403ecfd4"
-	Name="Average Days Delinquent Smart Field"
-	Description="Average days delinquent for constituent."
+	ID="8b8e6fa1-44f4-4a50-bd13-6623e9bdd40d"
+	Name="Average Recurring Gift Amount Smart Field"
+	Description="Average amount of all recurring gifts for a constituent's active sponsorships."
 	Author="Memphis Sellers"
-	SPName="USR_USP_SMARTFIELD_AVERAGEDAYSDELINQUENT"
-	DataType="Integer" 
+	SPName="USR_USP_SMARTFIELD_AVERAGERECURRINGGIFTS"
+	DataType="Money" 
 	RecordType="Constituent" 
-	DisplayName="Average Days Delinquent Smart Field" 
+	DisplayName="Average recurring gift amount smart field" 
 	SmartFieldFolder="Constituent"
 	>
 
 	<!-- describe the SP used to calculate the smart field values -->
 	<CreateProcedureSQL>
 		<![CDATA[
-create procedure dbo.USR_USP_SMARTFIELD_AVERAGEDAYSDELINQUENT
+create procedure dbo.USR_USP_SMARTFIELD_AVERAGERECURRINGGIFTS
 (
 	@ASOF datetime 
 )
 as
 	-- write sql to calculate the smart field values based on the parameters and ASOF date
 	select 
-		s.CONSTITUENTID,
-		AVG(dbo.USR_UFN_CALCULATE_NTD_DELINQUENCY(CONVERT(Date,dbo.USR_UFN_SPONSORSHIP_GET_NEXT_TRANSACTIONDATE_BY_SPONSORSHIPID(s.ID)))) as AvgDaysDelinquent
-	from dbo.SPONSORSHIP s 
-	group by s.CONSTITUENTID
+		CONSTITUENTID,
+		ROUND(AVG( case [FREQUENCYCODE] 
+			when 0 then (TRANSACTIONAMOUNT/12)
+			when 1 then ((TRANSACTIONAMOUNT * 2)/12)
+			when 2 then ((TRANSACTIONAMOUNT * 4)/12)
+			when 3 then TRANSACTIONAMOUNT
+			when 6 then ((TRANSACTIONAMOUNT * 6)/12)
+			when 7 then ((TRANSACTIONAMOUNT * 24)/12)
+			when 8 then ((TRANSACTIONAMOUNT * 26)/12)
+			when 9 then ((TRANSACTIONAMOUNT * 52)/12)
+		end),2) as TRANSACTIONAMOUNT
+	from dbo.REVENUESCHEDULE rs
+	join dbo.financialtransaction ft on ft.id = rs.id
+	where TYPECODE = 2		--recurring gift
+	and STATUSCODE IN (0,1) --active, held
+	group by CONSTITUENTID
+
 
 		]]>
 	</CreateProcedureSQL>
