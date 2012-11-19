@@ -11,7 +11,15 @@
 	DisplayName="Average recurring gift amount smart field" 
 	SmartFieldFolder="Constituent"
 	>
+	<!-- 
+	Remarks:    
 
+	History:
+	Date            Modified By     Comments
+	16-Nov-2012		Memphis Sellers	Initial Version
+	18-Nov-2012		CMayeda			Changed to only include recurring gifts associated with active sponsorships
+	-->
+	
 	<!-- describe the SP used to calculate the smart field values -->
 	<CreateProcedureSQL>
 		<![CDATA[
@@ -37,6 +45,14 @@ as
 	join dbo.financialtransaction ft on ft.id = rs.id
 	where TYPECODE = 2		--recurring gift
 	and STATUSCODE IN (0,1) --active, held
+	-- Only include recurring gifts associated with active sponsorships
+	and rs.ID in (select REVENUE.ID	 from	dbo.REVENUE
+				    join dbo.REVENUESPLIT rs on REVENUE.ID = rs.REVENUEID
+				    join dbo.SPONSORSHIP on SPONSORSHIP.REVENUESPLITID = rs.ID
+					join dbo.CONSTITUENT on CONSTITUENT.ID = SPONSORSHIP.CONSTITUENTID
+					join dbo.SPONSORSHIPOPPORTUNITY on SPONSORSHIPOPPORTUNITY.ID = SPONSORSHIP.SPONSORSHIPOPPORTUNITYID
+					join dbo.SPONSORSHIPOPPORTUNITYCHILD on SPONSORSHIPOPPORTUNITYCHILD.ID = SPONSORSHIPOPPORTUNITY.ID 
+				   where SPONSORSHIP.STATUSCODE = 1)
 	group by CONSTITUENTID
 
 
