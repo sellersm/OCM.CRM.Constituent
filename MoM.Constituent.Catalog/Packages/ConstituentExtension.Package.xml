@@ -23,6 +23,7 @@
 										AverageDaysDelinquent.SmartField.xml
 										NumberOfActiveChildSponsorships.SmartField.xml
 	16-Nov-2012		Memphis			Renamed the "AverageDaysDelinquent.SmartField.xml" to AverageMonthsDelinquent.SmartField.xml
+	18-Nov-2012		CMayeda			Added AverageRecurringGift.SmartField.xml
 	-->
 
 	<!-- Note:  the order of the items listed here is important.  For example, you won't be able to load a data form that references 
@@ -93,6 +94,7 @@
 		<!-- Smart Fields: these have a dependency on a UFN in Sponsorship -->
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.AverageMonthsDelinquent.SmartField.xml" />
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.NumberOfActiveChildSponsorships.SmartField.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.AverageRecurringGift.SmartField.xml" />
 		
 		<!-- Package Versions -->
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.PackageVersion.DataList.xml" />
