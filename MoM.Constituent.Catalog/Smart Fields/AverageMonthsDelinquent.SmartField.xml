@@ -2,8 +2,8 @@
 	xmlns="bb_appfx_smartfield"
 	xmlns:common="bb_appfx_commontypes" 
 	ID="9a7fa78c-4c2a-4157-8117-eaa1403ecfd4"
-	Name="Average Months Delinquent Smart Field"
-	Description="Average months delinquent for constituent."
+	Name="Average Months Delinquent Child Sponsorships Smart Field"
+	Description="Average months delinquent for all child sponsorships for a sponsor."
 	Author="Memphis Sellers"
 	SPName="USR_USP_SMARTFIELD_AVERAGEMONTHSDELINQUENT"
 	DataType="Integer" 
@@ -11,6 +11,15 @@
 	DisplayName="Average months delinquent smart field" 
 	SmartFieldFolder="Constituent"
 	>
+	<!-- 
+	Remarks:    
+
+	History:
+	Date            Modified By     Comments
+	15-Nov-2012		Memphis			Initial Version
+	26-Nov-2012		CMayeda			Modified to only include active sponsorships 
+								    Modified to only include child sponsorships 
+	-->
 
 	<!-- describe the SP used to calculate the smart field values -->
 	<CreateProcedureSQL>
@@ -21,10 +30,12 @@ create procedure dbo.USR_USP_SMARTFIELD_AVERAGEMONTHSDELINQUENT
 )
 as
 	-- write sql to calculate the smart field values based on the parameters and ASOF date
-	select 
-		s.CONSTITUENTID,
-		AVG(dbo.USR_UFN_CALCULATE_NTD_DELINQUENCY(CONVERT(Date,dbo.USR_UFN_SPONSORSHIP_GET_NEXT_TRANSACTIONDATE_BY_SPONSORSHIPID(s.ID)))) as AvgMonthsDelinquent
-	from dbo.SPONSORSHIP s 
+	select	s.CONSTITUENTID,
+			AVG(dbo.USR_UFN_CALCULATE_NTD_DELINQUENCY(CONVERT(Date,dbo.USR_UFN_SPONSORSHIP_GET_NEXT_TRANSACTIONDATE_BY_SPONSORSHIPID(s.ID)))) as AvgMonthsDelinquent
+	  from	dbo.SPONSORSHIP s 
+	  join	dbo.SPONSORSHIPOPPORTUNITYCHILD on SPONSORSHIPOPPORTUNITYCHILD.ID = s.SPONSORSHIPOPPORTUNITYID
+   where s.STATUSCODE = 1
+
 	group by s.CONSTITUENTID
 
 		]]>
