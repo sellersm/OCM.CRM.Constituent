@@ -1,0 +1,63 @@
+﻿<QueryViewSpec
+	xmlns="bb_appfx_queryview"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="f73b53f9-dcd5-44ff-9d3a-1b4a75ae9d71"
+	Name="Constituents with a Recurring Gift or Gift in Batch Query"
+	Description="Used to "
+	Author="Cary Mayeda"
+	IsRoot="false"
+	PrimaryKeyField="ID"
+	RecordType="CONSTITUENT"
+	common:SecurityUIFolder="REPLACE_WITH_SECURITYUIFOLDER"
+	>
+
+	<!-- define the view used to return data for the query -->
+	<ViewImplementation ViewName="USR_V_QUERY_CONSTITUENTWITHRECURRINGGIFTORGIFTINBATCH">
+		<ViewSQL>
+			<![CDATA[
+with StatementConstituents as
+(
+
+select	distinct 
+		CONSTITUENTID, 
+		'Gift in Batch' as INCLUSIONREASON
+  from	dbo.BATCHREVENUE
+  join	dbo.BATCH on BATCHREVENUE.BATCHID = BATCH.ID
+  join	dbo.BATCHTEMPLATE on BATCH.BATCHTEMPLATEID = BATCHTEMPLATE.ID
+ where	BATCHTEMPLATE.BATCHTYPECATALOGID in 
+			('326C43A6-D162-4FD4-8D61-FEF9A0EE8C5E',
+			'91102EFD-E0E9-467F-B2CA-8B510D06C937')
+
+union all
+
+select	distinct 
+		ft.CONSTITUENTID, 
+		'Active or Held Recurring Gift' as INCLUSIONREASON
+  from dbo.REVENUESCHEDULE rs
+  join dbo.FINANCIALTRANSACTION ft on ft.ID = rs.ID
+ where rs.STATUS in ('Active', 'Held') 
+)
+
+select distinct 
+	   CONSTITUENTID as ID,
+	   INCLUSIONREASON
+  from StatementConstituents 
+
+
+		
+			]]>
+		</ViewSQL>
+	</ViewImplementation>
+
+	<!-- describe each field in the view output -->
+	<Output>
+		<OutputFields>
+			<OutputField Caption="System record ID" Category="System Fields" Name="ID" />
+			<OutputField Name="INCLUSIONREASON" Caption="Inclusion Reason" DataType="String" />
+		</OutputFields>
+	</Output>
+	<RelationshipOperations>
+		<AddRelatedView RelatedView="V_QUERY_CONSTITUENT" RelatedField="ID" Field="ID" PathAlias="Temporary Mailing Criteria"/>
+	</RelationshipOperations>
+</QueryViewSpec>
+
