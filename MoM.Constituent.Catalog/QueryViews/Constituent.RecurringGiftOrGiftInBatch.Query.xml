@@ -57,7 +57,7 @@ select distinct
 		</OutputFields>
 	</Output>
 	<RelationshipOperations>
-		<AddRelatedView RelatedView="V_QUERY_CONSTITUENT" RelatedField="ID" Field="ID" PathAlias="Temporary Mailing Criteria"/>
+		<AddToParentView ParentView="V_QUERY_CONSTITUENT" ParentViewRelatedField="ID" Field="ID" PathAlias="Temporary Mailing Criteria"/>
 	</RelationshipOperations>
 </QueryViewSpec>
 
