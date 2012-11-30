@@ -24,6 +24,7 @@
 										NumberOfActiveChildSponsorships.SmartField.xml
 	16-Nov-2012		Memphis			Renamed the "AverageDaysDelinquent.SmartField.xml" to AverageMonthsDelinquent.SmartField.xml
 	18-Nov-2012		CMayeda			Added AverageRecurringGift.SmartField.xml
+	30-Nov-2012		CMayeda			Added RecurringGiftOrGiftInBatch.Query.xml
 	-->
 
 	<!-- Note:  the order of the items listed here is important.  For example, you won't be able to load a data form that references 
@@ -90,6 +91,9 @@
 
 		<!-- Page Expressions -->
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.ConstituentSponsor.PageExpressionDataForm.View.xml" />
+		
+		<!-- Query Views -->
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.RecurringGiftOrGiftInBatch.Query.xml" />
 		
 		<!-- Smart Fields: these have a dependency on a UFN in Sponsorship -->
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.AverageMonthsDelinquent.SmartField.xml" />
