@@ -25,6 +25,7 @@
 	16-Nov-2012		Memphis			Renamed the "AverageDaysDelinquent.SmartField.xml" to AverageMonthsDelinquent.SmartField.xml
 	18-Nov-2012		CMayeda			Added AverageRecurringGift.SmartField.xml
 	30-Nov-2012		CMayeda			Added RecurringGiftOrGiftInBatch.Query.xml
+	20-Dec-2012		CMayeda			Added AverageMonthsDelinquentByAmountDue.SmartField.xml
 	-->
 
 	<!-- Note:  the order of the items listed here is important.  For example, you won't be able to load a data form that references 
@@ -99,7 +100,8 @@
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.AverageMonthsDelinquent.SmartField.xml" />
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.NumberOfActiveChildSponsorships.SmartField.xml" />
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.AverageRecurringGift.SmartField.xml" />
-		
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.AverageMonthsDelinquentByAmountDue.SmartField.xml" />
+
 		<!-- Package Versions -->
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.PackageVersion.DataList.xml" />
 	</common:DependencyList>
