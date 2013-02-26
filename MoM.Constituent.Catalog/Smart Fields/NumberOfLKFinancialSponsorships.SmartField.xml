@@ -1,0 +1,62 @@
+﻿<SmartFieldSpec
+	xmlns="bb_appfx_smartfield"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="4943474f-4a05-49af-996f-673beee27f73"
+	Name="Number of Sri Lanka Financial Sponsorships Smart Field"
+	Description="This is a temporary query for the Sri Lanka Closure"
+	Author="Cary Mayeda"
+	SPName="USR_USP_SMARTFIELD_NUMBEROFLKFINANCIALSPONSORSHIPSFORCONSTITUENT"
+	DataType="Integer" 
+	RecordType="Constituent" 
+	DisplayName="Number of LK financial sponsorships" 
+	SmartFieldFolder="Constituent"	
+	>
+
+	<!-- describe the SP used to calculate the smart field values -->
+	<CreateProcedureSQL>
+		<![CDATA[
+create procedure dbo.USR_USP_SMARTFIELD_NUMBEROFLKFINANCIALSPONSORSHIPSFORCONSTITUENT
+(
+	@ASOF datetime 
+)
+as
+	-- write sql to calculate the smart field values based on the parameters and ASOF date
+
+select distinct 	
+		[V_QUERY_CONSTITUENT].[ID] as CONSTITUENTID,
+		count([V_QUERY_CONSTITUENT\Sponsor\Sponsorships\Sponsorship Opportunity].[LOOKUPID]) as [COUNT(Sponsor\Sponsorships\Sponsorship Opportunity\Lookup ID)]
+	
+  from [V_QUERY_CONSTITUENT] as [V_QUERY_CONSTITUENT]
+left outer join [V_QUERY_SPONSOR] as [V_QUERY_CONSTITUENT\Sponsor] on [V_QUERY_CONSTITUENT].[ID] = [V_QUERY_CONSTITUENT\Sponsor].[ID]
+inner join [V_QUERY_SPONSORSHIP] as [V_QUERY_CONSTITUENT\Sponsor\Sponsorships] on [V_QUERY_CONSTITUENT\Sponsor].[ID] = [V_QUERY_CONSTITUENT\Sponsor\Sponsorships].[CONSTITUENTID]
+left outer join [V_QUERY_SPONSORSHIPOPPORTUNITY] as [V_QUERY_CONSTITUENT\Sponsor\Sponsorships\Sponsorship Opportunity] on [V_QUERY_CONSTITUENT\Sponsor\Sponsorships].[SPONSORSHIPOPPORTUNITYID] = [V_QUERY_CONSTITUENT\Sponsor\Sponsorships\Sponsorship Opportunity].[ID]
+inner join [V_QUERY_SPONSORSHIPLOCATION] as [V_QUERY_CONSTITUENT\Sponsor\Sponsorships\Sponsorship Opportunity\Opportunity Location] on [V_QUERY_CONSTITUENT\Sponsor\Sponsorships\Sponsorship Opportunity].[SPONSORSHIPLOCATIONID] = [V_QUERY_CONSTITUENT\Sponsor\Sponsorships\Sponsorship Opportunity\Opportunity Location].[ID]
+left outer join [V_QUERY_CONSTITUENT] as [V_QUERY_CONSTITUENT\Sponsor\Sponsorships\Financial sponsor] on [V_QUERY_CONSTITUENT\Sponsor\Sponsorships].[FINANCIALSPONSOR] = [V_QUERY_CONSTITUENT\Sponsor\Sponsorships\Financial sponsor].[ID]
+
+where [V_QUERY_CONSTITUENT\Sponsor\Sponsorships].[STATUS] in (N'Active', N'Active (Transfer pending)', N'Active (Reassigned)')
+  and [V_QUERY_CONSTITUENT\Sponsor\Sponsorships\Sponsorship Opportunity\Opportunity Location].[LOOKUPID] like 'LK%'
+  and ([V_QUERY_CONSTITUENT\Sponsor\Sponsorships\Financial sponsor].[LOOKUPID] is not null and [V_QUERY_CONSTITUENT\Sponsor\Sponsorships\Financial sponsor].[LOOKUPID] <> '')
+  
+group by [V_QUERY_CONSTITUENT].[ID]
+
+
+		]]>
+	</CreateProcedureSQL>
+
+	<!-- describe any parameters (other than the ASOF date) defined on the SP -->
+	<!--<common:FormMetaData>
+		<common:FormFields>
+			<common:FormField Caption="Constituent ID" FieldID="CONSTITUENTID" DataType="Guid"/>
+		</common:FormFields>
+
+		-->
+	<!-- optionally indicate the client-side component for the user interface -->
+	<!--
+		-->
+	<!--<common:FormUIComponent FormUIComponentType="CustomComponent">
+			<common:CustomComponentID AssemblyName="REPLACE_WITH_ASSEMBLYNAME" ClassName="REPLACE_WITH_FULLCLASSNAME" />
+		</common:FormUIComponent>-->
+	<!--
+
+	</common:FormMetaData>-->
+</SmartFieldSpec>
