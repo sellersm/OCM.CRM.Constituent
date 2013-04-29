@@ -1,0 +1,45 @@
+﻿<SQLFunctionSpec
+	xmlns="bb_appfx_sqlfunction"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="a2d5a507-27e0-4ba4-8f5f-305d9cf6056a"
+	Name="USR_UFN_GET_CONSTITUENT_SOLICITCODES_LIST"
+	Description="Gets a table list of active solicit codes for a given constituent."
+	Author="Memphis Sellers"
+	DBFunctionName="USR_UFN_GET_CONSTITUENT_SOLICITCODES_LIST"
+	GrantServiceRolePermission="true"	
+	>
+
+	<!-- 
+	Remarks:    Gets a table list of active solicit codes for a given constituent.
+				
+	History:
+	Date            Modified By     Comments
+	25-Apr-2013		Memphis			Initial Version. Fogbugz Case 1074 was the reason for this UFN.
+	-->
+	
+	<CreateFunctionSQL>
+		<![CDATA[
+create function dbo.USR_UFN_GET_CONSTITUENT_SOLICITCODES_LIST(
+	@CONSTITUENTID uniqueidentifier
+)
+returns @SolicitCodeList TABLE 
+(
+	-- Add the column definitions for the TABLE variable here
+	codeDescription nvarchar(100)
+)
+with execute as caller
+as begin
+	-- do work here and return a value
+	insert @SolicitCodeList
+	select s.DESCRIPTION
+	from dbo.CONSTITUENTSOLICITCODE cs
+	join dbo.SOLICITCODE s on s.ID = cs.SOLICITCODEID
+	where cs.CONSTITUENTID = @CONSTITUENTID
+	and (cs.ENDDATE is null or (cs.ENDDATE is not null and Cast(cs.ENDDATE as date) < Cast(GETDATE() as date)))
+	
+	return
+end
+		]]>
+	</CreateFunctionSQL>
+
+</SQLFunctionSpec>

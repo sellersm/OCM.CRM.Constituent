@@ -1,0 +1,43 @@
+﻿<SQLFunctionSpec
+	xmlns="bb_appfx_sqlfunction"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="99baca5d-6749-45b1-8449-e5350971f818"
+	Name="USR_UFN_CONSTITUENT_HASVALID_PRIMARY_EMAIL"
+	Description="Determines if the given constituent has a valid and primary email address."
+	Author="Memphis Sellers"
+	DBFunctionName="USR_UFN_CONSTITUENT_HASVALID_PRIMARY_EMAIL"
+	GrantServiceRolePermission="true"
+	>
+
+	<!-- 
+	Remarks:    Determines if the given constituent has a valid and primary email address.
+				Valid means:
+				- email must be set as pimary & contains an email address
+				- "do not send email to this address" must NOT be checked
+				Returns a 1 if true, 0 if false.
+				
+	History:
+	Date            Modified By     Comments
+	25-Apr-2013		Memphis			Initial Version.  Fogbugz Case 1074 was the reason for this UFN.
+	-->
+
+
+	<CreateFunctionSQL>
+		<![CDATA[
+create function dbo.USR_UFN_CONSTITUENT_HASVALID_PRIMARY_EMAIL(
+	@CONSTITUENTID uniqueidentifier
+)
+returns bit
+with execute as caller
+as begin
+	-- do work here and return a value
+	declare @isValid bit = 0;
+	if exists (select 1 from dbo.EMAILADDRESS where (DONOTEMAIL = 0 and ISPRIMARY = 1 and CONSTITUENTID = @CONSTITUENTID))
+		set @isValid = 1;
+
+	return @isValid;
+end
+		]]>
+	</CreateFunctionSQL>
+
+</SQLFunctionSpec>
