@@ -27,6 +27,9 @@
 	30-Nov-2012		CMayeda			Added RecurringGiftOrGiftInBatch.Query.xml
 	20-Dec-2012		CMayeda			Added AverageMonthsDelinquentByAmountDue.SmartField.xml
 	26-Feb-2012		CMayeda			Added MoM.Constituent.Catalog.NumberOfLKFinancialSponsorships.SmartField.xml
+	06-May-2013		Memphis			Added new UFNs to use for D2 Campaign and whatever else needs them:
+									USR_UFN_GET_CONSTITUENT_SOLICITCODES_LIST.xml
+									USR_UFN_CONSTITUENT_HASVALID_PRIMARY_EMAIL.xml
 	-->
 
 	<!-- Note:  the order of the items listed here is important.  For example, you won't be able to load a data form that references 
@@ -90,6 +93,8 @@
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.USR_UFN_CONSTITUENT_GETVALIDPRIMARYEMAILADDRESS.xml" />
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.USR_UFN_CONSTITUENT_GETID_FORCODE.xml" />
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.USR_UFN_GET_PARTNERCONSTITUENCYCODES_TABLE_FORCONSTITUENT.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.USR_UFN_GET_CONSTITUENT_SOLICITCODES_LIST.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.USR_UFN_CONSTITUENT_HASVALID_PRIMARY_EMAIL.xml" />
 
 		<!-- Page Expressions -->
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.ConstituentSponsor.PageExpressionDataForm.View.xml" />
