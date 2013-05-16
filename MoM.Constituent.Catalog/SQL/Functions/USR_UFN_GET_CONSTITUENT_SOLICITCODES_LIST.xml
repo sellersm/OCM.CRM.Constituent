@@ -15,6 +15,7 @@
 	History:
 	Date            Modified By     Comments
 	25-Apr-2013		Memphis			Initial Version. Fogbugz Case 1074 was the reason for this UFN.
+	15-May-2013		Memphis			Fixed bug of enddate check (has to be in the future to be a current code!).
 	-->
 	
 	<CreateFunctionSQL>
@@ -34,8 +35,8 @@ as begin
 	select s.DESCRIPTION
 	from dbo.CONSTITUENTSOLICITCODE cs
 	join dbo.SOLICITCODE s on s.ID = cs.SOLICITCODEID
-	where cs.CONSTITUENTID = @CONSTITUENTID
-	and (cs.ENDDATE is null or (cs.ENDDATE is not null and Cast(cs.ENDDATE as date) < Cast(GETDATE() as date)))
+	where (cs.CONSTITUENTID = @CONSTITUENTID
+	and (cs.ENDDATE is null or (cs.ENDDATE is not null and Cast(cs.ENDDATE as date) > Cast(GETDATE() as date))))
 	
 	return
 end
