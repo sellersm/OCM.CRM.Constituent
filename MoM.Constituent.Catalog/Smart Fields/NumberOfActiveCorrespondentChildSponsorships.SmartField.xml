@@ -1,0 +1,59 @@
+﻿<SmartFieldSpec
+	xmlns="bb_appfx_smartfield"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="637E2C69-17AE-4EDB-91A2-AB9899DFC687"
+	Name="Number Of Active Correspondent Child Sponsorships Smart Field"
+	Description="Count of active child sponsorship correspondent commitments for this Constituent (sponsorships - not gifted)."
+	Author="Cary Mayeda"
+	SPName="USR_USP_SMARTFIELD_NUMBEROFACTIVECORRESPONDENTCHILDSPONSORSHIPSFORCONSTITUENT"
+	DataType="Integer" 
+	RecordType="Constituent" 
+	DisplayName="Number of correspondent child sponsorships" 
+	SmartFieldFolder="Constituent"
+	>
+	
+	<!-- 
+	Remarks:    This excludes project sponsorships.  This does not include gifted sponsorships
+
+	History:
+	Date            Modified By     Comments
+	23-May-2013		CMayeda			Initial Version
+
+	-->
+
+	<!-- describe the SP used to calculate the smart field values -->
+	<CreateProcedureSQL>
+		<![CDATA[
+create procedure dbo.USR_USP_SMARTFIELD_NUMBEROFACTIVECORRESPONDENTCHILDSPONSORSHIPSFORCONSTITUENT
+(
+	@ASOF datetime 
+)
+as
+	-- write sql to calculate the smart field values based on the parameters and ASOF date
+	select	c.ID,
+			count (so_child.id)
+      from	dbo.CONSTITUENT c
+	  left	join dbo.SPONSORSHIP s ON s.CONSTITUENTID = c.ID
+	  left	join dbo.SPONSORSHIPOPPORTUNITYCHILD so_child on s.SPONSORSHIPOPPORTUNITYID = so_child.ID
+     where	s.STATUSCODE = 1
+     group by c.ID
+
+
+		]]>
+	</CreateProcedureSQL>
+	
+	
+	<!-- describe any parameters (other than the ASOF date) defined on the SP -->
+	<!--<common:FormMetaData>
+		<common:FormFields>
+			<common:FormField Caption="Constituent ID" FieldID="CONSTITUENTID" DataType="Guid"/>
+		</common:FormFields>
+
+		--><!-- optionally indicate the client-side component for the user interface --><!--
+		--><!--<common:FormUIComponent FormUIComponentType="CustomComponent">
+			<common:CustomComponentID AssemblyName="REPLACE_WITH_ASSEMBLYNAME" ClassName="REPLACE_WITH_FULLCLASSNAME" />
+		</common:FormUIComponent>--><!--
+
+	</common:FormMetaData>-->
+
+</SmartFieldSpec>

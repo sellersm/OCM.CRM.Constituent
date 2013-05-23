@@ -124,7 +124,7 @@
     <EmbeddedResource Include="SQL\Functions\USR_UFN_GET_PARTNERCONSTITUENCYCODES_TABLE_FORCONSTITUENT.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Smart Fields\NumberOfActiveChildSponsorships.SmartField.xml" />
+    <EmbeddedResource Include="Smart Fields\NumberOfActiveCorrespondentChildSponsorships.SmartField.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Smart Fields\AverageMonthsDelinquent.SmartField.xml" />
@@ -146,6 +146,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SQL\Functions\USR_UFN_CONSTITUENT_HASVALID_PRIMARY_EMAIL.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Smart Fields\NumberOfActiveFinancialChildSponsorships.SmartField.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

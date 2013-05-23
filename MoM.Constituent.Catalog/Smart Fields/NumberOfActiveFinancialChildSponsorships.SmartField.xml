@@ -2,13 +2,13 @@
 	xmlns="bb_appfx_smartfield"
 	xmlns:common="bb_appfx_commontypes" 
 	ID="c3ec1e22-9922-4e09-88ac-84489fdec7e9"
-	Name="Number Of Active Child Sponsorships Smart Field"
-	Description="Count of active child sponsorships for this Constituent."
+	Name="Number Of Active Financial Child Sponsorships Smart Field"
+	Description="Count of active financial (not gift recipients) child sponsorships for this Constituent."
 	Author="Memphis Sellers"
-	SPName="USR_USP_SMARTFIELD_NUMBEROFACTIVECHILDSPONSORSHIPSFORCONSTITUENT"
+	SPName="USR_USP_SMARTFIELD_NUMBEROFACTIVEFINANCIALCHILDSPONSORSHIPSFORCONSTITUENT"
 	DataType="Integer" 
 	RecordType="Constituent" 
-	DisplayName="Number of child sponsorships" 
+	DisplayName="Number of financial child sponsorships" 
 	SmartFieldFolder="Constituent"
 	>
 

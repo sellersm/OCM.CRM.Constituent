@@ -30,6 +30,8 @@
 	06-May-2013		Memphis			Added new UFNs to use for D2 Campaign and whatever else needs them:
 									USR_UFN_GET_CONSTITUENT_SOLICITCODES_LIST.xml
 									USR_UFN_CONSTITUENT_HASVALID_PRIMARY_EMAIL.xml
+	23-May-2013		CMayeda			Changed NumberOfActiveChildSponsorships.SmartField.xml to NumberOfActiveFinancialChildSponsorships.SmartField.xml
+									Added NumberOfActiveCorrespondentChildSponsorships.SmartField.xml
 	-->
 
 	<!-- Note:  the order of the items listed here is important.  For example, you won't be able to load a data form that references 
@@ -104,10 +106,11 @@
 		
 		<!-- Smart Fields: these have a dependency on a UFN in Sponsorship -->
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.AverageMonthsDelinquent.SmartField.xml" />
-		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.NumberOfActiveChildSponsorships.SmartField.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.NumberOfActiveFinancialChildSponsorships.SmartField.xml" />
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.AverageRecurringGift.SmartField.xml" />
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.AverageMonthsDelinquentByAmountDue.SmartField.xml" />
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.NumberOfLKFinancialSponsorships.SmartField.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.NumberOfActiveCorrespondentChildSponsorships.SmartField.xml" />
 
 		<!-- Package Versions -->
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.PackageVersion.DataList.xml" />
