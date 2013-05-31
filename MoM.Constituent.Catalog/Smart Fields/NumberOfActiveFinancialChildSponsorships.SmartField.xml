@@ -15,7 +15,7 @@
 	<!-- describe the SP used to calculate the smart field values -->
 	<CreateProcedureSQL>
 		<![CDATA[
-create procedure dbo.USR_USP_SMARTFIELD_NUMBEROFACTIVECHILDSPONSORSHIPSFORCONSTITUENT
+create procedure dbo.USR_USP_SMARTFIELD_NUMBEROFACTIVEFINANCIALCHILDSPONSORSHIPSFORCONSTITUENT
 (
 	@ASOF datetime 
 )
