@@ -1,0 +1,88 @@
+﻿<SmartFieldSpec
+	xmlns="bb_appfx_smartfield"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="7ed4fcfd-5155-4935-ac51-41d28b9520dc"	
+	Name="Number of Active Correspondent Child Sponsorships Fixes DC Issues Smart Field"
+	Description="Count of active child sponsorship correspondent commitments for this Constituent (sponsorships - not gifted). Code included fixes the Data Conversion issues."
+	Author="Cary Mayeda"
+	SPName="USR_USP_SMARTFIELD_NUMBEROFACTIVECORRESPONDENTCHILDSPONSORSHIPSFORCONSTITUENT_DCFIXED"
+	DataType="Integer" 
+	RecordType="Constituent" 
+	DisplayName="Number of correspondent child sponsorships with data conversion fix" 
+	SmartFieldFolder="Constituent"
+	>
+	
+	<!-- 
+	Remarks:    This excludes project sponsorships.  This does not include gifted sponsorships
+
+	History:
+	Date            Modified By     Comments
+	19-Jun-2013		CMayeda			Initial Version - modified USR_USP_SMARTFIELD_NUMBEROFACTIVECORRESPONDENTCHILDSPONSORSHIPSFORCONSTITUENT
+
+	-->
+
+	<!-- describe the SP used to calculate the smart field values -->
+	<CreateProcedureSQL>
+		<![CDATA[
+create procedure dbo.USR_USP_SMARTFIELD_NUMBEROFACTIVECORRESPONDENTCHILDSPONSORSHIPSFORCONSTITUENT_DCFIXED
+(
+	@ASOF datetime 
+)
+as
+	-- write sql to calculate the smart field values based on the parameters and ASOF date
+with FinancialSponsorships (SponsorshipID)
+as (
+	select s.ID
+	  from dbo.SPONSORSHIP s 
+	  join dbo.CONSTITUENT c on s.CONSTITUENTID = c.ID 
+	  join dbo.SPONSORSHIPOPPORTUNITYCHILD so_child on s.SPONSORSHIPOPPORTUNITYID = so_child.ID     
+	 where s.STATUSCODE = 1
+	   and dbo.UFN_SPONSORSHIPOPPORTUNITY_ACTIVESPONSORSHIPS (so_child.ID) > 1
+	   and exists (	   
+					select 1
+					  from dbo.RELATIONSHIP r
+					  join dbo.CONSTITUENT on r.RECIPROCALCONSTITUENTID = CONSTITUENT.ID
+					  join dbo.RELATIONSHIPTYPECODE reltypecode on r.RECIPROCALTYPECODEID = reltypecode.ID
+					 where r.RELATIONSHIPCONSTITUENTID = c.ID --'02F8FB8C-2AB6-4C44-B8F4-00384117CB5A'
+					   and (r.STARTDATE is null
+							or r.STARTDATE <= cast (getdate() as date))
+					   and (r.ENDDATE is null
+							or r.ENDDATE >= cast (getdate() as date))
+					   and r.RECIPROCALTYPECODEID = 'B382173F-646B-426E-A44A-1D6C597FC6AF'
+					)			    
+       and exists (
+					select 1 from SPONSORSHIP s2
+                     where s2.STATUSCODE = 1
+                       and s2.SPONSORSHIPOPPORTUNITYID = so_child.ID 
+                       and s2.REVENUESPLITID is null
+                  )
+)
+	select	c.ID, count (so_child.id)
+      from	dbo.CONSTITUENT c
+	  left	join dbo.SPONSORSHIP s ON s.CONSTITUENTID = c.ID and s.STATUSCODE = 1
+	  left	join dbo.SPONSORSHIPOPPORTUNITYCHILD so_child on s.SPONSORSHIPOPPORTUNITYID = so_child.ID     
+	 where  not exists (select 1 from FinancialSponsorships where SponsorshipID = s.ID)
+	--   and dbo.UFN_SPONSORSHIPOPPORTUNITY_ACTIVESPONSORSHIPS (so_child.ID) > 1	   
+     group by c.ID
+
+
+
+
+		]]>
+	</CreateProcedureSQL>
+	
+	
+	<!-- describe any parameters (other than the ASOF date) defined on the SP -->
+	<!--<common:FormMetaData>
+		<common:FormFields>
+			<common:FormField Caption="Constituent ID" FieldID="CONSTITUENTID" DataType="Guid"/>
+		</common:FormFields>
+
+		--><!-- optionally indicate the client-side component for the user interface --><!--
+		--><!--<common:FormUIComponent FormUIComponentType="CustomComponent">
+			<common:CustomComponentID AssemblyName="REPLACE_WITH_ASSEMBLYNAME" ClassName="REPLACE_WITH_FULLCLASSNAME" />
+		</common:FormUIComponent>--><!--
+
+	</common:FormMetaData>-->
+
+</SmartFieldSpec>
