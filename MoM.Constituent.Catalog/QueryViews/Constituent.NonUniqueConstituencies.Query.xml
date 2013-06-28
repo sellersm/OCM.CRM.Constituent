@@ -1,0 +1,48 @@
+﻿<QueryViewSpec
+	xmlns="bb_appfx_queryview"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="7402dc6b-8b2e-4d2a-af3b-4be55dd50531"
+	Name="Constituent Non Unique Constituencies Query"
+	Description="Used to find constituents that have duplicate constituencies that fail the isunique constraint"
+	Author="Cary Mayeda"
+	IsRoot="true"
+	PrimaryKeyField="ID"
+	RecordType="CONSTITUENT"
+	common:SecurityUIFolder="CONSITUENT"
+	>
+
+	<!-- define the view used to return data for the query -->
+	<ViewImplementation ViewName="USR_V_QUERY_CONSTITUENTNONUNIQUECONSTITUENCIES">
+		<ViewSQL>
+			<![CDATA[
+ select	constit.ID,
+		constit.LOOKUPID, 
+		constit.NAME, 
+		cc.DESCRIPTION, 
+		c.DATEFROM, 
+		c.DATETO
+   from dbo.CONSTITUENCY c
+   join dbo.CONSTITUENT constit on c.CONSTITUENTID = constit.ID
+   join dbo.CONSTITUENCYCODE cc on cc.ID = c.CONSTITUENCYCODEID
+  where dbo.UFN_CONSTITUENCY_ISUNIQUE (CONSTITUENTID, CONSTITUENCYCODEID, DATEFROM, DATETO) = 0
+			
+			]]>
+		</ViewSQL>
+	</ViewImplementation>
+
+	<!-- describe each field in the view output -->
+	<Output>
+		<OutputFields>
+			<OutputField Caption="System record ID" Category="System Fields" Name="ID" />
+			<OutputField Name="LOOKUPID" Caption="Lookup ID" DataType="String" />
+			<OutputField Name="NAME" Caption="Name" DataType="String" />
+			<OutputField Name="DESCRIPTION" Caption="Constituency description" DataType="String" />
+			<OutputField Name="DATEFROM" Caption="Date from" DataType="String" />
+			<OutputField Name="DATETO" Caption="Date to" DataType="String" />
+		</OutputFields>
+	</Output>
+	<RelationshipOperations>
+		<AddRelatedView RelatedView="V_QUERY_CONSTITUENT" Field="ID" RelatedField="ID" PathAlias="Constituent"/>
+	</RelationshipOperations>
+</QueryViewSpec>
+
