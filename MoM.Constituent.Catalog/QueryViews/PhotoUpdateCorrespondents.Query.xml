@@ -54,6 +54,7 @@ and exists (select i.ID
 	<Output>
 		<OutputFields>
 			<OutputField Caption="System record ID" Category="System Fields" Name="ID" />
+			<OutputField Caption="Child System record ID" Category="System Fields" Name="CHILDID"/>
 			<OutputField Name="SPONSORLOOKUPID" Caption="Sponsor lookup ID" DataType="String" />
 			<OutputField Name="SPONSORNAME" Caption="Sponsor name" DataType="String" />
 			<OutputField Name="PROJECTLOOKUPID" Caption="Project lookup ID" DataType="String" />

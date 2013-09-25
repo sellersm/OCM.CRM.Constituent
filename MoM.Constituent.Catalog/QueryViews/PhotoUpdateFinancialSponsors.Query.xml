@@ -62,6 +62,7 @@ and (dbo.USR_UFN_ADDRESS_ADDRESSBLOCK_NORMALIZE_LOWERCASE(fs_address.ADDRESSBLOC
 	<Output>
 		<OutputFields>
 			<OutputField Caption="System record ID" Category="System Fields" Name="ID" />
+			<OutputField Caption="Child System record ID" Category="System Fields" Name="CHILDID"/>
 			<OutputField Name="FINANCIALSPONSORLOOKUPID" Caption="Financial sponsor lookup ID" DataType="String" />
 			<OutputField Name="FINANCIALSPONSORNAME" Caption="Financial sponsor name" DataType="String" />
 			<OutputField Name="PROJECTLOOKUPID" Caption="Project lookup ID" DataType="String" />
