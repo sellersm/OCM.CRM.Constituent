@@ -32,6 +32,11 @@
 									USR_UFN_CONSTITUENT_HASVALID_PRIMARY_EMAIL.xml
 	23-May-2013		CMayeda			Changed NumberOfActiveChildSponsorships.SmartField.xml to NumberOfActiveFinancialChildSponsorships.SmartField.xml
 									Added NumberOfActiveCorrespondentChildSponsorships.SmartField.xml
+	26-Sep-2013		CMayeda			Added	NewsletterUpdateOnlyCorrespondents.Query.xml
+											NewsletterUpdateOnlyFinancialSponsors.Query.xml
+											PhotoUpdateCorrespondents.Query.xml
+											PhotoUpdateFinancialSponsors.Query.xml
+
 	-->
 
 	<!-- Note:  the order of the items listed here is important.  For example, you won't be able to load a data form that references 
@@ -103,7 +108,11 @@
 		
 		<!-- Query Views -->
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.RecurringGiftOrGiftInBatch.Query.xml" />
-		
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.NewsletterUpdateOnlyCorrespondents.Query.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.NewsletterUpdateOnlyFinancialSponsors.Query.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.PhotoUpdateCorrespondents.Query.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.PhotoUpdateFinancialSponsors.Query.xml" />
+
 		<!-- Smart Fields: these have a dependency on a UFN in Sponsorship -->
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.AverageMonthsDelinquent.SmartField.xml" />
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.NumberOfActiveFinancialChildSponsorships.SmartField.xml" />

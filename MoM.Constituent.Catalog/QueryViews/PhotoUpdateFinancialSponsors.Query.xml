@@ -1,0 +1,79 @@
+﻿<QueryViewSpec
+	xmlns="bb_appfx_queryview"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="6af5159b-dab8-4207-8c21-8c3c0bd72dce"
+	Name="Photo Update Financial Sponsor Gifter Query"
+	Description="Financial sponsors who have a gifted sponsorship with a different address than Correspondent and the child with a completed Annual Photo Update interaction."
+	Author="Cary Mayeda"
+	IsRoot="true"
+	PrimaryKeyField="ID"
+	RecordType="CONSTITUENT"
+	common:SecurityUIFolder="Constituent"
+	>
+
+	<!-- define the view used to return data for the query -->
+	<ViewImplementation ViewName="USR_V_QUERY_CONSTITUENT_FINANCIALSPONSORPHOTOUPDATE">
+		<ViewSQL>
+			<![CDATA[
+			
+select 
+	financialsponsor.ID as ID, 
+	financialsponsor.LOOKUPID as FINANCIALSPONSORLOOKUPID, 
+	financialsponsor.NAME as FINANCIALSPONSORNAME,
+	so.ID as CHILDID,
+	proj_const.LOOKUPID as PROJECTLOOKUPID, 
+	so.LOOKUPID as CHILDLOOKUPID, 
+	so_child.NAME as CHILDNAME
+
+from	
+	dbo.SPONSORSHIP s
+	inner join dbo.SPONSORSHIPOPPORTUNITY so on s.SPONSORSHIPOPPORTUNITYID = so.ID
+	inner join dbo.SPONSORSHIPOPPORTUNITYCHILD so_child on s.SPONSORSHIPOPPORTUNITYID = so_child.ID
+	inner join dbo.SPONSORSHIPLOCATION slocation on so.SPONSORSHIPLOCATIONID = slocation.ID 	
+	inner join dbo.CONSTITUENT proj_const on proj_const.ID = slocation.FIELDOFFICEID
+	inner join dbo.REVENUESPLIT rs on rs.ID = s.REVENUESPLITID
+	inner join dbo.REVENUE r on r.ID = rs.REVENUEID
+	inner join dbo.CONSTITUENT financialsponsor on financialsponsor.ID = r.CONSTITUENTID
+	inner join dbo.ADDRESS fs_address on fs_address.CONSTITUENTID = financialsponsor.ID and fs_address.ISPRIMARY = 1
+	inner join dbo.ADDRESS c_address on c_address.CONSTITUENTID = s.CONSTITUENTID and c_address.ISPRIMARY = 1
+	
+where 
+	s.CONSTITUENTID <> r.CONSTITUENTID 
+and s.STATUSCODE = 1
+and exists (select i.ID 
+              from dbo.INTERACTION i 
+			  join dbo.INTERACTIONSUBCATEGORY isubcat on i.INTERACTIONSUBCATEGORYID = isubcat.ID
+	          join dbo.INTERACTIONCATEGORY icat on isubcat.INTERACTIONCATEGORYID = icat.ID
+		     where i.CONSTITUENTID = so_child.CONSTITUENTID 
+			   and isubcat.NAME = 'Annual Photo Update'
+	           and icat.NAME = 'Child Annual Update'
+	           and i.EXPECTEDDATE >= '3/31/2013'
+	           and i.STATUSCODE = 2 -- Completed
+	         )
+and (dbo.USR_UFN_ADDRESS_ADDRESSBLOCK_NORMALIZE_LOWERCASE(fs_address.ADDRESSBLOCK)<> 
+       dbo.USR_UFN_ADDRESS_ADDRESSBLOCK_NORMALIZE_LOWERCASE(c_address.ADDRESSBLOCK)
+    or coalesce (fs_address.STATEID, '00000000-0000-0000-0000-000000000000') <> coalesce (c_address.STATEID, '00000000-0000-0000-0000-000000000000'))
+
+
+			]]>
+		</ViewSQL>
+	</ViewImplementation>
+
+	<Output>
+		<OutputFields>
+			<OutputField Caption="System record ID" Category="System Fields" Name="ID" />
+			<OutputField Name="FINANCIALSPONSORLOOKUPID" Caption="Financial sponsor lookup ID" DataType="String" />
+			<OutputField Name="FINANCIALSPONSORNAME" Caption="Financial sponsor name" DataType="String" />
+			<OutputField Name="PROJECTLOOKUPID" Caption="Project lookup ID" DataType="String" />
+			<OutputField Name="CHILDLOOKUPID" Caption="Child lookup ID" DataType="String" />
+			<OutputField Name="CHILDNAME" Caption="Child name" DataType="String" />
+		</OutputFields>
+	</Output>
+	<RelationshipOperations>
+		<AddRelatedView RelatedView="V_QUERY_CONSTITUENT" Field="ID" RelatedField="ID" PathAlias="Constituent"/>
+		<AddRelatedView RelatedView ="V_QUERY_SPONSORSHIPOPPORTUNITY" Field="CHILDID" RelatedField="ID" PathAlias="Sponsored child"/>
+		
+	</RelationshipOperations>
+
+</QueryViewSpec>
+
