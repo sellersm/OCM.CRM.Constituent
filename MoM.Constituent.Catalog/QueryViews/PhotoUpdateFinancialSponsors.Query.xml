@@ -2,7 +2,7 @@
 	xmlns="bb_appfx_queryview"
 	xmlns:common="bb_appfx_commontypes" 
 	ID="6af5159b-dab8-4207-8c21-8c3c0bd72dce"
-	Name="Photo Update Financial Sponsor Gifter Query"
+	Name="Photo Update Financial Sponsor (Gifters) Query"
 	Description="Financial sponsors who have a gifted sponsorship with a different address than Correspondent and the child with a completed Annual Photo Update interaction."
 	Author="Cary Mayeda"
 	IsRoot="true"
