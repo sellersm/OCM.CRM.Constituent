@@ -1,0 +1,100 @@
+﻿<ViewDataFormTemplateSpec 
+	xmlns="bb_appfx_viewdataformtemplate" 
+	xmlns:common="bb_appfx_commontypes" 
+	ID="ebaabc08-0ac6-4da6-80bc-9acf40357dee" 
+	Name="Constituent Primary Address OCM View Form"
+	Description="Used for viewing a constituent's primary address."
+	Author="Cary Mayeda"
+	DataFormInstanceID="bb6e0c04-1a4a-4edd-9e4d-af719c63f30c" 
+	RecordType="Constituent"
+	common:SecurityUIFolder="Constituent"
+	>
+
+	<!-- define the SP that returns the data used by the form -->
+	<SPDataForm SPName="USR_USP_DATAFORMTEMPLATE_VIEW_CONSTITUENTADDRESS_OCM">
+		<common:CreateProcedureSQL>
+			<![CDATA[
+			create procedure dbo.USR_USP_DATAFORMTEMPLATE_VIEW_CONSTITUENTADDRESS_OCM
+			(
+				@ID uniqueidentifier,
+				@DATALOADED bit = 0 output,
+				@HASADDRESS bit = null output,
+				@POSTCODE nvarchar(20) = null output,
+				@ADDRESSBLOCK nvarchar(150) = null output,
+				@CITY nvarchar(50) = null output,
+				@STATEID uniqueidentifier = null output,
+				@STATEABBREV nvarchar(5) = null output,
+				@STATEDESC nvarchar(100) = null output,				
+				@COUNTRYID uniqueidentifier = null output,
+				@ISUSADDRESS bit = null output,
+				@PHONENUMBER nvarchar(100) = null output,
+				@EMAILADDRESS nvarchar(100) = null output
+			)
+			as
+				set nocount on;
+
+				set @DATALOADED = 0;
+				
+				declare @USCOUNTRYID uniqueidentifier = (select top(1) ID from dbo.COUNTRY where DESCRIPTION like '%united%state%')
+				
+				select 
+					@DATALOADED = 1,
+					@HASADDRESS = 1,
+					@POSTCODE = POSTCODE,
+					@ADDRESSBLOCK = ADDRESSBLOCK,
+					@CITY = CITY,
+					@STATEID = STATEID,
+					@STATEABBREV = STATE.ABBREVIATION,
+					@STATEDESC = STATE.DESCRIPTION,
+					@COUNTRYID = ADDRESS.COUNTRYID
+				from dbo.ADDRESS
+				left join dbo.STATE on ADDRESS.STATEID = STATE.ID
+				where CONSTITUENTID = @ID
+				and ISPRIMARY = 1
+				
+				if @COUNTRYID = @USCOUNTRYID set @ISUSADDRESS = 1
+				else set @ISUSADDRESS = 0
+				
+				select 
+					@PHONENUMBER = NUMBER
+				from
+					dbo.PHONE
+				where
+					CONSTITUENTID = @ID
+				and ISPRIMARY = 1 
+				and DONOTCALL = 0
+					  
+				select 
+					@EMAILADDRESS = EMAILADDRESS
+				from
+					dbo.EMAILADDRESS
+				where
+					CONSTITUENTID = @ID
+				and ISPRIMARY = 1 
+				and DONOTEMAIL = 0
+					  
+			return 0;
+
+			]]>
+		</common:CreateProcedureSQL>
+	</SPDataForm>
+
+	<!-- describe fields on the form, which correspond to parameters on the SP.  Note that system paramters 
+	like the context @ID, @DATALOADED, and @CURRENTAPPUSERID need not be listed. -->
+	<common:FormMetaData FixedDialog="true">
+		<common:FormFields>
+			<common:FormField FieldID="HASADDRESS" DataType="Boolean" Hidden="true" Caption="HASADDRESS" />
+			<common:FormField FieldID="POSTCODE" MaxLength="20" Caption="Postcode" CaptionResourceKey="$$postcode" />
+			<common:FormField FieldID="ADDRESSBLOCK" MaxLength="150" Caption="Address" CaptionResourceKey="$$address" />
+			<common:FormField FieldID="CITY" MaxLength="50" Caption="City" CaptionResourceKey="$$city" />
+			<common:FormField FieldID="STATEID" DataType="Guid" Caption="StateID" CaptionResourceKey="$$state" />
+			<common:FormField FieldID="STATEABBREV" MaxLength="5" Caption="State Abbreviation" CaptionResourceKey="$$state" />
+			<common:FormField FieldID="STATEDESC" MaxLength="100" Caption="State Description" CaptionResourceKey="$$state" />
+			<common:FormField FieldID="COUNTRYID" DataType="Guid" Caption="Country" CaptionResourceKey="$$country" />
+			<common:FormField FieldID="ISUSADDRESS" DataType="Boolean" Hidden="true" Caption="ISUSADDRESS" />
+			<common:FormField FieldID="PHONENUMBER" MaxLength="100" Caption="Phone" />
+			<common:FormField FieldID="EMAILADDRESS" MaxLength="100" Caption="Email" />
+		</common:FormFields>
+	</common:FormMetaData>
+
+</ViewDataFormTemplateSpec>
