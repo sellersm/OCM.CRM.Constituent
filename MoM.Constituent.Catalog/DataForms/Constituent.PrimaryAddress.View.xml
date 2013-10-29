@@ -9,6 +9,14 @@
 	RecordType="Constituent"
 	common:SecurityUIFolder="Constituent"
 	>
+	<!-- 
+	Remarks:  Based on USP_DATAFORMTEMPLATE_VIEW_CONSTITUENTADDRESS. 
+			  Added phone number and email address
+
+	History:
+	Date            Modified By     Comments
+	28-Oct-2013		CMayeda			Initial Version
+	-->
 
 	<!-- define the SP that returns the data used by the form -->
 	<SPDataForm SPName="USR_USP_DATAFORMTEMPLATE_VIEW_CONSTITUENTADDRESS_OCM">
