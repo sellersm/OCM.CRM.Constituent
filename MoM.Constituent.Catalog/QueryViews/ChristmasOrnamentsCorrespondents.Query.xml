@@ -1,0 +1,71 @@
+﻿<QueryViewSpec
+	xmlns="bb_appfx_queryview"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="F8E99495-D1A0-4C9C-817B-C7AA2BD88638"
+	Name="Christmas Ornaments Correspondents Query"
+	Description="Correspondents who sponsor a child and the child does not have a pending Annual Photo Update interaction"
+	Author="Cary Mayeda"
+	IsRoot="true"
+	PrimaryKeyField="ID"
+	RecordType="CONSTITUENT"
+	common:SecurityUIFolder="Constituent"
+	>
+
+	<!-- define the view used to return data for the query -->
+	<ViewImplementation ViewName="USR_V_QUERY_CONSTITUENT_CORRESPONDENTCHRISTMASORNAMENTS">
+		<ViewSQL>
+			<![CDATA[
+			
+select 
+	s.CONSTITUENTID as ID, 
+	c.LOOKUPID as SPONSORLOOKUPID, 
+	c.NAME as SPONSORNAME,
+	so.ID as CHILDID,
+	proj_const.LOOKUPID as PROJECTLOOKUPID, 
+	so.LOOKUPID as CHILDLOOKUPID, 
+	so_child.NAME as CHILDNAME
+	
+from 
+	SPONSORSHIP s
+	inner join dbo.CONSTITUENT c on s.CONSTITUENTID = c.ID
+	inner join dbo.SPONSORSHIPOPPORTUNITY so on s.SPONSORSHIPOPPORTUNITYID = so.ID
+	inner join dbo.SPONSORSHIPOPPORTUNITYCHILD so_child on s.SPONSORSHIPOPPORTUNITYID = so_child.ID
+	inner join dbo.SPONSORSHIPLOCATION slocation on so.SPONSORSHIPLOCATIONID = slocation.ID 	
+	inner join dbo.CONSTITUENT proj_const on proj_const.ID = slocation.FIELDOFFICEID
+			
+where
+	s.STATUSCODE = 	1 -- Active
+and not exists (select i.ID 
+              from dbo.INTERACTION i 
+			  join dbo.INTERACTIONSUBCATEGORY isubcat on i.INTERACTIONSUBCATEGORYID = isubcat.ID
+	          join dbo.INTERACTIONCATEGORY icat on isubcat.INTERACTIONCATEGORYID = icat.ID
+		     where i.CONSTITUENTID = so_child.CONSTITUENTID 
+			   and isubcat.NAME = 'Annual Photo Update'
+	           and icat.NAME = 'Child Annual Update'
+	           and i.EXPECTEDDATE >= '3/31/2013'
+	           and i.STATUSCODE = 1 -- Pending
+			   )
+
+			]]>
+		</ViewSQL>
+	</ViewImplementation>
+
+	<Output>
+		<OutputFields>
+			<OutputField Caption="System record ID" Category="System Fields" Name="ID" />
+			<OutputField Caption="Child System record ID" Category="System Fields" Name="CHILDID"/>
+			<OutputField Name="SPONSORLOOKUPID" Caption="Sponsor lookup ID" DataType="String" />
+			<OutputField Name="SPONSORNAME" Caption="Sponsor name" DataType="String" />
+			<OutputField Name="PROJECTLOOKUPID" Caption="Project lookup ID" DataType="String" />
+			<OutputField Name="CHILDLOOKUPID" Caption="Child lookup ID" DataType="String" />
+			<OutputField Name="CHILDNAME" Caption="Child name" DataType="String" />
+		</OutputFields>
+	</Output>
+	<RelationshipOperations>
+		<AddRelatedView RelatedView="V_QUERY_CONSTITUENT" Field="ID" RelatedField="ID" PathAlias="Constituent"/>
+		<AddRelatedView RelatedView ="V_QUERY_SPONSORSHIPOPPORTUNITY" Field="CHILDID" RelatedField="ID" PathAlias="Sponsored child"/>
+		
+	</RelationshipOperations>
+
+</QueryViewSpec>
+
