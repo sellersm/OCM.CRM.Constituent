@@ -22,6 +22,7 @@
 	Date            Modified By     Comments
 	20-Dec-2012		CMayeda			Initial Version
 	12-Feb-2012		CMayeda			Changed to account for the issue of null NTDs on recurring gifts
+	13-Jan-2013		CMayeda			Added criteria to exclude $0 active RGs, because of Data Conversion fix issues, which cause a divide by zero error
 	-->
 
 	<!-- describe the SP used to calculate the smart field values -->
@@ -58,6 +59,7 @@ as
 	where ft.TYPECODE = 2		--recurring gift
 	  and rsch.STATUSCODE = 0	--active
 	  and s.STATUSCODE = 1
+	  and ft.TRANSACTIONAMOUNT > 0  -- exclude $0 RGs
 	group by ft.CONSTITUENTID
 )
 select	CONSTITUENTID,
