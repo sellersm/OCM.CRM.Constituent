@@ -1,0 +1,71 @@
+﻿<SmartFieldSpec
+	xmlns="bb_appfx_smartfield"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="53d06125-8006-4478-b79e-87bfb3130965"
+	Name="Has child sponsorship on EFT Smart Field"
+	Description="Has child sponsorship on EFT for a constituent. True if any active child sponsorship in paid with credit card or direct debit."
+	Author="Cary Mayeda"
+	SPName="USR_USP_HASCHILDSPONSORSHIPONEFTFORCONSTITUENT"
+	DataType="Boolean"
+	RecordType="Constituent"
+	DisplayName="Has child sponsorship on EFT smart field"
+	SmartFieldFolder="Constituent"
+	>
+	<!-- 
+	Remarks:    This is used to determine if the sponsor pays any child sponsorship with credit card or direct debit.
+				The smart field should be cleared before updating.
+				
+	History:
+	Date            Modified By     Comments
+	28-Jan-2014		CMayeda			Initial Version
+	-->
+
+		<!-- describe the SP used to calculate the smart field values -->
+
+		<CreateProcedureSQL>
+			<![CDATA[
+create procedure dbo.USR_USP_HASCHILDSPONSORSHIPONEFTFORCONSTITUENT
+(
+	@ASOF datetime 
+)
+as
+	-- write sql to calculate the smart field values based on the parameters and ASOF date
+
+select distinct
+	s.CONSTITUENTID, 1
+ from 
+	dbo.CONSTITUENT c 
+	join dbo.SPONSORSHIP s on s.CONSTITUENTID = c.ID
+	join dbo.SPONSORSHIPOPPORTUNITY so on so.ID = s.SPONSORSHIPOPPORTUNITYID
+	join dbo.SPONSORSHIPOPPORTUNITYCHILD so_child on so_child.ID = s.SPONSORSHIPOPPORTUNITYID
+	join dbo.REVENUESPLIT rsplit on s.REVENUESPLITID = rsplit.ID
+	join dbo.REVENUEPAYMENTMETHOD rpaymethod on rpaymethod.REVENUEID = rsplit.REVENUEID
+where
+	s.STATUSCODE = 1
+and rpaymethod.PAYMENTMETHODCODE in (2, 3) -- Credit card, Direct debit
+
+
+
+		]]>
+		</CreateProcedureSQL>
+
+
+		<!-- describe any parameters (other than the ASOF date) defined on the SP -->
+		<!--<common:FormMetaData>
+		<common:FormFields>
+			<common:FormField Caption="Constituent ID" FieldID="CONSTITUENTID" DataType="Guid"/>
+		</common:FormFields>
+
+		-->
+		<!-- optionally indicate the client-side component for the user interface -->
+		<!--
+		-->
+		<!--<common:FormUIComponent FormUIComponentType="CustomComponent">
+			<common:CustomComponentID AssemblyName="REPLACE_WITH_ASSEMBLYNAME" ClassName="REPLACE_WITH_FULLCLASSNAME" />
+		</common:FormUIComponent>-->
+		<!--
+
+	</common:FormMetaData>-->
+
+
+</SmartFieldSpec>

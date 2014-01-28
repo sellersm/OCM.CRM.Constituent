@@ -1,0 +1,63 @@
+﻿<SmartFieldSpec
+	xmlns="bb_appfx_smartfield"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="126ed06d-abcc-47cd-b8f8-3ef859548327"
+	Name="Earliest Sponsorship Date Smart Field"
+	Description="Earliest child sponsorship date of all sponsorships for a constituent. Includes former sponsorships as well."
+	Author="Cary Mayeda"
+	SPName="USR_USP_SMARTFIELD_EARLIESTCHILDSPONSORSHIPDATEFORCONSTITUENT"
+	DataType="Date"
+	RecordType="Constituent"
+	DisplayName="Earliest Child Sponsorship Date smart field"
+	SmartFieldFolder="Constituent"
+	>
+	
+	<!-- 
+	Remarks:    This is used to determine the when the person started sponsorship children at OCM.				
+				
+	History:
+	Date            Modified By     Comments
+	28-Jan-2014		CMayeda			Initial Version
+	-->
+
+	<!-- describe the SP used to calculate the smart field values -->
+
+	<CreateProcedureSQL>
+		<![CDATA[
+create procedure dbo.USR_USP_SMARTFIELD_EARLIESTCHILDSPONSORSHIPDATEFORCONSTITUENT
+(
+	@ASOF datetime 
+)
+as
+	-- write sql to calculate the smart field values based on the parameters and ASOF date
+
+	select s.CONSTITUENTID, min(s.STARTDATE)
+	from dbo.SPONSORSHIP s 
+		join dbo.SPONSORSHIPOPPORTUNITYCHILD on SPONSORSHIPOPPORTUNITYCHILD.ID = s.SPONSORSHIPOPPORTUNITYID
+		join dbo.CONSTITUENT c on s.CONSTITUENTID = c.ID
+	group by s.CONSTITUENTID
+
+
+		]]>
+</CreateProcedureSQL>
+
+
+<!-- describe any parameters (other than the ASOF date) defined on the SP -->
+<!--<common:FormMetaData>
+		<common:FormFields>
+			<common:FormField Caption="Constituent ID" FieldID="CONSTITUENTID" DataType="Guid"/>
+		</common:FormFields>
+
+		-->
+<!-- optionally indicate the client-side component for the user interface -->
+<!--
+		-->
+<!--<common:FormUIComponent FormUIComponentType="CustomComponent">
+			<common:CustomComponentID AssemblyName="REPLACE_WITH_ASSEMBLYNAME" ClassName="REPLACE_WITH_FULLCLASSNAME" />
+		</common:FormUIComponent>-->
+<!--
+
+	</common:FormMetaData>-->
+
+
+</SmartFieldSpec>

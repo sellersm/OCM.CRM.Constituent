@@ -1,0 +1,78 @@
+﻿<SmartFieldSpec
+	xmlns="bb_appfx_smartfield"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="265c1f50-9867-4991-9a2e-5b839d5097d3"
+	Name="Rate Increase 2014 All Child Sponsorships Paid Ahead"
+	Description="Rate Increase 2014 - Used to determine those in Paid Ahead Sponsors Segment."
+	Author="Cary Mayeda"
+	SPName="USR_USP_SMARTFIELD_RI2014ALLCHILDSPONSORSHIPSPAIDAHEADFORCONSTITUENT"
+	DataType="Boolean"
+	RecordType="Constituent"
+	DisplayName="Rate Increase 2014 - All Child Sponsorships Paid Ahead smart field"
+	SmartFieldFolder="Constituent"
+	>
+
+	<!-- 
+	Remarks:    This is used to determine the when the person started sponsorship children at OCM.		
+				This has dates and amounts hard coded to fit the segment.
+				Values need to be cleared before populating the smart field.		
+				
+	History:
+	Date            Modified By     Comments
+	28-Jan-2014		CMayeda			Initial Version
+	-->
+
+	<!-- describe the SP used to calculate the smart field values -->
+
+	<CreateProcedureSQL>
+		<![CDATA[
+create procedure dbo.USR_USP_SMARTFIELD_RI2014ALLCHILDSPONSORSHIPSPAIDAHEADFORCONSTITUENT
+(
+	@ASOF datetime 
+)
+as
+	-- write sql to calculate the smart field values based on the parameters and ASOF date
+
+	select 
+		distinct s.CONSTITUENTID, 1
+	  from 
+		dbo.REVENUESCHEDULE rsch
+		join dbo.FINANCIALTRANSACTION ft on ft.id = rsch.id
+		join dbo.REVENUESPLIT rsplit on ft.ID = rsplit.REVENUEID
+		join dbo.SPONSORSHIP s on s.REVENUESPLITID = rsplit.ID
+		join dbo.SPONSORSHIPOPPORTUNITYCHILD on SPONSORSHIPOPPORTUNITYCHILD.ID = s.SPONSORSHIPOPPORTUNITYID
+	 where 
+		rsch.NEXTTRANSACTIONDATE > '2014-04-01T23:59:59.997'		
+	and s.STATUSCODE = 1 -- Active
+	and ft.TRANSACTIONAMOUNT between 34 and 38.99
+	and not exists (select 1 from dbo.REVENUESCHEDULE rsch2
+							 join dbo.FINANCIALTRANSACTION ft2 on ft2.id = rsch2.id
+							 join dbo.REVENUESPLIT rsplit2 on ft2.ID = rsplit2.REVENUEID
+							 join dbo.SPONSORSHIP s2 on s2.REVENUESPLITID = rsplit2.ID
+							where rsch2.NEXTTRANSACTIONDATE <= '2014-04-01'	
+							  and s2.STATUSCODE = 1 -- Active	
+							  and s2.CONSTITUENTID = s.CONSTITUENTID)
+
+
+		]]>
+	</CreateProcedureSQL>
+
+
+	<!-- describe any parameters (other than the ASOF date) defined on the SP -->
+	<!--<common:FormMetaData>
+		<common:FormFields>
+			<common:FormField Caption="Constituent ID" FieldID="CONSTITUENTID" DataType="Guid"/>
+		</common:FormFields>
+
+		-->
+	<!-- optionally indicate the client-side component for the user interface -->
+	<!--
+		-->
+	<!--<common:FormUIComponent FormUIComponentType="CustomComponent">
+			<common:CustomComponentID AssemblyName="REPLACE_WITH_ASSEMBLYNAME" ClassName="REPLACE_WITH_FULLCLASSNAME" />
+		</common:FormUIComponent>-->
+	<!--
+
+	</common:FormMetaData>-->
+
+</SmartFieldSpec>

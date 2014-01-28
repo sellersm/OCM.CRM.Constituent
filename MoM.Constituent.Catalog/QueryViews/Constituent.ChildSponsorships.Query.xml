@@ -1,0 +1,86 @@
+﻿<QueryViewSpec
+	xmlns="bb_appfx_queryview"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="beb39d55-301b-4bc7-8833-1fb153467100"
+	Name="Constituent Child Sponsorship Query"
+	Description="Used to view child sponsorship commitment information - including monthly amount"
+	Author="Cary Mayeda"
+	IsRoot="true"
+	PrimaryKeyField="ID"
+	RecordType="CONSTITUENT"
+	common:SecurityUIFolder="CONSITUENT"
+	>
+
+	<!-- define the view used to return data for the query -->
+	<ViewImplementation ViewName="USR_V_QUERY_CONSTITUENTCHILDSPONSORSHIP">
+		<ViewSQL>
+			<![CDATA[
+
+select 
+	c.ID, 
+	c.LOOKUPID,
+	c.NAME,
+	s.ID as SPONSORSHIPID,
+	so.ID as CHILDID,
+	so.LOOKUPID as CHILDLOOKUPID,
+	so_child.NAME as CHILDNAME,
+	ft.ID as REVENUEID, 
+	ft.TRANSACTIONAMOUNT,
+	rsch.FREQUENCY,
+	rsch.FREQUENCYCODE,	
+	case
+		when rsch.FREQUENCYCODE = 0 then ft.TRANSACTIONAMOUNT / 12			-- Annually
+		when rsch.FREQUENCYCODE = 1 then ft.TRANSACTIONAMOUNT / 6			-- Semi-annually
+		when rsch.FREQUENCYCODE = 2 then ft.TRANSACTIONAMOUNT / 3			-- Quarterly
+		when rsch.FREQUENCYCODE = 3 then ft.TRANSACTIONAMOUNT				-- Monthly
+		when rsch.FREQUENCYCODE = 6 then ft.TRANSACTIONAMOUNT / 2			-- Bimonthly
+		when rsch.FREQUENCYCODE = 7 then ft.TRANSACTIONAMOUNT * 2			-- Semi-Monthly
+		when rsch.FREQUENCYCODE = 8 then (ft.TRANSACTIONAMOUNT * 26) / 12	-- Biweekly
+		when rsch.FREQUENCYCODE = 9 then (ft.TRANSACTIONAMOUNT * 52) /12	-- Weekly
+	end as MONTHLYSPONSORSHIPAMOUNT,
+	rsch.NEXTTRANSACTIONDATE,
+	s.STATUSCODE
+	
+  from 
+	dbo.CONSTITUENT c 
+	join dbo.SPONSORSHIP s on s.CONSTITUENTID = c.ID
+	join dbo.SPONSORSHIPOPPORTUNITY so on so.ID = s.SPONSORSHIPOPPORTUNITYID
+	join dbo.SPONSORSHIPOPPORTUNITYCHILD so_child on so_child.ID = s.SPONSORSHIPOPPORTUNITYID
+	join dbo.REVENUESPLIT rsplit on s.REVENUESPLITID = rsplit.ID
+	join dbo.FINANCIALTRANSACTION ft on ft.ID = rsplit.REVENUEID
+	join dbo.REVENUESCHEDULE rsch on ft.id = rsch.id
+			
+			]]>
+		</ViewSQL>
+	</ViewImplementation>
+
+	<!-- describe each field in the view output -->
+	<Output>
+		<OutputFields>
+			<OutputField Name="ID" Caption="Constituent System record ID" Category="System Fields" DataType="Guid"/>
+			<OutputField Name="LOOKUPID" Caption="Sponsor Lookup ID" DataType="String" />
+			<OutputField Name="NAME" Caption="Sponsor Name" DataType="String" />
+			<OutputField Name="SPONSORSHIPID" Caption="Sponsorship System record ID"  Category="System Fields" DataType="Guid" />
+			<OutputField Name="CHILDID" Caption="Child System record ID"  Category="System Fields" DataType="Guid" />
+			<OutputField Name="CHILDLOOKUPID" Caption="Child Lookup ID" DataType="String" />
+			<OutputField Name="CHILDNAME" Caption="Child Name" DataType="String" />
+			<OutputField Name="MONTHLYSPONSORSHIPAMOUNT" Caption="Monthly Sponsorship Amount" DataType="Money" />
+			<OutputField Name="REVENUEID" Caption="Revenue System record ID"  Category="System Fields" DataType="Guid" />
+			<OutputField Name="TRANSACTIONAMOUNT" Caption="Transaction Amount" DataType="Money" />
+			<OutputField Name="FREQUENCY" Caption="Payment Frequency" DataType="String" />
+			<OutputField Name="FREQUENCYCODE" Caption="Payment Frequency Code" DataType="TinyInt" />
+			<OutputField Name="NEXTTRANSACTIONDATE" Caption="Next Transaction Date" DataType="Date" />
+			<OutputField Name="STATUSCODE" Caption="Sponsorship Status Code" DataType="TinyInt" />
+
+		</OutputFields>
+	</Output>
+	<RelationshipOperations>
+		<AddRelatedView RelatedView="V_QUERY_CONSTITUENT" RelatedField="ID" Field="ID" PathAlias="Constituent"/>
+		<AddRelatedView RelatedView="V_QUERY_SPONSORSHIPOPPORTUNITY" RelatedField="ID" Field="CHILDID" PathAlias="Sponsorship Opportunity"/>
+		<AddRelatedView RelatedView="V_QUERY_SPONSORSHIP" RelatedField="ID" Field="SPONSORSHIPID" PathAlias="Sponsorship"/>
+		<AddRelatedView RelatedView="V_QUERY_REVENUE" RelatedField="ID" Field="REVENUEID" PathAlias="Revenue"/>
+
+	</RelationshipOperations>
+
+</QueryViewSpec>
+
