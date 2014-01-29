@@ -25,7 +25,7 @@
 
 	<CreateProcedureSQL>
 		<![CDATA[
-create procedure dbo.USR_USP_HASCHILDSPONSORSHIPONEFTFORCONSTITUENT
+create procedure dbo.USR_USP_HASCHILDSPONSORSHIPONCASHFORCONSTITUENT
 (
 	@ASOF datetime 
 )
