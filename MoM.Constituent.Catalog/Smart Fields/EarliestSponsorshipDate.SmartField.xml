@@ -8,7 +8,7 @@
 	SPName="USR_USP_SMARTFIELD_EARLIESTCHILDSPONSORSHIPDATEFORCONSTITUENT"
 	DataType="Date"
 	RecordType="Constituent"
-	DisplayName="Earliest Child Sponsorship Date smart field"
+	DisplayName="Earliest Child Sponsorship Date"
 	SmartFieldFolder="Constituent"
 	>
 	

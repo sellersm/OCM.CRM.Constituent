@@ -2,13 +2,13 @@
 	xmlns="bb_appfx_smartfield"
 	xmlns:common="bb_appfx_commontypes" 
 	ID="53d06125-8006-4478-b79e-87bfb3130965"
-	Name="Has child sponsorship on EFT Smart Field"
-	Description="Has child sponsorship on EFT for a constituent. True if any active child sponsorship in paid with credit card or direct debit."
+	Name="Has EFT Child Sponsorship Smart Field"
+	Description="The constituent has at least one child sponsorship on EFT. True if any active child sponsorship is paid with credit card or direct debit."
 	Author="Cary Mayeda"
 	SPName="USR_USP_HASCHILDSPONSORSHIPONEFTFORCONSTITUENT"
 	DataType="Boolean"
 	RecordType="Constituent"
-	DisplayName="Has child sponsorship on EFT smart field"
+	DisplayName="Has child sponsorship on EFT"
 	SmartFieldFolder="Constituent"
 	>
 	<!-- 

@@ -8,7 +8,7 @@
 	SPName="USR_USP_SMARTFIELD_AVERAGEMONTHSDELINQUENT_AMTPASTDUE"
 	DataType="Integer"
 	RecordType="Constituent"
-	DisplayName="Average months delinquent by Past Due Amount smart field"
+	DisplayName="Average months delinquent by Past Due Amount"
 	SmartFieldFolder="Constituent"
 >
 	<!-- 

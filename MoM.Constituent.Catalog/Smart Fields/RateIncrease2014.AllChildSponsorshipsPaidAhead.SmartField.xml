@@ -2,13 +2,13 @@
 	xmlns="bb_appfx_smartfield"
 	xmlns:common="bb_appfx_commontypes" 
 	ID="265c1f50-9867-4991-9a2e-5b839d5097d3"
-	Name="Rate Increase 2014 All Child Sponsorships Paid Ahead"
+	Name="Rate Increase 2014 All Child Sponsorships Paid Ahead Smart Field"
 	Description="Rate Increase 2014 - Used to determine those in Paid Ahead Sponsors Segment."
 	Author="Cary Mayeda"
 	SPName="USR_USP_SMARTFIELD_RI2014ALLCHILDSPONSORSHIPSPAIDAHEADFORCONSTITUENT"
 	DataType="Boolean"
 	RecordType="Constituent"
-	DisplayName="Rate Increase 2014 - All Child Sponsorships Paid Ahead smart field"
+	DisplayName="Rate Increase 2014 - All Child Sponsorships Paid Ahead"
 	SmartFieldFolder="Constituent"
 	>
 
