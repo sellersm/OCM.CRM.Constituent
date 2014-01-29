@@ -3,7 +3,7 @@
 	xmlns:common="bb_appfx_commontypes" 
 	ID="126ed06d-abcc-47cd-b8f8-3ef859548327"
 	Name="Earliest Sponsorship Date Smart Field"
-	Description="Earliest child sponsorship date of all sponsorships for a constituent. Includes former sponsorships as well."
+	Description="Earliest child sponsorship date of all financial sponsorships for a constituent. Includes former sponsorships as well."
 	Author="Cary Mayeda"
 	SPName="USR_USP_SMARTFIELD_EARLIESTCHILDSPONSORSHIPDATEFORCONSTITUENT"
 	DataType="Date"
@@ -13,7 +13,7 @@
 	>
 	
 	<!-- 
-	Remarks:    This is used to determine the when the person started sponsorship children at OCM.				
+	Remarks:    This is used to determine the when the person started financial sponsorships children at OCM (not correspondents).				
 				
 	History:
 	Date            Modified By     Comments
@@ -31,12 +31,16 @@ create procedure dbo.USR_USP_SMARTFIELD_EARLIESTCHILDSPONSORSHIPDATEFORCONSTITUE
 as
 	-- write sql to calculate the smart field values based on the parameters and ASOF date
 
-	select s.CONSTITUENTID, min(s.STARTDATE)
-	from dbo.SPONSORSHIP s 
-		join dbo.SPONSORSHIPOPPORTUNITYCHILD on SPONSORSHIPOPPORTUNITYCHILD.ID = s.SPONSORSHIPOPPORTUNITYID
-		join dbo.CONSTITUENT c on s.CONSTITUENTID = c.ID
-	group by s.CONSTITUENTID
+select distinct
+	c.ID, min(s.STARTDATE)
+ from 
+	dbo.CONSTITUENT c 
+	join dbo.FINANCIALTRANSACTION ft on ft.CONSTITUENTID = c.ID
+	join dbo.REVENUESPLIT rsplit on ft.ID = rsplit.REVENUEID
+	join dbo.SPONSORSHIP s on s.REVENUESPLITID = rsplit.ID
+	join dbo.SPONSORSHIPOPPORTUNITYCHILD so_child on so_child.ID = s.SPONSORSHIPOPPORTUNITYID
 
+group by c.ID
 
 		]]>
 </CreateProcedureSQL>

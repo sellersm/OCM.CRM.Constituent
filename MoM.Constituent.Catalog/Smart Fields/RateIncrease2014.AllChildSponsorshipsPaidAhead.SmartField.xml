@@ -32,9 +32,9 @@ create procedure dbo.USR_USP_SMARTFIELD_RI2014ALLCHILDSPONSORSHIPSPAIDAHEADFORCO
 )
 as
 	-- write sql to calculate the smart field values based on the parameters and ASOF date
-
+	
 	select 
-		distinct s.CONSTITUENTID, 1
+		distinct ft.CONSTITUENTID, 1
 	  from 
 		dbo.REVENUESCHEDULE rsch
 		join dbo.FINANCIALTRANSACTION ft on ft.id = rsch.id
@@ -51,7 +51,7 @@ as
 							 join dbo.SPONSORSHIP s2 on s2.REVENUESPLITID = rsplit2.ID
 							where rsch2.NEXTTRANSACTIONDATE <= '2014-04-01'	
 							  and s2.STATUSCODE = 1 -- Active	
-							  and s2.CONSTITUENTID = s.CONSTITUENTID)
+							  and ft2.CONSTITUENTID = ft.CONSTITUENTID)
 
 
 		]]>

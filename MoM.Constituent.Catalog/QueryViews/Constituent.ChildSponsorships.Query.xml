@@ -43,12 +43,13 @@ select
 	
   from 
 	dbo.CONSTITUENT c 
-	join dbo.SPONSORSHIP s on s.CONSTITUENTID = c.ID
+	join dbo.FINANCIALTRANSACTION ft on ft.CONSTITUENTID = c.ID
+	join dbo.REVENUESCHEDULE rsch on ft.id = rsch.id
+	join dbo.REVENUESPLIT rsplit on ft.ID = rsplit.REVENUEID
+	join dbo.SPONSORSHIP s on s.REVENUESPLITID = rsplit.ID
 	join dbo.SPONSORSHIPOPPORTUNITY so on so.ID = s.SPONSORSHIPOPPORTUNITYID
 	join dbo.SPONSORSHIPOPPORTUNITYCHILD so_child on so_child.ID = s.SPONSORSHIPOPPORTUNITYID
-	join dbo.REVENUESPLIT rsplit on s.REVENUESPLITID = rsplit.ID
-	join dbo.FINANCIALTRANSACTION ft on ft.ID = rsplit.REVENUEID
-	join dbo.REVENUESCHEDULE rsch on ft.id = rsch.id
+	
 			
 			]]>
 		</ViewSQL>

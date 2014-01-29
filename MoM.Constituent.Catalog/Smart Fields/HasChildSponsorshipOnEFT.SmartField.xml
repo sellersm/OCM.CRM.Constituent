@@ -32,18 +32,17 @@ as
 	-- write sql to calculate the smart field values based on the parameters and ASOF date
 
 select distinct
-	s.CONSTITUENTID, 1
- from 
+	c.ID, 1
+from 
 	dbo.CONSTITUENT c 
-	join dbo.SPONSORSHIP s on s.CONSTITUENTID = c.ID
-	join dbo.SPONSORSHIPOPPORTUNITY so on so.ID = s.SPONSORSHIPOPPORTUNITYID
+	join dbo.FINANCIALTRANSACTION ft on ft.CONSTITUENTID = c.ID
+	join dbo.REVENUESPLIT rsplit on ft.ID = rsplit.REVENUEID
+	join dbo.SPONSORSHIP s on s.REVENUESPLITID = rsplit.ID
 	join dbo.SPONSORSHIPOPPORTUNITYCHILD so_child on so_child.ID = s.SPONSORSHIPOPPORTUNITYID
-	join dbo.REVENUESPLIT rsplit on s.REVENUESPLITID = rsplit.ID
 	join dbo.REVENUEPAYMENTMETHOD rpaymethod on rpaymethod.REVENUEID = rsplit.REVENUEID
 where
 	s.STATUSCODE = 1
 and rpaymethod.PAYMENTMETHODCODE in (2, 3) -- Credit card, Direct debit
-
 
 
 		]]>
