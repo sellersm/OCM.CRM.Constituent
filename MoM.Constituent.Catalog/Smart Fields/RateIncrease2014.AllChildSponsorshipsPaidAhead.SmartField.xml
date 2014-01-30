@@ -44,7 +44,6 @@ as
 	 where 
 		rsch.NEXTTRANSACTIONDATE > '2014-04-01T23:59:59.997'		
 	and s.STATUSCODE = 1 -- Active
-	and ft.TRANSACTIONAMOUNT between 34 and 38.99
 	and not exists (select 1 from dbo.REVENUESCHEDULE rsch2
 							 join dbo.FINANCIALTRANSACTION ft2 on ft2.id = rsch2.id
 							 join dbo.REVENUESPLIT rsplit2 on ft2.ID = rsplit2.REVENUEID
