@@ -2,15 +2,25 @@
 	xmlns="bb_appfx_datalist"
 	xmlns:common="bb_appfx_commontypes" 
 	ID="a57c8175-7d3e-4c26-9d36-7ef21adc9f5a" 
-	Name="Constituent Church Member Sponsorships Data List"
-	Description="The active sponsorships of active church members." 
+	Name="Constituent Church Member Child Sponsorships Data List"
+	Description="The active child sponsorships of active church members." 
 	Author="Cary Mayeda"
 	common:SecurityUIFolder="Constituent">
+
+	<!-- 
+	Remarks:	CONTEXTID is the church constituent id
+				This only returns church members with no end date on the relationship with the church and have at least one active sponsorship
+
+	History:
+	Date            Modified By     Comments
+	07-Feb-2013		CMayeda			Initial Version
+	-->
 
 	<!-- define the SP that returns the data for the datalist -->
 	<SPDataList SPName="USR_USP_DATALIST_CONSTITUENTACTIVECHURCHMEMBERSPONSORSHIPS">
 		<common:CreateProcedureSQL>
 			<![CDATA[
+			
 create procedure dbo.USR_USP_DATALIST_CONSTITUENTACTIVECHURCHMEMBERSPONSORSHIPS(@CONTEXTID uniqueidentifier)
 as
 	set nocount on;

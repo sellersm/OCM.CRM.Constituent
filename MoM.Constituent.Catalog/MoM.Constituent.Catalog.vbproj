@@ -202,13 +202,20 @@
     <EmbeddedResource Include="DataLists\Constituent.NonSponsorshipRecurringGifts.DataList.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="DataLists\Constituent.Donations.DataList.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="DataLists\Constituent.ChurchMemberSponsorships.DataList.xml" />
+    <EmbeddedResource Include="DataLists\Constituent.ChurchMemberSponsorships.DataList.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Page Expressions\Constituent.OCM.PageExpressionDataForm.View.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DataLists\Constituent.ChurchMembersNoSponsorships.DataList.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DataLists\Constituent.NonSponsorshipDonations.DataList.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

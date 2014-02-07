@@ -1,0 +1,91 @@
+﻿<DataListSpec 
+	xmlns="bb_appfx_datalist"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="4df33eb2-89b7-4f2b-8e87-81122518f003" 
+	Name="Constituent Church Members No Child Sponsorships Data List"
+	Description="The active church members who do not have any active child sponsorships."
+	Author="Cary Mayeda"
+	common:SecurityUIFolder="Constituent">
+
+	<!-- 
+	Remarks:	CONTEXTID is the church constituent id
+				This only returns church members with no end date on the relationship with the church and have at least one active sponsorship
+
+	History:
+	Date            Modified By     Comments
+	07-Feb-2013		CMayeda			Initial Version
+	-->
+
+	<!-- define the SP that returns the data for the datalist -->
+	<SPDataList SPName="USR_USP_DATALIST_CONSTITUENTACTIVECHURCHMEMBERSNOSPONSORSHIPS">
+		<common:CreateProcedureSQL>
+			<![CDATA[
+			
+create procedure dbo.USR_USP_DATALIST_CONSTITUENTACTIVECHURCHMEMBERSNOSPONSORSHIPS(@CONTEXTID uniqueidentifier)
+as
+	set nocount on;
+
+
+	;with churchmembers (ID, MEMBERID, MEMBERLOOKUPID, MEMBERNAME, MEMBERSTARTDATE, ACTIVESPONSORSHIPCOUNT)
+	as
+	(
+	select 
+		church.ID, 
+		member.ID as MEMBERID,
+		member.LOOKUPID as MEMBERLOOKUPID,
+		member.NAME as MEMBERNAME,
+		r.STARTDATE as MEMBERSTARTDATE,
+		(select COUNT(s2.ID) from dbo.SPONSORSHIP s2
+						  join dbo.SPONSORSHIPOPPORTUNITYCHILD so_child2 on s2.SPONSORSHIPOPPORTUNITYID = so_child2.ID
+						  join dbo.REVENUESPLIT revsplit2 on revsplit2.ID = s2.REVENUESPLITID
+						  join dbo.FINANCIALTRANSACTION ft2 on ft2.ID = revsplit2.REVENUEID
+						  where s2.STATUSCODE = 1 and ft2.CONSTITUENTID = member.ID) as ACTIVESPONSORSHIPCOUNT
+	 from 
+		CONSTITUENT church
+		inner join dbo.RELATIONSHIP r on r.RECIPROCALCONSTITUENTID = church.ID and r.ENDDATE is null
+		inner join dbo.RELATIONSHIPTYPECODE rc on r.RELATIONSHIPTYPECODEID = rc.ID
+		inner join dbo.CONSTITUENT member on member.ID = r.RELATIONSHIPCONSTITUENTID
+
+	where
+		church.ID = @CONTEXTID
+	and	church.ISORGANIZATION = 1
+	and rc.DESCRIPTION = 'Church Member'
+	)
+
+	select 
+		ID, MEMBERID, MEMBERLOOKUPID, MEMBERNAME, MEMBERSTARTDATE
+	from 
+		churchmembers 
+	where  
+		ACTIVESPONSORSHIPCOUNT = 0
+	order by MEMBERLOOKUPID
+
+]]>
+		</common:CreateProcedureSQL>
+	</SPDataList>
+
+	<!-- describe the context ID parameter for the SP (if applicable)-->
+	<Context ContextRecordType="CONSTITUENT" RecordIDParameter="CONTEXTID"/>
+
+	<!-- describe any parameters (other than the context ID) defined on the SP
+	<Parameters>
+		<common:FormMetaData>
+			<common:FormFields>
+				<common:FormField FieldID="PARAMETER1" Caption="Paramter1" DataType="REPLACE_WITH_DATATYPE"/>
+			</common:FormFields>
+		</common:FormMetaData>
+	</Parameters>-->
+
+	<!-- define the output fields in the list -->
+	<Output>
+		<OutputFields>
+			<OutputField FieldID="ID" Caption="ID" DataType="Guid" IsHidden="true" />
+			<OutputField FieldID="MEMBERID" Caption="Member System ID" DataType="Guid" IsHidden="true" />
+			<OutputField FieldID="MEMBERLOOKUPID" Caption="Lookup ID" DataType="String" />
+			<OutputField FieldID="MEMBERNAME" Caption="Name" DataType="String" />
+			<OutputField FieldID="MEMBERSTARTDATE" Caption="Member Start date" DataType="Date" />
+
+		</OutputFields>
+	</Output>
+
+</DataListSpec>

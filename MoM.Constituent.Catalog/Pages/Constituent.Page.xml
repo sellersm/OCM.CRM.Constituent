@@ -16,6 +16,7 @@
 	25-Aug-2012		Memphis			Initial Version: hiding the normal add sponsorship, adding "Add a New Sponsorship" custom action
 	23-Sep-2012		Memphis			Added tasks for adding a prospect sponsorship, adding an unavailable sponsorship
 	02-Oct-2012		Memphis			Added task for cancelling a sponsorship on the Deceasing Options Page.
+	07-Feb-2014		CMayeda			Added Sponsorship, Additional Giving, and Church Membership Tabs
 	-->	
 	
 	
@@ -219,7 +220,7 @@
 
 					</AddTab>
 					<AddTab Sequence="10">
-						<Tab Caption="Additional Giving" ID="F0C6748C-5D3E-4825-9272-455DB4D35F86">
+						<Tab Caption="Additional Giving" ID="F0C6748C-5D3E-4825-9272-455DB4D35F86" Visible="=Page.Fields!HASADDITIONALGIVING">
 							<Sections>
 								<Section ID="F0C6748C-5D3E-4825-9272-455DB4D35F86" Caption="Non-sponsorship recurring gifts">
 									<DataList ID="f3387804-c191-4428-b635-3d0bbe7b8e26">
@@ -238,7 +239,7 @@
 									</Actions>
 								</Section>
 								<Section ID="D5ACBD00-395E-4827-A72B-95669CAD8160" Caption="Donations" DisplayStyle="InlineBlock">
-									<DataList ID="e0eeefa8-93cf-43de-b926-f15dd6403b50" ShowBorder="true">
+									<DataList ID="292b4c87-7316-40f8-af5c-c111761eec29" ShowBorder="true">
 										<RenderStyle>
 											<StandardView AutoSize="true" />
 										</RenderStyle>
@@ -257,16 +258,32 @@
 						</Tab>
 						</AddTab>
 					<AddTab Sequence="11">
-						<Tab Caption="Member Sponsorships" ID="6EFF6796-4EC0-4B47-A31C-CD7891046858" Visible="=Page.Fields!HASCHURCHMEMBERS">
+						<Tab Caption="Church Members" ID="6EFF6796-4EC0-4B47-A31C-CD7891046858" Visible="=Page.Fields!HASCHURCHMEMBERS">
 							<Sections>
 								<Section ID="9D88B5F7-347C-45A7-9BB1-4CB5189CF6BE" Caption="Church member child sponsorships">
 									<DataList ID="a57c8175-7d3e-4c26-9d36-7ef21adc9f5a">
 										<RenderStyle>
-											<StandardView />
+											<StandardView AutoSize="true" />
 										</RenderStyle>
 									</DataList>
 									<Actions>
 										<Action ID="72C6AE5C-46C8-44F1-A252-93F06573DE21" Caption="Go to Constituent" ImageKey="RES:goto_round" DefaultAction="True">
+											<ShowPage PageID="88159265-2b7e-4c7b-82a2-119d01ecd40f" TabID="15a22f9c-4c1b-11dc-8314-0800200c9a66" xmlns="bb_appfx_commontypes">
+												<ActionContext>
+													<SectionField>MEMBERID</SectionField>
+												</ActionContext>
+											</ShowPage>
+										</Action>
+									</Actions>
+								</Section>
+								<Section ID="F9D7A2C3-349F-4AE4-9388-340701FA2490" Caption="Church members without child sponsorships">
+									<DataList ID="4df33eb2-89b7-4f2b-8e87-81122518f003">
+										<RenderStyle>
+											<StandardView AutoSize="true" />
+										</RenderStyle>
+									</DataList>
+									<Actions>
+										<Action ID="19A1F6E7-0B90-49BA-8E4E-5C64A79FEF25" Caption="Go to Constituent" ImageKey="RES:goto_round" DefaultAction="True">
 											<ShowPage PageID="88159265-2b7e-4c7b-82a2-119d01ecd40f" TabID="15a22f9c-4c1b-11dc-8314-0800200c9a66" xmlns="bb_appfx_commontypes">
 												<ActionContext>
 													<SectionField>MEMBERID</SectionField>

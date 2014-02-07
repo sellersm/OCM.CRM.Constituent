@@ -26,7 +26,8 @@ create procedure dbo.USR_USP_DATAFORMTEMPLATE_VIEW_CONSTITUENTOCM_PAGEEXPRESSION
 (
 	@ID uniqueidentifier,
 	@DATALOADED bit = 0 output,
-	@HASCHURCHMEMBERS bit = null output
+	@HASCHURCHMEMBERS bit = null output,
+	@HASADDITIONALGIVING bit = null output	
 )
 as
 	set nocount on;
@@ -44,9 +45,39 @@ as
 															inner join dbo.RELATIONSHIPTYPECODE rc on r.RELATIONSHIPTYPECODEID = rc.ID
 					  							where CONSTITUENT.ISORGANIZATION = 1
 												and rc.DESCRIPTION = 'Church Member'
-												and r.RECIPROCALCONSTITUENTID = CONSTITUENT.ID and r.ENDDATE is null)  then 1
+												and r.RECIPROCALCONSTITUENTID = CONSTITUENT.ID and r.ENDDATE is null)  
+									then 1
 								else 0
-							end
+							end,
+		@HASADDITIONALGIVING = case 
+									when (exists (select [V_QUERY_REVENUE].ID from [V_QUERY_REVENUE] as [V_QUERY_REVENUE]
+												inner join [V_QUERY_REVENUESPLIT] as [V_QUERY_REVENUE\Revenue Splits] on [V_QUERY_REVENUE].[ID] = [V_QUERY_REVENUE\Revenue Splits].[REVENUEID]
+												left outer join [V_QUERY_DESIGNATION] as [V_QUERY_REVENUE\Revenue Splits\Designation] on [V_QUERY_REVENUE\Revenue Splits].[DESIGNATIONID] = [V_QUERY_REVENUE\Revenue Splits\Designation].[ID]
+												left outer join [V_QUERY_REVENUE] as [V_QUERY_REVENUE\Revenue Splits\Revenue Details] on [V_QUERY_REVENUE\Revenue Splits].[REVENUEID] = [V_QUERY_REVENUE\Revenue Splits\Revenue Details].[ID]
+												left outer join [V_QUERY_REVENUELETTER] as [V_QUERY_REVENUE\Revenue Splits\Revenue Details\Revenue Letters] on [V_QUERY_REVENUE\Revenue Splits\Revenue Details].[ID] = [V_QUERY_REVENUE\Revenue Splits\Revenue Details\Revenue Letters].[REVENUEID]
+												left outer join [V_QUERY_CONSTITUENT] as [V_QUERY_REVENUE\Constituent] on [V_QUERY_REVENUE].[CONSTITUENTID] = [V_QUERY_REVENUE\Constituent].[ID]
+												where [V_QUERY_REVENUE].[TRANSACTIONTYPE] = N'Payment'
+												 and [V_QUERY_REVENUE\Revenue Splits].[APPLICATION] = N'Donation'
+												 and [V_QUERY_REVENUE\Revenue Splits].[TYPE] = N'Gift'
+												 and [V_QUERY_REVENUE\Constituent].ID = CONSTITUENT.ID
+												) 
+										or 
+										exists (select	
+													rev.ID as RECURRINGGIFTID
+													from	
+														dbo.REVENUE rev 
+														inner join dbo.REVENUESPLIT revsplit on revsplit.REVENUEID = rev.ID
+														inner join dbo.CONSTITUENT c on rev.CONSTITUENTID = c.ID
+													where
+														not exists (select ID from dbo.SPONSORSHIP sp where sp.REVENUESPLITID = revsplit.ID)
+													and	c.ID = CONSTITUENT.ID
+												))
+															
+											then 1
+									else 0
+								end 
+
+										
 	from 
 		dbo.CONSTITUENT
 
@@ -63,6 +94,8 @@ as
 	<common:FormMetaData FixedDialog="true">
 		<common:FormFields>
 			<common:FormField FieldID="HASCHURCHMEMBERS" Caption="Has Church Members" DataType="Boolean" />
+			<common:FormField FieldID="HASADDITIONALGIVING" Caption="Has Church Members" DataType="Boolean" />
+			
 		</common:FormFields>
 	</common:FormMetaData>
 
