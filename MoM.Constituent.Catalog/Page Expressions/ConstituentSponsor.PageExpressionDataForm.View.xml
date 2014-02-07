@@ -16,6 +16,7 @@
 	History:
 	Date            Modified By     Comments
 	29-Sep-2012		Memphis			FogBugz Case 856 view tasks logic.
+	06-Feb-2014		Cary Mayeda		Added @HASCHURCHMEMBERS
 	-->
 
 	<!-- define the SP that returns the data used by the form -->
@@ -30,7 +31,8 @@ create procedure dbo.USR_USP_DATAFORMTEMPLATE_VIEW_CONSTITUENTSPONSOR_PAGEEXPRES
 	@CURRENTPROSPECTSPONSOR bit = null output,
 	@CURRENTPROJECTSPONSOR bit = null output,
 	@PARTNERSHIPFORMERCY bit = null output,
-	@CURRENTPROSPECTPROJECTSPONSOR bit = null output
+	@CURRENTPROSPECTPROJECTSPONSOR bit = null output,
+	@HASCHURCHMEMBERS bit = null output
 )
 as
 	set nocount on;
@@ -41,14 +43,26 @@ as
 	-- populate the output parameters, which correspond to fields on the form.  Note that
 	-- we set @DATALOADED = 1 to indicate that the load was successful.  Otherwise, the system
 	-- will display a "no data loaded" message.
-	select @DATALOADED = 1,
-		   @CURRENTSPONSOR = dbo.USR_UFN_CONSTITUENT_HAS_CONSTITUENCYCODE(@ID, dbo.USR_UFN_CONSTITUENT_GETID_FORCODE('Sponsor')),
-		   @CURRENTPROJECTSPONSOR = dbo.USR_UFN_CONSTITUENT_HAS_CONSTITUENCYCODE(@ID, dbo.USR_UFN_CONSTITUENT_GETID_FORCODE('Project Sponsor')),
-		   @CURRENTPROSPECTSPONSOR = dbo.USR_UFN_CONSTITUENT_HAS_CONSTITUENCYCODE(@ID, dbo.USR_UFN_CONSTITUENT_GETID_FORCODE('Prospect Sponsor')),
-		   @PARTNERSHIPFORMERCY = dbo.USR_UFN_CONSTITUENT_HAS_CONSTITUENCYCODE(@ID, dbo.USR_UFN_CONSTITUENT_GETID_FORCODE('Partnership for Mercy')),
-		   @CURRENTPROSPECTPROJECTSPONSOR = dbo.USR_UFN_CONSTITUENT_HAS_CONSTITUENCYCODE(@ID, dbo.USR_UFN_CONSTITUENT_GETID_FORCODE('Prospect Project Sponsor'))
-	from dbo.CONSTITUENT
-	where ID = @ID
+	select 
+		@DATALOADED = 1,
+		@CURRENTSPONSOR = dbo.USR_UFN_CONSTITUENT_HAS_CONSTITUENCYCODE(@ID, dbo.USR_UFN_CONSTITUENT_GETID_FORCODE('Sponsor')),
+		@CURRENTPROJECTSPONSOR = dbo.USR_UFN_CONSTITUENT_HAS_CONSTITUENCYCODE(@ID, dbo.USR_UFN_CONSTITUENT_GETID_FORCODE('Project Sponsor')),
+		@CURRENTPROSPECTSPONSOR = dbo.USR_UFN_CONSTITUENT_HAS_CONSTITUENCYCODE(@ID, dbo.USR_UFN_CONSTITUENT_GETID_FORCODE('Prospect Sponsor')),
+		@PARTNERSHIPFORMERCY = dbo.USR_UFN_CONSTITUENT_HAS_CONSTITUENCYCODE(@ID, dbo.USR_UFN_CONSTITUENT_GETID_FORCODE('Partnership for Mercy')),
+		@CURRENTPROSPECTPROJECTSPONSOR = dbo.USR_UFN_CONSTITUENT_HAS_CONSTITUENCYCODE(@ID, dbo.USR_UFN_CONSTITUENT_GETID_FORCODE('Prospect Project Sponsor')),
+		@HASCHURCHMEMBERS = case 
+								when exists (select r.ID from dbo.RELATIONSHIP r
+															inner join dbo.RELATIONSHIPTYPECODE rc on r.RELATIONSHIPTYPECODEID = rc.ID
+					  							where CONSTITUENT.ISORGANIZATION = 1
+												and rc.DESCRIPTION = 'Church Member'
+												and r.RECIPROCALCONSTITUENTID = CONSTITUENT.ID and r.ENDDATE is null)  then 1
+								else 0
+							end
+	from 
+		dbo.CONSTITUENT
+
+	where 
+		ID = @ID
 	
 	return 0;
 			]]>
@@ -64,6 +78,7 @@ as
 			<common:FormField FieldID="CURRENTPROSPECTSPONSOR" Caption="Current prospect sponsor" DataType="Boolean"  />
 			<common:FormField FieldID="PARTNERSHIPFORMERCY" Caption="Partnership for mercy" DataType="Boolean" />
 			<common:FormField FieldID="CURRENTPROSPECTPROJECTSPONSOR" Caption="Current prospect project sponsor" DataType="Boolean" />
+			<common:FormField FieldID="HASCHURCHMEMBERS" Caption="Has Church Members" DataType="Boolean" />
 		</common:FormFields>
 	</common:FormMetaData>
 

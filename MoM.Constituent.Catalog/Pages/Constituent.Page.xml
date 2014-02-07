@@ -139,6 +139,145 @@
 						</AlterSections>
 						
 					</AlterTab>
+
+					<AddTab Sequence="9">
+						<Tab ID="CF1BD406-55FA-4A7E-BD55-AA937F164DEC" Caption="Sponsorships" Visible="=Page.Fields!ISSPONSOR">
+							<Sections>
+								<Section ID="9FF5EA73-F8CA-4A1A-9C48-D850844504B2" Caption="Active child sponsorships" DisplayStyle="InlineBlock">
+									<DataList ID="1835dffc-7a48-4e7f-ba35-9d1c88a02f02">
+										<RenderStyle>
+											<StandardView AutoSize="true" />
+										</RenderStyle>
+									</DataList>
+									<Actions>
+										<Action ID="31DD5229-C87D-42CF-830B-C85B4B879ADE" Caption="Go to child" ImageKey="RES:goto_round">
+											<ShowPage PageID="0f392d71-5884-4363-b6e3-a75755f8402a" TabID="b6cecb36-a9ab-4f9b-a9f5-c4e2cf10e790" xmlns="bb_appfx_commontypes">
+												<ActionContext>
+													<SectionField>SPONSORSHIPOPPORTUNITYID</SectionField>
+												</ActionContext>
+											</ShowPage>
+										</Action>
+										<Action ID="98F69D52-E290-49B1-8C35-860ADEC04A4E" Caption="Go to sponsorship" ImageKey="RES:goto_round">
+											<ShowPage PageID="428f040a-eb45-4171-8c52-a030b9992d65" TabID="64e81aea-cc0c-42b2-b354-58d9871e5fe9" xmlns="bb_appfx_commontypes">
+												<ActionContext>
+													<SectionField>SPONSORSHIPID</SectionField>
+												</ActionContext>
+											</ShowPage>
+										</Action>
+										<Action ID="DEE283BE-A76B-4335-B1CB-2602E7DF382A" Caption="Go to correspondent" ImageKey="RES:goto_round" Visible="=Fields!ISGIFTSPONSORSHIP=&quot;YES&quot;">
+											<!--ToolTipText="=string.concat(&quot;Go to &quot;, fields!Correspondent)" Visible="=Fields(&quot;Sponsorship\Sponsor\Constituent\System record ID&quot;)&lt;&gt;Fields(&quot;Sponsorship\Financial sponsor\System record ID&quot;)"> -->
+											<ShowPage PageID="88159265-2b7e-4c7b-82a2-119d01ecd40f" TabID="00000000-0000-0000-0000-000000000000" xmlns="bb_appfx_commontypes">
+												<ActionContext>
+													<SectionField>CORRESPONDENTID</SectionField>
+												</ActionContext>
+											</ShowPage>
+										</Action>
+										<Action ID="07FDC8B4-19B6-4C3F-9F79-E1A167DA9BB3" Caption="Go to recurring gift" ImageKey="RES:goto_round">
+											<ShowPage PageID="387f861b-6c03-486c-9ff5-9cc5bb7a5275" TabID="00000000-0000-0000-0000-000000000000" xmlns="bb_appfx_commontypes">
+												<ActionContext>
+													<SectionField>SPONSORSHIPRECURRINGGIFTID</SectionField>
+												</ActionContext>
+											</ShowPage>
+										</Action>
+									</Actions>
+								</Section>
+
+
+								<Section ID="7914ED75-37F2-41D2-AC93-1834127F20C9" Caption="Active project sponsorships">
+									<DataList ID="3ba335de-4b5a-49f8-b9b2-ae1302e97921">
+										<RenderStyle>
+											<StandardView AutoSize="true" />
+										</RenderStyle>
+									</DataList>
+									<Actions>
+										<Action ID="17695334-0A0A-48BC-8AAC-2C41D0FD48CA" Caption="Go to project" ImageKey="RES:goto_round">
+											<ShowPage PageID="0f392d71-5884-4363-b6e3-a75755f8402a" TabID="00000000-0000-0000-0000-000000000000" xmlns="bb_appfx_commontypes">
+												<ActionContext>
+													<SectionField>SPONSORSHIPOPPORTUNITYID</SectionField>
+												</ActionContext>
+											</ShowPage>
+										</Action>
+										<Action ID="28C2DD49-F572-401D-B4F3-C05086C55B35" Caption="Go to sponsorship" ImageKey="RES:goto_round">
+											<ShowPage PageID="428f040a-eb45-4171-8c52-a030b9992d65" TabID="00000000-0000-0000-0000-000000000000" xmlns="bb_appfx_commontypes">
+												<ActionContext>
+													<SectionField>SPONSORSHIPID</SectionField>
+												</ActionContext>
+											</ShowPage>
+										</Action>
+										<Action ID="267CCCBC-06E7-4520-80AE-1BFCAF8D341C" Caption="Go to recurring gift">
+											<ShowPage PageID="387f861b-6c03-486c-9ff5-9cc5bb7a5275" TabID="00000000-0000-0000-0000-000000000000" xmlns="bb_appfx_commontypes">
+												<ActionContext>
+													<SectionField>SPONSORSHIPRECURRINGGIFTID</SectionField>
+												</ActionContext>
+											</ShowPage>
+										</Action>
+									</Actions>
+								</Section>
+
+							</Sections>
+						</Tab>
+
+					</AddTab>
+					<AddTab Sequence="10">
+						<Tab Caption="Additional Giving" ID="F0C6748C-5D3E-4825-9272-455DB4D35F86">
+							<Sections>
+								<Section ID="F0C6748C-5D3E-4825-9272-455DB4D35F86" Caption="Non-sponsorship recurring gifts">
+									<DataList ID="f3387804-c191-4428-b635-3d0bbe7b8e26">
+										<RenderStyle>
+											<StandardView AutoSize="true" />
+										</RenderStyle>
+									</DataList>
+									<Actions>
+										<Action ID="964D2BB4-BAD6-496A-80DC-D179DCA443AD" Caption="Go to recurring gift" ImageKey="RES:goto_round" DefaultAction="True">
+											<ShowPage PageID="387f861b-6c03-486c-9ff5-9cc5bb7a5275" TabID="00000000-0000-0000-0000-000000000000" xmlns="bb_appfx_commontypes">
+												<ActionContext>
+													<SectionField>RECURRINGGIFTID</SectionField>
+												</ActionContext>
+											</ShowPage>
+										</Action>
+									</Actions>
+								</Section>
+								<Section ID="D5ACBD00-395E-4827-A72B-95669CAD8160" Caption="Donations" DisplayStyle="InlineBlock">
+									<DataList ID="e0eeefa8-93cf-43de-b926-f15dd6403b50" ShowBorder="true">
+										<RenderStyle>
+											<StandardView AutoSize="true" />
+										</RenderStyle>
+									</DataList>
+									<Actions>
+										<Action ID="489CA7EE-D684-46BF-98B6-21040D94DF04" Caption="Go to revenue" ImageKey="RES:goto_round" DefaultAction="True">
+											<ShowPage PageID="387f861b-6c03-486c-9ff5-9cc5bb7a5275" TabID="00000000-0000-0000-0000-000000000000" xmlns="bb_appfx_commontypes">
+												<ActionContext>
+													<SectionField>System record ID</SectionField>
+												</ActionContext>
+											</ShowPage>
+										</Action>
+									</Actions>
+								</Section>
+							</Sections>
+						</Tab>
+						</AddTab>
+					<AddTab Sequence="11">
+						<Tab Caption="Member Sponsorships" ID="6EFF6796-4EC0-4B47-A31C-CD7891046858" Visible="=Page.Fields!HASCHURCHMEMBERS">
+							<Sections>
+								<Section ID="9D88B5F7-347C-45A7-9BB1-4CB5189CF6BE" Caption="Church member child sponsorships">
+									<DataList ID="a57c8175-7d3e-4c26-9d36-7ef21adc9f5a">
+										<RenderStyle>
+											<StandardView />
+										</RenderStyle>
+									</DataList>
+									<Actions>
+										<Action ID="72C6AE5C-46C8-44F1-A252-93F06573DE21" Caption="Go to Constituent" ImageKey="RES:goto_round" DefaultAction="True">
+											<ShowPage PageID="88159265-2b7e-4c7b-82a2-119d01ecd40f" TabID="15a22f9c-4c1b-11dc-8314-0800200c9a66" xmlns="bb_appfx_commontypes">
+												<ActionContext>
+													<SectionField>MEMBERID</SectionField>
+												</ActionContext>
+											</ShowPage>
+										</Action>
+									</Actions>
+								</Section>
+							</Sections>
+						</Tab>
+					</AddTab>
 					</AlterTabs>
 
 			</AlterPage>

@@ -1,0 +1,92 @@
+﻿<DataListSpec 
+	xmlns="bb_appfx_datalist"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="a57c8175-7d3e-4c26-9d36-7ef21adc9f5a" 
+	Name="Constituent Church Member Sponsorships Data List"
+	Description="The active sponsorships of active church members." 
+	Author="Cary Mayeda"
+	common:SecurityUIFolder="Constituent">
+
+	<!-- define the SP that returns the data for the datalist -->
+	<SPDataList SPName="USR_USP_DATALIST_CONSTITUENTACTIVECHURCHMEMBERSPONSORSHIPS">
+		<common:CreateProcedureSQL>
+			<![CDATA[
+create procedure dbo.USR_USP_DATALIST_CONSTITUENTACTIVECHURCHMEMBERSPONSORSHIPS(@CONTEXTID uniqueidentifier)
+as
+	set nocount on;
+
+
+select 
+	church.ID, 
+	member.ID as MEMBERID,
+	member.LOOKUPID as MEMBERLOOKUPID,
+	member.NAME as MEMBERNAME,
+	r.STARTDATE as MEMBERSTARTDATE,
+	(select COUNT(s2.ID) from dbo.SPONSORSHIP s2
+	                  join dbo.SPONSORSHIPOPPORTUNITYCHILD so_child2 on s2.SPONSORSHIPOPPORTUNITYID = so_child2.ID
+	                  join dbo.REVENUESPLIT revsplit2 on revsplit2.ID = s2.REVENUESPLITID
+	                  join dbo.FINANCIALTRANSACTION ft2 on ft2.ID = revsplit2.REVENUEID
+	                  where s2.STATUSCODE = 1 and ft2.CONSTITUENTID = member.ID) as ACTIVESPONSORSHIPCOUNT,
+	coalesce (slocation.LOOKUPID,'') as PROJECTLOOKUPID,
+	so.LOOKUPID as CHILDID,
+	so_child.NAME as CHILDNAME,
+	s.STARTDATE as SPONSORSHIPSTARTDATE,
+	so_child.GENDER,
+	so_child.AGE
+	
+ from 
+	CONSTITUENT church
+	inner join dbo.RELATIONSHIP r on r.RECIPROCALCONSTITUENTID = church.ID and r.ENDDATE is null
+	inner join dbo.RELATIONSHIPTYPECODE rc on r.RELATIONSHIPTYPECODEID = rc.ID
+	inner join dbo.CONSTITUENT member on member.ID = r.RELATIONSHIPCONSTITUENTID
+	inner join dbo.FINANCIALTRANSACTION ft on ft.CONSTITUENTID = member.ID
+	inner join dbo.REVENUESPLIT revsplit on revsplit.REVENUEID = ft.ID
+	inner join dbo.SPONSORSHIP s on s.REVENUESPLITID = revsplit.ID
+	inner join dbo.SPONSORSHIPOPPORTUNITY so on so.ID = s.SPONSORSHIPOPPORTUNITYID
+	inner join dbo.SPONSORSHIPOPPORTUNITYCHILD so_child on so_child.ID = s.SPONSORSHIPOPPORTUNITYID
+	inner join dbo.SPONSORSHIPLOCATION slocation on so.SPONSORSHIPLOCATIONID = slocation.ID 	
+
+where
+	church.ID = @CONTEXTID
+and	church.ISORGANIZATION = 1
+and rc.DESCRIPTION = 'Church Member'
+and s.STATUSCODE = 1
+
+order by member.LOOKUPID, so.LOOKUPID
+
+			]]>
+		</common:CreateProcedureSQL>
+	</SPDataList>
+
+	<!-- describe the context ID parameter for the SP (if applicable)-->
+	<Context ContextRecordType="CONSTITUENT" RecordIDParameter="CONTEXTID"/>
+
+	<!-- describe any parameters (other than the context ID) defined on the SP
+	<Parameters>
+		<common:FormMetaData>
+			<common:FormFields>
+				<common:FormField FieldID="PARAMETER1" Caption="Paramter1" DataType="REPLACE_WITH_DATATYPE"/>
+			</common:FormFields>
+		</common:FormMetaData>
+	</Parameters>-->
+
+	<!-- define the output fields in the list -->
+	<Output>
+		<OutputFields>
+			<OutputField FieldID="ID" Caption="ID" DataType="Guid" IsHidden="true" />
+			<OutputField FieldID="MEMBERID" Caption="Member System ID" DataType="Guid" IsHidden="true" />
+			<OutputField FieldID="MEMBERLOOKUPID" Caption="Lookup ID" DataType="String" />
+			<OutputField FieldID="MEMBERNAME" Caption="Name" DataType="String" />
+			<OutputField FieldID="MEMBERSTARTDATE" Caption="Member Start date" DataType="Date" />
+			<OutputField FieldID="ACTIVESPONSORSHIPCOUNT" Caption="Active Sponsorships" DataType="Integer" />
+			<OutputField FieldID="PROJECTLOOKUPID" Caption="Project ID" DataType="String" />
+			<OutputField FieldID="CHILDID" Caption="Child ID" DataType="String" />
+			<OutputField FieldID="CHILDNAME" Caption="Child Name" DataType="String" />
+			<OutputField FieldID="SPONSORSHIPSTARTDATE" Caption="Start date" DataType="Date" />
+			<OutputField FieldID="GENDER" Caption="Gender" DataType="String" />
+			<OutputField FieldID="AGE" Caption="Age" DataType="Integer" />
+
+		</OutputFields>
+	</Output>
+
+</DataListSpec>

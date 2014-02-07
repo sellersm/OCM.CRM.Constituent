@@ -192,6 +192,24 @@
   <ItemGroup>
     <EmbeddedResource Include="Smart Fields\HasChildSponsorshipCash.SmartField.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DataLists\Constituent.ActiveChildSponsorships.DataList.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DataLists\Constituent.ActiveProjectSponsorships.DataList.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DataLists\Constituent.NonSponsorshipRecurringGifts.DataList.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DataLists\Constituent.Donations.DataList.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DataLists\Constituent.ChurchMemberSponsorships.DataList.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Page Expressions\Constituent.OCM.PageExpressionDataForm.View.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
