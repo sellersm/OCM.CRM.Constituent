@@ -36,7 +36,7 @@
 											NewsletterUpdateOnlyFinancialSponsors.Query.xml
 											PhotoUpdateCorrespondents.Query.xml
 											PhotoUpdateFinancialSponsors.Query.xml
-
+	07-Feb-2013		CMayeda			Added new data lists and page expression data form for the Sponsorships, Additional giving, and Church member tabs
 	-->
 
 	<!-- Note:  the order of the items listed here is important.  For example, you won't be able to load a data form that references 
@@ -85,6 +85,14 @@
 		<!-- Search Lists -->
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.PartnershipForMercyOrg.Search.xml" />
 
+		<!-- Data Lists -->
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.ActiveChildSponsorships.DataList.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.ActiveProjectSponsorships.DataList.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.ChurchMembersNoSponsorships.DataList.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.ChurchMemberSponsorships.DataList.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.NonSponsorshipDonations.DataList.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.NonSponsorshipRecurringGifts.DataList.xml" />
+
 		<!-- Pages -->
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.Constituent.Page.xml" />
 		
@@ -105,6 +113,7 @@
 
 		<!-- Page Expressions -->
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.ConstituentSponsor.PageExpressionDataForm.View.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.OCM.PageExpressionDataForm.View.xml" />
 		
 		<!-- Query Views -->
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.RecurringGiftOrGiftInBatch.Query.xml" />

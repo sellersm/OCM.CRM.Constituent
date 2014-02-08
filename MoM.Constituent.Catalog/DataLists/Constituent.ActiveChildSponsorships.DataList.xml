@@ -7,6 +7,15 @@
 	Author="Cary Mayeda"
 	common:SecurityUIFolder="Constituent">
 
+	<!-- 
+	Remarks:	The Number of Active Sponsorships is repeated on each row, when a sponsor sponsors more than one child
+				This only displays child sponsorships for Financial Sponsors (none display for Correspondents)
+
+	History:
+	Date            Modified By     Comments
+	07-Feb-2013		CMayeda			Initial Version
+	-->
+	
 	<!-- define the SP that returns the data for the datalist -->
 	<SPDataList SPName="USR_USP_DATALIST_CONSTITUENTACTIVECHILDSPONSORSHIPS">
 		<common:CreateProcedureSQL>

@@ -11,11 +11,12 @@
 	>
 
 	<!-- 
-	Remarks:    Constituent page fields to control the acction tasks display rules.
+	Remarks:    Constituent page fields to control the action tasks / tabs display rules.
 
 	History:
 	Date            Modified By     Comments
 	06-Feb-2014		Cary Mayeda		Initial Version
+	06-Feb-2014		Cary Mayeda		Fixed HASADDITIONALGIVING	
 	-->
 
 	<!-- define the SP that returns the data used by the form -->
@@ -63,14 +64,15 @@ as
 												) 
 										or 
 										exists (select	
-													rev.ID as RECURRINGGIFTID
-													from	
-														dbo.REVENUE rev 
-														inner join dbo.REVENUESPLIT revsplit on revsplit.REVENUEID = rev.ID
-														inner join dbo.CONSTITUENT c on rev.CONSTITUENTID = c.ID
-													where
-														not exists (select ID from dbo.SPONSORSHIP sp where sp.REVENUESPLITID = revsplit.ID)
-													and	c.ID = CONSTITUENT.ID
+													ft.ID 
+												from	
+													dbo.FINANCIALTRANSACTION ft
+													inner join dbo.REVENUESPLIT revsplit on revsplit.REVENUEID = ft.ID
+													inner join dbo.CONSTITUENT c on ft.CONSTITUENTID = c.ID
+												where
+													ft.TYPECODE = 2 -- Recurring gift
+												and	not exists (select ID from dbo.SPONSORSHIP sp where sp.REVENUESPLITID = revsplit.ID)
+												and	c.ID = CONSTITUENT.ID
 												))
 															
 											then 1

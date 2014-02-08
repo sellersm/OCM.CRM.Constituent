@@ -7,6 +7,14 @@
 	Author="Cary Mayeda"
 	common:SecurityUIFolder="Constituent">
 
+	<!-- 
+	Remarks:	
+
+	History:
+	Date            Modified By     Comments
+	07-Feb-2013		CMayeda			Initial Version
+	-->
+
 	<!-- define the SP that returns the data for the datalist -->
 	<SPDataList SPName="USR_USP_DATALIST_CONSTITUENTACTIVEPROJECTSPONSORSHIPS">
 		<common:CreateProcedureSQL>
