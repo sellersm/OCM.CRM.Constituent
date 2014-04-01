@@ -23,19 +23,20 @@
 create procedure dbo.USR_USP_DATALIST_CONSTITUENTDONATIONS(@CONTEXTRECORDID uniqueidentifier)
 as
 	set nocount on;
-	with
-	[ROOT_CTE] as (
-	select  distinct 	[V_QUERY_REVENUE].[DATE] as [Date],
+	
+	select  distinct 	
+		[V_QUERY_REVENUE].[DATE] as [Date],
+		[V_QUERY_REVENUE].[AMOUNT] as [Total Amount],
 		[V_QUERY_REVENUE\Revenue Splits\Designation].[USERID] as [Fund ID],
 		[V_QUERY_REVENUE\Revenue Splits].[DESIGNATIONNAME] as [Fund Name],
-		[V_QUERY_REVENUE].[AMOUNT] as [Amount],
+		[V_QUERY_REVENUE\Revenue Splits].AMOUNT as Amount,
 		[V_QUERY_REVENUE].[PAYMENTMETHOD] as [Payment method],
 		[V_QUERY_REVENUE\Revenue Splits\Revenue Details\Revenue Letters].[ACKNOWLEDGEDATE] as [Acknowledge Date],
 		[V_QUERY_REVENUE\Revenue Splits\Revenue Details\Revenue Letters].[NAME] as [Revenue Letter],
+		[V_QUERY_REVENUE].LOOKUPID as [Revenue LookupID],
 		[V_QUERY_REVENUE].[ID] as [System record ID],
-		[V_QUERY_REVENUE\Constituent].[ID] as [Constituent\System record ID],
-		[V_QUERY_REVENUE].[BASECURRENCYID] as [Base currency ID],
-	[V_QUERY_REVENUE].[ID] as [QUERYRECID]
+		[V_QUERY_REVENUE\Constituent].[ID] as [Constituent System record ID],
+		[V_QUERY_REVENUE].[BASECURRENCYID] as [Base currency ID]
 	from [V_QUERY_REVENUE] as [V_QUERY_REVENUE]
 	inner join [V_QUERY_REVENUESPLIT] as [V_QUERY_REVENUE\Revenue Splits] on [V_QUERY_REVENUE].[ID] = [V_QUERY_REVENUE\Revenue Splits].[REVENUEID]
 	left outer join [V_QUERY_DESIGNATION] as [V_QUERY_REVENUE\Revenue Splits\Designation] on [V_QUERY_REVENUE\Revenue Splits].[DESIGNATIONID] = [V_QUERY_REVENUE\Revenue Splits\Designation].[ID]
@@ -45,22 +46,10 @@ as
 	where [V_QUERY_REVENUE].[TRANSACTIONTYPE] = N'Payment'
 	 and [V_QUERY_REVENUE\Revenue Splits].[APPLICATION] = N'Donation'
 	 and [V_QUERY_REVENUE\Revenue Splits].[TYPE] = N'Gift'
-	)
-
-
-	select [Date],
-		[Fund ID],
-		[Fund Name],
-		[Amount],
-		[Payment method],
-		[Acknowledge Date],
-		[Revenue Letter],
-		[System record ID],
-		[Constituent\System record ID],
-		[Base currency ID]
-	from [ROOT_CTE] as QUERYRESULTS
-	where QUERYRESULTS.[Constituent\System record ID] = @CONTEXTRECORDID
-	order by [Date] desc
+	 and [V_QUERY_REVENUE].CONSTITUENTID = @CONTEXTRECORDID
+	 --and [V_QUERY_REVENUE].[AMOUNT] <> [V_QUERY_REVENUE\Revenue Splits].AMOUNT
+	order by [V_QUERY_REVENUE].[DATE] desc, [V_QUERY_REVENUE].LOOKUPID
+	
 
 ]]>
 		</common:CreateProcedureSQL>
@@ -70,6 +59,9 @@ as
 	<Output>
 		<OutputFields>
 			<OutputField FieldID="Date" Caption="Date" DataType="Date" />
+			<OutputField FieldID="Total Amount" Caption="Total Amount" DataType="Money">
+				<CurrencyField CurrencyFieldID="Base currency ID" />
+			</OutputField>
 			<OutputField FieldID="Fund ID" Caption="Fund ID" DataType="String" />
 			<OutputField FieldID="Fund Name" Caption="Fund Name" DataType="String" />
 			<OutputField FieldID="Amount" Caption="Amount" DataType="Money">
@@ -78,8 +70,9 @@ as
 			<OutputField FieldID="Payment method" Caption="Payment method" DataType="String" />
 			<OutputField FieldID="Acknowledge Date" Caption="Acknowledge Date" DataType="Date" />
 			<OutputField FieldID="Revenue Letter" Caption="Revenue Letter" DataType="String" />
+			<OutputField FieldID="Revenue LookupID" Caption="Revenue LookupID" DataType="String" />
 			<OutputField FieldID="System record ID" Caption="System record ID" IsHidden="true" DataType="Guid" />
-			<OutputField FieldID="Constituent\System record ID" Caption="Constituent\System record ID" IsHidden="true" DataType="Guid" />
+			<OutputField FieldID="Constituent System record ID" Caption="Constituent System record ID" IsHidden="true" DataType="Guid" />
 			<OutputField FieldID="Base currency ID" Caption="Base currency ID" IsHidden="true" DataType="Guid" />
 		</OutputFields>
 	</Output>
