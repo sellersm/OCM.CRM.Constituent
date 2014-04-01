@@ -1,0 +1,115 @@
+﻿<QueryViewSpec
+	xmlns="bb_appfx_queryview"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="7c0802d8-aa5b-4782-9110-d73f07767787"
+	Name="Church Member Correspondents Query"
+	Description="Active Church Members and their active correspondent sponsorships"
+	Author="Cary Mayeda"
+	IsRoot="true"
+	PrimaryKeyField="MEMBERID"
+	RecordType="CONSTITUENT"
+	common:SecurityUIFolder="CONSITUENT"
+	>
+	<!-- 
+	Remarks:	A list of sponsorships for church members using both the Church and Church Member relationships
+
+	History:
+	Date            Modified By     Comments
+	31-Mar-2013		CMayeda			Initial Version
+	-->
+
+	<!-- define the view used to return data for the query -->
+	<ViewImplementation ViewName="USR_V_QUERY_CHURCHMEMBERCORRESPONDENTS">
+		<ViewSQL>
+			<![CDATA[
+with ChurchRel as (
+select 
+	church.ID as CHURCHID,
+	church.KEYNAME as CHURCHNAME,
+	church.LOOKUPID as CHURCHLOOKUPID,
+	member.ID as MEMBERID,
+	member.NAME as MEMBERNAME,
+	member.LOOKUPID as MEMBERLOOKUPID,
+	s.ID as SPONSORSHIPID,
+	s.SPONSORSHIPOPPORTUNITYID as CHILDID,
+	so.LOOKUPID as CHILDLOOKUPID,
+	dbo.USR_UFN_CHILD_GETCHILDLOOKUPID(so.ID,1) as CHILDPROJECTLOOKUPID,
+	so_child.NAME as CHILDNAME,
+	'Church' as RELATIONSHIP
+
+from 
+	CONSTITUENT church
+	join dbo.RELATIONSHIP r ON r.RELATIONSHIPCONSTITUENTID = church.ID 
+	join dbo.RELATIONSHIPTYPECODE rcode ON rcode.ID = r.RELATIONSHIPTYPECODEID
+	join dbo.CONSTITUENT member on r.RECIPROCALCONSTITUENTID = member.ID
+	join dbo.SPONSORSHIP s on s.CONSTITUENTID = member.ID and s.STATUSCODE = 1
+	join dbo.SPONSORSHIPOPPORTUNITY so ON so.ID = s.SPONSORSHIPOPPORTUNITYID
+	join dbo.SPONSORSHIPOPPORTUNITYCHILD so_child on so_child.ID = so.ID
+where 
+	rcode.[DESCRIPTION] = 'Church'
+and (r.ENDDATE is null or r.ENDDATE > getdate())
+)
+
+select * from ChurchRel
+
+union
+
+select 
+	church.ID as CHURCHID,
+	church.KEYNAME as CHURCHNAME,
+	church.LOOKUPID as CHURCHLOOKUPID,
+	member.ID as MEMBERID,
+	member.NAME as MEMBERNAME,
+	member.LOOKUPID as MEMBERLOOKUPID,
+	s.ID as SPONSORSHIPID,
+	s.SPONSORSHIPOPPORTUNITYID as CHILDID,
+	so.LOOKUPID as CHILDLOOKUPID,
+	dbo.USR_UFN_CHILD_GETCHILDLOOKUPID(so.ID,1) as CHILDPROJECTLOOKUPID,
+	so_child.NAME as CHILDNAME,
+	'Church Member' as RELATIONSHIP
+
+from 
+	CONSTITUENT church
+join dbo.RELATIONSHIP r ON r.RECIPROCALCONSTITUENTID = church.ID 
+join dbo.RELATIONSHIPTYPECODE rcode ON rcode.ID = r.RELATIONSHIPTYPECODEID
+	join dbo.CONSTITUENT member on r.RELATIONSHIPCONSTITUENTID = member.ID
+	join dbo.SPONSORSHIP s on s.CONSTITUENTID = member.ID and s.STATUSCODE = 1
+	join dbo.SPONSORSHIPOPPORTUNITY so ON so.ID = s.SPONSORSHIPOPPORTUNITYID
+	join dbo.SPONSORSHIPOPPORTUNITYCHILD so_child on so_child.ID = so.ID
+where 
+	rcode.[DESCRIPTION] = 'Church Member'
+and (r.ENDDATE is null or r.ENDDATE > getdate())
+and not exists (select MEMBERID from ChurchRel where CHURCHID = church.ID and MEMBERID = member.ID)
+		
+			]]>
+		</ViewSQL>
+	</ViewImplementation>
+
+	<!-- describe each field in the view output -->
+	<Output>
+		<OutputFields>
+			<OutputField Name="CHURCHID" Caption="Church System record ID" Category="System Fields" DataType="Guid"/>
+			<OutputField Name="CHURCHNAME" Caption="Church Name" DataType="String" />
+			<OutputField Name="CHURCHLOOKUPID" Caption="Church Lookup ID" DataType="String" />
+			<OutputField Name="MEMBERID" Caption="Member System record ID" Category="System Fields" DataType="Guid"/>
+			<OutputField Name="MEMBERNAME" Caption="Member Name" DataType="String" />
+			<OutputField Name="MEMBERLOOKUPID" Caption="Member Lookup ID" DataType="String" />
+			<OutputField Name="SPONSORSHIPID" Caption="Sponsorship System record ID"  Category="System Fields" DataType="Guid" />
+			<OutputField Name="CHILDID" Caption="Child System record ID"  Category="System Fields" DataType="Guid" />
+			<OutputField Name="CHILDLOOKUPID" Caption="Child Lookup ID" DataType="String" />
+			<OutputField Name="CHILDPROJECTLOOKUPID" Caption="Project and Child Lookup ID" DataType="String" />
+			<OutputField Name="CHILDNAME" Caption="Child Name" DataType="String" />
+			<OutputField Name="RELATIONSHIP" Caption="Relationship Type" DataType="String" />
+
+		</OutputFields>
+	</Output>
+	<RelationshipOperations>
+		<AddRelatedView RelatedView="V_QUERY_CONSTITUENT" RelatedField="ID" Field="MEMBERID" PathAlias="Member Constituent"/>
+		<AddRelatedView RelatedView="V_QUERY_CONSTITUENT" RelatedField="ID" Field="CHURCHID" PathAlias="Church Constituent"/>
+		<AddRelatedView RelatedView="V_QUERY_SPONSORSHIPOPPORTUNITY" RelatedField="ID" Field="CHILDID" PathAlias="Sponsorship Opportunity"/>
+		<AddRelatedView RelatedView="V_QUERY_SPONSORSHIP" RelatedField="ID" Field="SPONSORSHIPID" PathAlias="Sponsorship"/>
+
+	</RelationshipOperations>
+
+</QueryViewSpec>
+

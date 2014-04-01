@@ -37,6 +37,7 @@
 											PhotoUpdateCorrespondents.Query.xml
 											PhotoUpdateFinancialSponsors.Query.xml
 	07-Feb-2013		CMayeda			Added new data lists and page expression data form for the Sponsorships, Additional giving, and Church member tabs
+	31-Mar-2013		CMayeda			Added ChurchMemberCorrespondents.Query.xml
 	-->
 
 	<!-- Note:  the order of the items listed here is important.  For example, you won't be able to load a data form that references 
@@ -121,6 +122,7 @@
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.NewsletterUpdateOnlyFinancialSponsors.Query.xml" />
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.PhotoUpdateCorrespondents.Query.xml" />
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.PhotoUpdateFinancialSponsors.Query.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.ChurchMemberCorrespondents.Query.xml" />
 
 		<!-- Smart Fields: these have a dependency on a UFN in Sponsorship -->
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.AverageMonthsDelinquent.SmartField.xml" />
