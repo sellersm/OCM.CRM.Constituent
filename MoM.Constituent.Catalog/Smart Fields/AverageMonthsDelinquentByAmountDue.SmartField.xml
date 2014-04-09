@@ -43,11 +43,12 @@ as
 									DATEDIFF(m, rsch.NEXTTRANSACTIONDATE, getdate())+ 1
 								else DATEDIFF(m, rsch.NEXTTRANSACTIONDATE, getdate())							
 							end
-						when rsch.FREQUENCYCODE = 3 then dbo.UFN_RECURRINGGIFT_GETPASTDUEAMOUNT(ft.ID, null) / ft.TRANSACTIONAMOUNT -- Monthly
-						when rsch.FREQUENCYCODE = 6 then dbo.UFN_RECURRINGGIFT_GETPASTDUEAMOUNT(ft.ID, null) / ((ft.TRANSACTIONAMOUNT * 6)/12) -- Bimonthly
-						when rsch.FREQUENCYCODE = 7 then dbo.UFN_RECURRINGGIFT_GETPASTDUEAMOUNT(ft.ID, null) / ((ft.TRANSACTIONAMOUNT * 24)/12) -- Semi-Monthly
-						when rsch.FREQUENCYCODE = 8 then dbo.UFN_RECURRINGGIFT_GETPASTDUEAMOUNT(ft.ID, null) / ((ft.TRANSACTIONAMOUNT * 26)/12) -- Biweekly
-						when rsch.FREQUENCYCODE = 9 then dbo.UFN_RECURRINGGIFT_GETPASTDUEAMOUNT(ft.ID, null) / ((ft.TRANSACTIONAMOUNT * 52)/12) -- Weekly
+							-- these we're null instead of '4/2/14'
+						when rsch.FREQUENCYCODE = 3 then dbo.UFN_RECURRINGGIFT_GETPASTDUEAMOUNT(ft.ID, '4/2/14') / ft.TRANSACTIONAMOUNT -- Monthly
+						when rsch.FREQUENCYCODE = 6 then dbo.UFN_RECURRINGGIFT_GETPASTDUEAMOUNT(ft.ID, '4/2/14') / ((ft.TRANSACTIONAMOUNT * 6)/12) -- Bimonthly
+						when rsch.FREQUENCYCODE = 7 then dbo.UFN_RECURRINGGIFT_GETPASTDUEAMOUNT(ft.ID, '4/2/14') / ((ft.TRANSACTIONAMOUNT * 24)/12) -- Semi-Monthly
+						when rsch.FREQUENCYCODE = 8 then dbo.UFN_RECURRINGGIFT_GETPASTDUEAMOUNT(ft.ID, '4/2/14') / ((ft.TRANSACTIONAMOUNT * 26)/12) -- Biweekly
+						when rsch.FREQUENCYCODE = 9 then dbo.UFN_RECURRINGGIFT_GETPASTDUEAMOUNT(ft.ID, '4/2/14') / ((ft.TRANSACTIONAMOUNT * 52)/12) -- Weekly
 					end ))
 		as AVGMONTHSDELINQUENT
 	from dbo.REVENUESCHEDULE rsch
