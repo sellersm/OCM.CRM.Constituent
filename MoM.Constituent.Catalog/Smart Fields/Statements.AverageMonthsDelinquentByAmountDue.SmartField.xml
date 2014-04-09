@@ -1,0 +1,92 @@
+﻿<SmartFieldSpec
+	xmlns="bb_appfx_smartfield"
+	xmlns:common="bb_appfx_commontypes"
+	ID="7EC4488E-83DF-4868-A8F0-4061424EFC55"
+	Name="Statements - Average Months Delinquent Child Sponsorships By Past Due Amount Smart Field"
+	Description="Average months delinquent as of the 2nd of the month for all child sponsorships for a sponsor - using Past Due Amount instead of NTD."
+	Author="Cary Mayeda"
+	SPName="USR_USP_SMARTFIELD_STATEMENTS_AVERAGEMONTHSDELINQUENT_AMTPASTDUE"
+	DataType="Integer"
+	RecordType="Constituent"
+	DisplayName="Statements Average months delinquent by Past Due Amount"
+	SmartFieldFolder="Constituent"
+>
+	<!-- 
+	Remarks:    This is used because Blackbaud's NTD fix throws off the NTD calculation
+				It uses the NTD for Annually, Semi-annually, Quarterly frequencies and Past Due amount for all others 
+				It calculates the delinquency as of today
+				
+				It does not have any negative (or paid ahead) numbers - only delinquencies
+				
+	History:
+	Date            Modified By     Comments
+	09-Apr-2014		CMayeda			Initial Version copied from AverageMonthsDelinquentByAmountDue.SmartField.xml to always use the 2nd of the month
+	-->
+
+	<!-- describe the SP used to calculate the smart field values -->
+	<CreateProcedureSQL>
+		<![CDATA[
+create procedure dbo.USR_USP_SMARTFIELD_STATEMENTS_AVERAGEMONTHSDELINQUENT_AMTPASTDUE
+(
+	@ASOF datetime 
+)
+as
+	-- write sql to calculate the smart field values based on the parameters and ASOF date
+	; with DelinquencyWithNegatives as
+(select ft.CONSTITUENTID,
+ 		floor (AVG( case 
+						when rsch.FREQUENCYCODE in (0,1,2) then -- Annually, Semi-annually, Quarterly
+							case                                        
+								when day (rsch.NEXTTRANSACTIONDATE) < day (getdate()) then 
+									DATEDIFF(m, rsch.NEXTTRANSACTIONDATE, getdate())+ 1
+								else DATEDIFF(m, rsch.NEXTTRANSACTIONDATE, getdate())							
+							end
+						-- This get's the past due amount as of the 2nd of the current month
+						when rsch.FREQUENCYCODE = 3 then dbo.UFN_RECURRINGGIFT_GETPASTDUEAMOUNT(ft.ID, dateadd(day, 1, dateadd(month, datediff(month, 0, getdate()), 0))) / ft.TRANSACTIONAMOUNT -- Monthly
+						when rsch.FREQUENCYCODE = 6 then dbo.UFN_RECURRINGGIFT_GETPASTDUEAMOUNT(ft.ID, dateadd(day, 1, dateadd(month, datediff(month, 0, getdate()), 0))) / ((ft.TRANSACTIONAMOUNT * 6)/12) -- Bimonthly
+						when rsch.FREQUENCYCODE = 7 then dbo.UFN_RECURRINGGIFT_GETPASTDUEAMOUNT(ft.ID, dateadd(day, 1, dateadd(month, datediff(month, 0, getdate()), 0))) / ((ft.TRANSACTIONAMOUNT * 24)/12) -- Semi-Monthly
+						when rsch.FREQUENCYCODE = 8 then dbo.UFN_RECURRINGGIFT_GETPASTDUEAMOUNT(ft.ID, dateadd(day, 1, dateadd(month, datediff(month, 0, getdate()), 0))) / ((ft.TRANSACTIONAMOUNT * 26)/12) -- Biweekly
+						when rsch.FREQUENCYCODE = 9 then dbo.UFN_RECURRINGGIFT_GETPASTDUEAMOUNT(ft.ID, dateadd(day, 1, dateadd(month, datediff(month, 0, getdate()), 0))) / ((ft.TRANSACTIONAMOUNT * 52)/12) -- Weekly
+					end ))
+		as AVGMONTHSDELINQUENT
+	from dbo.REVENUESCHEDULE rsch
+	join dbo.FINANCIALTRANSACTION ft on ft.id = rsch.id
+	join dbo.REVENUESPLIT rsplit on ft.ID = rsplit.REVENUEID
+	join dbo.SPONSORSHIP s on s.REVENUESPLITID = rsplit.ID
+	join dbo.SPONSORSHIPOPPORTUNITYCHILD on SPONSORSHIPOPPORTUNITYCHILD.ID = s.SPONSORSHIPOPPORTUNITYID
+		
+	where ft.TYPECODE = 2		--recurring gift
+	  and rsch.STATUSCODE = 0	--active
+	  and s.STATUSCODE = 1
+	  and ft.TRANSACTIONAMOUNT > 0  -- exclude $0 RGs
+	group by ft.CONSTITUENTID
+)
+select	CONSTITUENTID,
+		case 
+			when AVGMONTHSDELINQUENT < 0  then 0
+			else AVGMONTHSDELINQUENT 
+		end as AVGMONTHSDELINQUENT
+  from	DelinquencyWithNegatives 
+  where AVGMONTHSDELINQUENT is not null
+
+
+		]]>
+	</CreateProcedureSQL>
+
+	<!-- describe any parameters (other than the ASOF date) defined on the SP -->
+	<!--<common:FormMetaData>
+		<common:FormFields>
+			<common:FormField Caption="Parameter 1" FieldID="PARAMETER1" DataType="Integer"/>
+			<common:FormField Caption="Parameter 2" FieldID="PARAMETER2" DataType="Money"/>
+		</common:FormFields>
+
+		-->
+	<!-- optionally indicate the client-side component for the user interface -->
+	<!--
+		<common:FormUIComponent FormUIComponentType="CustomComponent">
+			<common:CustomComponentID AssemblyName="REPLACE_WITH_ASSEMBLYNAME" ClassName="REPLACE_WITH_FULLCLASSNAME" />
+		</common:FormUIComponent>
+
+	</common:FormMetaData>-->
+
+</SmartFieldSpec>

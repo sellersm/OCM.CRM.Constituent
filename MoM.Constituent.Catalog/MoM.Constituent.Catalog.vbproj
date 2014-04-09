@@ -136,7 +136,7 @@
     <EmbeddedResource Include="QueryViews\Constituent.RecurringGiftOrGiftInBatch.Query.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Smart Fields\AverageMonthsDelinquentByAmountDue.SmartField.xml" />
+    <EmbeddedResource Include="Smart Fields\Statements.AverageMonthsDelinquentByAmountDue.SmartField.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Smart Fields\NumberOfLKFinancialSponsorships.SmartField.xml" />
@@ -219,6 +219,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="QueryViews\ChurchMemberCorrespondents.Query.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Smart Fields\AverageMonthsDelinquentByAmountDue.SmartField.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
