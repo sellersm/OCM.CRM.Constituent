@@ -14,6 +14,7 @@
 	Date            Modified By     Comments
 	07-Feb-2013		CMayeda			Initial Version
 	29-May-2014		CMayeda			Added ISEFTDECLINED, DELAYEFTPAYMENTDUEDATECODE
+	30-May-2014		CMayeda			Changed ISEFTDECLINED to only display "Yes" when equal to 1, otherwise it's blank
 	-->
 
 	<!-- define the SP that returns the data for the datalist -->
@@ -54,7 +55,10 @@ as
 			when dbo.USR_UFN_CHECK_RECURRINGGIFT_ISHELD(revsplit.ID) = 1  then 'Yes'
 			else ''
 		end as ISHELD,
-		ft_ext.ISEFTDECLINED,
+		case
+			when ft_ext.ISEFTDECLINED = 1 then 'Yes'
+			else ''
+		end as ISEFTDECLINED,
 		(select DESCRIPTION from DELAYEFTPAYMENTDUEDATECODE where ID = ft_ext.DELAYEFTPAYMENTDUEDATECODEID) as DELAYEFTPAYMENTDUEDATECODE
 						
 	from	
@@ -102,7 +106,7 @@ as
 			<OutputField FieldID="LASTPAYMENTDATE" Caption="Last payment date" DataType="Date" />
 			<OutputField FieldID="PAYMENTMETHOD" Caption="Payment method" DataType="String" />
 			<OutputField FieldID="ISHELD" Caption="Held?" DataType="String" />
-			<OutputField FieldID="ISEFTDECLINED" Caption="Declined?" DataType="Boolean" />
+			<OutputField FieldID="ISEFTDECLINED" Caption="Declined?" DataType="String" />
 			<OutputField FieldID="DELAYEFTPAYMENTDUEDATECODE" Caption="Delayed EFT Due Date" DataType="String" />
 
 		</OutputFields>
