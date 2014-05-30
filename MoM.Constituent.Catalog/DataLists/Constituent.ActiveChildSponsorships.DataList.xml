@@ -14,33 +14,30 @@
 	History:
 	Date            Modified By     Comments
 	07-Feb-2013		CMayeda			Initial Version
+	29-May-2014		CMayeda			Added ISEFTDECLINED, DELAYEFTPAYMENTDUEDATECODE, and moved some child and correspondent fields to a linked view form
 	-->
 	
 	<!-- define the SP that returns the data for the datalist -->
 	<SPDataList SPName="USR_USP_DATALIST_CONSTITUENTACTIVECHILDSPONSORSHIPS">
 		<common:CreateProcedureSQL>
 			<![CDATA[
+			
 create procedure dbo.USR_USP_DATALIST_CONSTITUENTACTIVECHILDSPONSORSHIPS(@CONTEXTID uniqueidentifier)
 as
 	set nocount on;
 
-	select	
+	select 
 		financialsponsor.ID as FINANCIALSPONSORID,
 		correspondent.ID as CORRESPONDENTID,
 		sp.ID as SPONSORSHIPID,
 		rev.ID as SPONSORSHIPRECURRINGGIFTID,
 		sp.SPONSORSHIPOPPORTUNITYID,
 		spc.LOOKUPID as COMMITMENTLOOKUPID,		
+		coalesce (slocation.LOOKUPID,'') as PROJECTLOOKUPID,
 		so.LOOKUPID as CHILDLOOKUPID,
 		so_child.NAME as CHILDNAME,				
 		statusCode.DESCRIPTION as SPONSORSHIPSTATUS,
 		sp.STARTDATE,
-		coalesce (slocation.LOOKUPID,'') as PROJECTLOOKUPID,
-		so.ELIGIBILITY,
-		so_child.GENDER,
-		so_child.BIRTHDATE,
-		so_child.AGE,
-		so_child_ext.CURRENTPROGRAMCOMPLETIONDATE,
 		rev.Amount as RGAMOUNT,
 		revschedule.FREQUENCY,
 		case when revschedule.NEXTTRANSACTIONDATE > revschedule.ENDDATE then null else revschedule.NEXTTRANSACTIONDATE end as NTD,
@@ -64,18 +61,19 @@ as
 			when dbo.USR_UFN_CHECK_RECURRINGGIFT_ISHELD(sp.REVENUESPLITID) = 1  then 'Yes'
 			else ''
 		end as ISHELD,
+		ft_ext.ISEFTDECLINED,
+		(select DESCRIPTION from DELAYEFTPAYMENTDUEDATECODE where ID = ft_ext.DELAYEFTPAYMENTDUEDATECODEID) as DELAYEFTPAYMENTDUEDATECODE,
 		case 
 			when financialsponsor.ID <> correspondent.ID then 'Yes'
 			else 'No'
-		end as ISGIFTSPONSORSHIP,
-		correspondent.LOOKUPID as CORRESPONDENTLOOKUPID,
-		correspondent.NAME as CORRESPONDENTNAME
-				
+		end as ISGIFTSPONSORSHIP
+		
 	from	
 		dbo.SPONSORSHIP sp
 		inner join dbo.SPONSORSHIPCOMMITMENT spc on sp.SPONSORSHIPCOMMITMENTID = spc.ID
 		inner join dbo.REVENUESPLIT revsplit on sp.REVENUESPLITID = revsplit.ID
 		inner join dbo.REVENUE rev on revsplit.REVENUEID = rev.ID
+		left  join dbo.USR_FINANCIALTRANSACTION_EXTENSION ft_ext on rev.ID = ft_ext.ID
 		inner join dbo.REVENUESCHEDULE revschedule on revschedule.ID = rev.ID --REVENUE.ID		
 		inner join dbo.CONSTITUENT financialsponsor on rev.CONSTITUENTID = financialsponsor.ID
 		inner join dbo.CONSTITUENT correspondent on sp.CONSTITUENTID = correspondent.ID
@@ -91,7 +89,7 @@ as
 	where  
 		sp.STATUSCODE = 1   
 	and	financialsponsor.ID = @CONTEXTID
-
+	
 			]]>
 		</common:CreateProcedureSQL>
 	</SPDataList>
@@ -117,16 +115,11 @@ as
 			<OutputField FieldID="SPONSORSHIPRECURRINGGIFTID" Caption="Sponsorship Recurring Gift System ID" DataType="Guid" IsHidden="true" />
 			<OutputField FieldID="SPONSORSHIPOPPORTUNITYID" Caption="Sponsorship Opportunity System ID" DataType="Guid" IsHidden="true" />
 			<OutputField FieldID="COMMITMENTLOOKUPID" Caption="Commitment ID" DataType="String" />
+			<OutputField FieldID="PROJECTLOOKUPID" Caption="Project ID" DataType="String" />
 			<OutputField FieldID="CHILDLOOKUPID" Caption="Child ID" DataType="String" />
 			<OutputField FieldID="CHILDNAME" Caption="Child name" DataType="String" />
 			<OutputField FieldID="SPONSORSHIPSTATUS" Caption="Sponsorship status" DataType="String" />
 			<OutputField FieldID="STARTDATE" Caption="Start Date" DataType="Date" />
-			<OutputField FieldID="PROJECTLOOKUPID" Caption="Project ID" DataType="String" />
-			<OutputField FieldID="ELIGIBILITY" Caption="Eligiblity" DataType="String" />
-			<OutputField FieldID="GENDER" Caption="Gender" DataType="String" />
-			<OutputField FieldID="BIRTHDATE" Caption="Birthdate" DataType="FuzzyDate" />
-			<OutputField FieldID="AGE" Caption="Age" DataType="Integer" />
-			<OutputField FieldID="CURRENTPROGRAMCOMPLETIONDATE" Caption="Completion date" DataType="Date" />
 			<OutputField FieldID="RGAMOUNT" Caption="Amount" DataType="Money" />
 			<OutputField FieldID="FREQUENCY" Caption="Frequency" DataType="String" />
 			<OutputField FieldID="NTD" Caption="NTD" DataType="Date" />
@@ -135,9 +128,9 @@ as
 			<OutputField FieldID="LASTPAYMENTDATE" Caption="Last payment date" DataType="Date" />
 			<OutputField FieldID="PAYMENTMETHOD" Caption="Payment method" DataType="String" />
 			<OutputField FieldID="ISHELD" Caption="Held?" DataType="String" />
+			<OutputField FieldID="ISEFTDECLINED" Caption="Declined?" DataType="Boolean" />
+			<OutputField FieldID="DELAYEFTPAYMENTDUEDATECODE" Caption="Delayed EFT Due Date" DataType="String" />
 			<OutputField FieldID="ISGIFTSPONSORSHIP" Caption="Gift Sponsorship?" DataType="String" />
-			<OutputField FieldID="CORRESPONDENTLOOKUPID" Caption="Corresponding sponsor ID" DataType="String" />
-			<OutputField FieldID="CORRESPONDENTNAME" Caption="Corresponding sponsor name" DataType="String" />
 
 		</OutputFields>
 	</Output>

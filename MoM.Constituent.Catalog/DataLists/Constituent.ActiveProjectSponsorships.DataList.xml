@@ -56,14 +56,17 @@ as
 		case 
 			when dbo.USR_UFN_CHECK_RECURRINGGIFT_ISHELD(sp.REVENUESPLITID) = 1  then 'Yes'
 			else ''
-		end as ISHELD
-				
+		end as ISHELD,
+		ft_ext.ISEFTDECLINED,
+		(select DESCRIPTION from DELAYEFTPAYMENTDUEDATECODE where ID = ft_ext.DELAYEFTPAYMENTDUEDATECODEID) as DELAYEFTPAYMENTDUEDATECODE
+					
 	from	
 		dbo.SPONSORSHIP sp
 		inner join dbo.SPONSORSHIPCOMMITMENT spc on sp.SPONSORSHIPCOMMITMENTID = spc.ID
 		inner join dbo.REVENUESPLIT revsplit on sp.REVENUESPLITID = revsplit.ID
 		inner join dbo.REVENUE rev on revsplit.REVENUEID = rev.ID
 		inner join dbo.REVENUESCHEDULE revschedule on revschedule.ID = rev.ID --REVENUE.ID		
+		left  join dbo.USR_FINANCIALTRANSACTION_EXTENSION ft_ext on rev.ID = ft_ext.ID
 		inner join dbo.CONSTITUENT financialsponsor on rev.CONSTITUENTID = financialsponsor.ID
 		inner join dbo.CONSTITUENT correspondent on sp.CONSTITUENTID = correspondent.ID
 		inner join dbo.SPONSORSHIPOPPORTUNITY so on so.ID = sp.SPONSORSHIPOPPORTUNITYID
@@ -113,6 +116,8 @@ as
 			<OutputField FieldID="LASTPAYMENTDATE" Caption="Last payment date" DataType="Date" />
 			<OutputField FieldID="PAYMENTMETHOD" Caption="Payment method" DataType="String" />
 			<OutputField FieldID="ISHELD" Caption="Held?" DataType="String" />
+			<OutputField FieldID="ISEFTDECLINED" Caption="Declined?" DataType="Boolean" />
+			<OutputField FieldID="DELAYEFTPAYMENTDUEDATECODE" Caption="Delayed EFT Due Date" DataType="String" />
 
 		</OutputFields>
 	</Output>

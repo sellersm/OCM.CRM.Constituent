@@ -38,6 +38,7 @@
 											PhotoUpdateFinancialSponsors.Query.xml
 	07-Feb-2013		CMayeda			Added new data lists and page expression data form for the Sponsorships, Additional giving, and Church member tabs
 	31-Mar-2013		CMayeda			Added ChurchMemberCorrespondents.Query.xml
+	29-May-2014		CMayeda			Added Constituent.ActiveChildSponsorships.View.xml
 	-->
 
 	<!-- Note:  the order of the items listed here is important.  For example, you won't be able to load a data form that references 
@@ -94,6 +95,9 @@
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.NonSponsorshipDonations.DataList.xml" />
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.NonSponsorshipRecurringGifts.DataList.xml" />
 
+		<!-- Data Forms -->
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.Constituent.ActiveChildSponsorships.View.xml" />
+		
 		<!-- Pages -->
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.Constituent.Page.xml" />
 		
