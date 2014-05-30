@@ -96,7 +96,7 @@
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.NonSponsorshipRecurringGifts.DataList.xml" />
 
 		<!-- Data Forms -->
-		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.Constituent.ActiveChildSponsorships.View.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.ActiveChildSponsorships.View.xml" />
 		
 		<!-- Pages -->
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.Constituent.Page.xml" />
