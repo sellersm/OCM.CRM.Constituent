@@ -1,0 +1,72 @@
+﻿<SmartFieldSpec
+	xmlns="bb_appfx_smartfield"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="9efb40fc-a93e-4376-84e6-206992d6b12d"
+	Name="Number of Sponsored Children with Completed Photo Interactions Smart Field"
+	Description="Used in the Annual Photo Update mailing"
+	Author="Cary Mayeda"
+	SPName="USR_USP_SMARTFIELD_NUMBEROFSPONSOREDCHILDRENWITHCOMPLETEDPHOTOINTERACTIONS"
+	DataType="Integer" 
+	RecordType="CONSTITUENT" 
+	DisplayName="Number of Sponsored Children with Completed Photo Interactions Smart Field" 
+	SmartFieldFolder="Constituent"
+	>
+	<!-- 
+	Remarks:    This is used to determine the number children that have a Completed Annual Photo Update interaction in the current year.
+				This is used in the Annaul Photo Update mailing
+				Values do NOT need to be cleared before populating the smart field.		
+				
+	History:
+	Date            Modified By     Comments
+	01-Sep-2014		CMayeda			Initial Version
+	-->
+	
+	<!-- describe the SP used to calculate the smart field values -->
+	<CreateProcedureSQL>
+		<![CDATA[
+create procedure dbo.USR_USP_SMARTFIELD_NUMBEROFSPONSOREDCHILDRENWITHCOMPLETEDPHOTOINTERACTIONS
+(
+	@ASOF datetime 
+)
+as
+begin
+
+declare @statusCode_Pending tinyint = 1
+declare @statusCode_Completed tinyint = 2
+
+-- Child Annual Update subcategories
+declare @categoryName_ChildAnnualUpdate nvarchar(100) = 'Child Annual Update'
+declare @subcategoryName_ChildAnnualPhotoUpdate nvarchar(100) = 'Annual Photo Update'
+declare @subcategoryID_ChildAnnualPhotoUpdate uniqueidentifier
+declare @categoryID_ChildAnnualUpdate uniqueidentifier
+
+exec dbo.USR_USP_INTERACTION_GETSUBCATEGORYID 
+	@subcategoryID =  @subcategoryID_ChildAnnualPhotoUpdate output,
+	@categoryName = @categoryName_ChildAnnualUpdate,
+	@subcategoryName = @subcategoryName_ChildAnnualPhotoUpdate,
+	@raiseErrorIfNotFound = 1
+
+select 
+	sponsor.ID, 
+	(select count (so_child.ID) 	 
+	 from 
+		dbo.SPONSORSHIP s 
+		join dbo.SPONSORSHIPOPPORTUNITYCHILD so_child on so_child.ID = s.SPONSORSHIPOPPORTUNITYID
+		join dbo.INTERACTION inter on so_child.CONSTITUENTID = inter.CONSTITUENTID
+	 where inter.STATUSCODE = @statusCode_Completed
+	   and	inter.INTERACTIONSUBCATEGORYID  = @subcategoryID_ChildAnnualPhotoUpdate
+	   and year(inter.EXPECTEDDATE) = year(getdate())
+	   and s.STATUSCODE = 1 --Active
+       and s.CONSTITUENTID = sponsor.ID 
+	) as ChildCount
+	
+from 
+	dbo.CONSTITUENT sponsor
+	
+end
+
+		]]>
+	</CreateProcedureSQL>
+
+
+</SmartFieldSpec>
