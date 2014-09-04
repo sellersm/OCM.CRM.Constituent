@@ -10,7 +10,14 @@
 	RecordType="CONSTITUENT"
 	common:SecurityUIFolder="Constituent"
 	>
-
+	<!-- 
+	Remarks:    
+	
+	History:
+	Date            Modified By     Comments
+	04-Sep-2014		CMayeda			Changed this to look for interactions that are the current year.
+	-->
+	
 	<!-- define the view used to return data for the query -->
 	<ViewImplementation ViewName="USR_V_QUERY_CONSTITUENT_CORRESPONDENTPHOTOUPDATE">
 		<ViewSQL>
@@ -42,7 +49,7 @@ and exists (select i.ID
 		     where i.CONSTITUENTID = so_child.CONSTITUENTID 
 			   and isubcat.NAME = 'Annual Photo Update'
 	           and icat.NAME = 'Child Annual Update'
-	           and i.EXPECTEDDATE >= '3/31/2013'
+	           and year(i.EXPECTEDDATE) = year(getdate())			   
 	           and i.STATUSCODE = 2 -- Completed
 	         )
 
