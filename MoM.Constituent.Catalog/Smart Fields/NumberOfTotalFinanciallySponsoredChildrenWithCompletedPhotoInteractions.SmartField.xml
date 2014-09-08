@@ -1,0 +1,120 @@
+﻿<SmartFieldSpec
+	xmlns="bb_appfx_smartfield"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="213ECEFC-B997-4968-A0BF-B37E06F5A83C"
+	Name="Number of Total Financially Sponsored Children with Completed Photo Interactions Smart Field"
+	Description="Used in the Annual Photo Update mailing"
+	Author="Cary Mayeda"
+	SPName="USR_USP_SMARTFIELD_NUMBEROFTOTALFINANCIALLYSPONSOREDCHILDRENWITHCOMPLETEDPHOTOINTERACTIONS"
+	DataType="Integer" 
+	RecordType="CONSTITUENT" 
+	DisplayName="Number of Total Financially Sponsored Children with Completed Photo Interactions Smart Field" 
+	SmartFieldFolder="Constituent"
+	>
+	<!-- 
+	Remarks:    This is used to determine the total number of sponsored (gifted and not gifted) children that have a Completed Annual Photo Update interaction in the current year.
+				This is used in the Annaul Photo Update mailing
+				Values do NOT need to be cleared before populating the smart field.		
+				
+	History:
+	Date            Modified By     Comments
+	08-Sep-2014		CMayeda			Initial Version
+	-->
+	
+	<!-- describe the SP used to calculate the smart field values -->
+	<CreateProcedureSQL>
+		<![CDATA[
+create procedure dbo.USR_USP_SMARTFIELD_NUMBEROFTOTALFINANCIALLYSPONSOREDCHILDRENWITHCOMPLETEDPHOTOINTERACTIONS
+(
+	@ASOF datetime 
+)
+as
+begin
+
+
+declare @statusCode_Pending tinyint = 1
+declare @statusCode_Completed tinyint = 2
+
+-- Child Annual Update subcategories
+declare @categoryName_ChildAnnualUpdate nvarchar(100) = 'Child Annual Update'
+declare @subcategoryName_ChildAnnualPhotoUpdate nvarchar(100) = 'Annual Photo Update'
+declare @subcategoryID_ChildAnnualPhotoUpdate uniqueidentifier
+declare @categoryID_ChildAnnualUpdate uniqueidentifier
+
+exec dbo.USR_USP_INTERACTION_GETSUBCATEGORYID 
+	@subcategoryID =  @subcategoryID_ChildAnnualPhotoUpdate output,
+	@categoryName = @categoryName_ChildAnnualUpdate,
+	@subcategoryName = @subcategoryName_ChildAnnualPhotoUpdate,
+	@raiseErrorIfNotFound = 1
+
+;with FinancialSponsors as
+(
+select 
+	constituent.ID, 
+	(select count (so_child.ID) 	 
+	 from 
+		dbo.SPONSORSHIP s 
+		inner join dbo.REVENUESPLIT rs on rs.ID = s.REVENUESPLITID
+		inner join dbo.REVENUE r on r.ID = rs.REVENUEID
+		inner join dbo.CONSTITUENT financialsponsor on financialsponsor.ID = r.CONSTITUENTID
+		inner join dbo.ADDRESS fs_address on fs_address.CONSTITUENTID = financialsponsor.ID and fs_address.ISPRIMARY = 1
+		inner join dbo.ADDRESS c_address on c_address.CONSTITUENTID = s.CONSTITUENTID and c_address.ISPRIMARY = 1
+		inner join dbo.SPONSORSHIPOPPORTUNITYCHILD so_child on so_child.ID = s.SPONSORSHIPOPPORTUNITYID
+		inner join dbo.INTERACTION inter on so_child.CONSTITUENTID = inter.CONSTITUENTID
+	 where 
+		-- Only financial sponsors (gifters) who have a different address than the correspondent
+		s.CONSTITUENTID <> r.CONSTITUENTID 
+	 and (dbo.USR_UFN_ADDRESS_ADDRESSBLOCK_NORMALIZE_LOWERCASE(fs_address.ADDRESSBLOCK)<> 
+    	 dbo.USR_UFN_ADDRESS_ADDRESSBLOCK_NORMALIZE_LOWERCASE(c_address.ADDRESSBLOCK)
+    	or coalesce (fs_address.STATEID, '00000000-0000-0000-0000-000000000000') <> coalesce (c_address.STATEID, '00000000-0000-0000-0000-000000000000'))
+
+	 -- completed Annual Photo Update interactions in the current year
+	 and inter.STATUSCODE = @statusCode_Completed
+	 and	inter.INTERACTIONSUBCATEGORYID  = @subcategoryID_ChildAnnualPhotoUpdate
+	 and year(inter.EXPECTEDDATE) = year(getdate())
+
+	 -- only active sponsorships
+	 and s.STATUSCODE = 1 
+	 
+	 and financialsponsor.ID = constituent.ID 
+	 
+	) as ChildCount
+	
+from 
+	dbo.CONSTITUENT constituent
+	
+),
+Sponsors as
+
+(select 
+	sponsor.ID, 
+	(select count (so_child.ID) 	 
+	 from 
+		dbo.SPONSORSHIP s 
+		join dbo.SPONSORSHIPOPPORTUNITYCHILD so_child on so_child.ID = s.SPONSORSHIPOPPORTUNITYID
+		join dbo.INTERACTION inter on so_child.CONSTITUENTID = inter.CONSTITUENTID
+	 where inter.STATUSCODE = @statusCode_Completed
+	   and	inter.INTERACTIONSUBCATEGORYID  = @subcategoryID_ChildAnnualPhotoUpdate
+	   and year(inter.EXPECTEDDATE) = year(getdate())
+	   and s.STATUSCODE = 1 --Active
+       and s.CONSTITUENTID = sponsor.ID 
+	) as ChildCount
+	
+from 
+	dbo.CONSTITUENT sponsor
+)
+
+select 
+	Sponsors.ID,
+	Sponsors.ChildCount + FinancialSponsors.ChildCount as ChildCount
+from 
+	Sponsors 
+	join FinancialSponsors on Sponsors.ID = FinancialSponsors.ID 
+
+end
+
+		]]>
+	</CreateProcedureSQL>
+
+
+</SmartFieldSpec>

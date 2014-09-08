@@ -2,13 +2,13 @@
 	xmlns="bb_appfx_smartfield"
 	xmlns:common="bb_appfx_commontypes" 
 	ID="1599043A-D0FB-44FF-8DD9-8A2577F2FB0C"
-	Name="Number of Financially Sponsored Children with Completed Photo Interactions Smart Field"
+	Name="Number of Gifted Financially Sponsored Children with Completed Photo Interactions Smart Field"
 	Description="Used in the Annual Photo Update mailing. This only contains Financial Sponsors with different primary mailing addresses from the Correspondents"
 	Author="Cary Mayeda"
-	SPName="USR_USP_SMARTFIELD_NUMBEROFFINANCIALLYSPONSOREDCHILDRENWITHCOMPLETEDPHOTOINTERACTIONS"
+	SPName="USR_USP_SMARTFIELD_NUMBEROFGIFTEDSPONSOREDCHILDRENWITHCOMPLETEDPHOTOINTERACTIONS"
 	DataType="Integer" 
 	RecordType="CONSTITUENT" 
-	DisplayName="Number of Financially Sponsored Children with Completed Photo Interactions Smart Field" 
+	DisplayName="Number of Gifted Financially Sponsored Children with Completed Photo Interactions Smart Field" 
 	SmartFieldFolder="Constituent"
 	>
 	<!-- 
@@ -20,12 +20,13 @@
 	History:
 	Date            Modified By     Comments
 	05-Sep-2014		CMayeda			Initial Version
+	08-Sep-2014		CMayeda			Changed name to be better describe that this is only gifted sponsorships
 	-->
 	
 	<!-- describe the SP used to calculate the smart field values -->
 	<CreateProcedureSQL>
 		<![CDATA[
-create procedure dbo.USR_USP_SMARTFIELD_NUMBEROFFINANCIALLYSPONSOREDCHILDRENWITHCOMPLETEDPHOTOINTERACTIONS
+create procedure dbo.USR_USP_SMARTFIELD_NUMBEROFGIFTEDSPONSOREDCHILDRENWITHCOMPLETEDPHOTOINTERACTIONS
 (
 	@ASOF datetime 
 )
