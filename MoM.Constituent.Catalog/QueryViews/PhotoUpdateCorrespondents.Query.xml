@@ -16,6 +16,7 @@
 	History:
 	Date            Modified By     Comments
 	04-Sep-2014		CMayeda			Changed this to look for interactions that are the current year.
+	09-Sep-2014		CMayeda			Added Child's first name
 	-->
 	
 	<!-- define the view used to return data for the query -->
@@ -30,7 +31,8 @@ select
 	so.ID as CHILDID,
 	proj_const.LOOKUPID as PROJECTLOOKUPID, 
 	so.LOOKUPID as CHILDLOOKUPID, 
-	so_child.NAME as CHILDNAME
+	so_child.NAME as CHILDNAME,
+	so_child.FIRSTNAME as CHILDFIRSTNAME
 	
 from 
 	SPONSORSHIP s
@@ -67,6 +69,7 @@ and exists (select i.ID
 			<OutputField Name="PROJECTLOOKUPID" Caption="Project lookup ID" DataType="String" />
 			<OutputField Name="CHILDLOOKUPID" Caption="Child lookup ID" DataType="String" />
 			<OutputField Name="CHILDNAME" Caption="Child name" DataType="String" />
+			<OutputField Name="CHILDFIRSTNAME" Caption="Child first name" DataType="String" />
 		</OutputFields>
 	</Output>
 	<RelationshipOperations>
