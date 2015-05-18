@@ -57,7 +57,6 @@ and sp_ext.CURRENTOPPORTUNITYSPONSORSHIPSTATUS in (N'Formerly Sponsored', N'Form
 select distinct
 	c1.CONSTITUENTID,
 	C1.ENDDATE
-into USR_TEMP_FINANCIALSP
 from 
 	CancellationReasons c1
 where 
