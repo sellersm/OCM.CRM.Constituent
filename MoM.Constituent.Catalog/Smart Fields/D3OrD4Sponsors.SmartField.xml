@@ -1,0 +1,113 @@
+﻿<SmartFieldSpec
+	xmlns="bb_appfx_smartfield"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="0D7CEB8B-401C-4B23-9785-7DD177B78955"
+	Name="D3 And D4 Sponsors"
+	Description="Sponsors who have at least one sponsorship that is D3 or D4"
+	Author="Cary Mayeda"
+	SPName="USR_USP_SMARTFIELD_D3ORD4SPONSORS"
+	DataType="Boolean"
+	RecordType="Constituent"
+	DisplayName="Sponsors who have at least one sponsorship that is D3 or D4"
+	SmartFieldFolder="Constituent"
+	>
+	
+	<!-- 
+	Remarks:    This is used to determine the when the person started financial sponsorships children at OCM (not correspondents).				
+				
+	History:
+	Date            Modified By     Comments
+	18-May-2015		CMayeda			Initial Version
+	-->
+
+	<!-- describe the SP used to calculate the smart field values -->
+
+	<CreateProcedureSQL>
+		<![CDATA[
+create procedure dbo.USR_USP_SMARTFIELD_D3ORD4SPONSORS
+(
+	@ASOF datetime 
+)
+as
+	
+begin
+	-- write sql to calculate the smart field values based on the parameters and ASOF date
+
+	declare @currentDate date = Cast(GETDATE() as date)
+
+	--'First Day of 2 Months ago'
+	declare @firstDayTwoMonthsAgo date
+	set @firstDayTwoMonthsAgo =  dateadd(month, datediff(month, 0, getdate()) - 2, 0)
+	
+	declare @d4ResultsTable table (
+		sponsorshipID uniqueidentifier,
+		childID uniqueidentifier, 
+		childLookupID nvarchar(100),
+		childName nvarchar(154),  
+		financialSponsorID uniqueidentifier, 
+		financialSponsorLookupID nvarchar(100), 
+		financialSponsorName nvarchar(255),  
+		sponsorshipRevenueSplitID uniqueidentifier, 
+		sponsorshipRecurringGiftID uniqueidentifier,
+		NTD date, 
+		numberOfMonthsPastDue decimal(6,3)
+		);
+			
+	insert @d4ResultsTable	
+	select	sp.ID as sponsorshipID,
+			sp.SPONSORSHIPOPPORTUNITYID as childID,
+			so.LOOKUPID as childLookupID,
+			so_child.NAME as childName,
+			sponsor.ID as financialSponsorID,
+			sponsor.LOOKUPID as financialSponsorLookupID,
+			sponsor.NAME as financialSponsorName,
+			sp.REVENUESPLITID as sponsorshipRevenueSplitID,
+			rev.ID as sponsorshipRecurringGiftID,
+			case when revschedule.NEXTTRANSACTIONDATE > revschedule.ENDDATE then null else revschedule.NEXTTRANSACTIONDATE end as NTD,
+			dbo.USR_UFN_RECURRINGGIFT_GETNUMBEROFMONTHSPASTDUE(rev.ID, dateadd(day, 1, dateadd(month, datediff(month, 0, getdate()), 0))) as numberOfMonthsPastDue
+	  from	dbo.SPONSORSHIP sp
+	  
+	  join	dbo.REVENUESPLIT revsplit on sp.REVENUESPLITID = revsplit.ID
+	  join	dbo.REVENUE rev on revsplit.REVENUEID = rev.ID
+	  join	dbo.REVENUESCHEDULE revschedule on revschedule.ID = rev.ID --REVENUE.ID		
+	  join	dbo.CONSTITUENT sponsor on rev.CONSTITUENTID = sponsor.ID
+	  join	dbo.USR_SPONSORSHIPEXTENSION se on se.ID = sp.ID
+	  join	dbo.USR_CURRENTOPPORTUNITYSPONSORSHIPSTATUSCODE statusCode on 
+				statusCode.ID = se.CURRENTOPPORTUNITYSPONSORSHIPSTATUSCODEID and statusCode.DESCRIPTION = 'Sponsored' -- 1.6
+	  join	dbo.SPONSORSHIPOPPORTUNITY so on so.ID = sp.SPONSORSHIPOPPORTUNITYID
+	  join	dbo.SPONSORSHIPOPPORTUNITYCHILD so_child on so_child.ID = sp.SPONSORSHIPOPPORTUNITYID
+	
+	 where  sp.STATUSCODE = 1   -- Status of 'Active' 
+			-- NTD Less than <= first day of Month - 2
+	   and  (case when revschedule.NEXTTRANSACTIONDATE > revschedule.ENDDATE then null else revschedule.NEXTTRANSACTIONDATE end) 
+	          <= @firstDayTwoMonthsAgo 
+	          
+	delete from @d4ResultsTable
+	where numberOfMonthsPastDue < 3;
+
+	select distinct financialSponsorID, 1 from @d4ResultsTable
+
+end
+		]]>
+</CreateProcedureSQL>
+
+
+<!-- describe any parameters (other than the ASOF date) defined on the SP -->
+<!--<common:FormMetaData>
+		<common:FormFields>
+			<common:FormField Caption="Constituent ID" FieldID="CONSTITUENTID" DataType="Guid"/>
+		</common:FormFields>
+
+		-->
+<!-- optionally indicate the client-side component for the user interface -->
+<!--
+		-->
+<!--<common:FormUIComponent FormUIComponentType="CustomComponent">
+			<common:CustomComponentID AssemblyName="REPLACE_WITH_ASSEMBLYNAME" ClassName="REPLACE_WITH_FULLCLASSNAME" />
+		</common:FormUIComponent>-->
+<!--
+
+	</common:FormMetaData>-->
+
+
+</SmartFieldSpec>

@@ -1,0 +1,87 @@
+﻿<SmartFieldSpec
+	xmlns="bb_appfx_smartfield"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="5CF30DDB-5AA4-4D74-AEED-CC73EEE6DCA4"
+	Name="Last Terminated Sponsorship Has Reason of Auto Cancelled Sponsorship Date"
+	Description="Sponsorship End Date of those where the last terminated or cancelled sponsorship has a reason of 'Autocancel - Delinquent Payment'"
+	Author="Cary Mayeda"
+	SPName="USR_USP_SMARTFIELD_LASTESTAUTOCANCELLEDSPONSORSHIPDATE"
+	DataType="Date"
+	RecordType="Constituent"
+	DisplayName="Last Terminated Sponsorship Has Reason of Auto Cancelled Sponsorship Date"
+	SmartFieldFolder="Constituent"
+	>
+	
+	<!-- 
+	Remarks:    This is used to determine the when the person started financial sponsorships children at OCM (not correspondents).				
+				
+	History:
+	Date            Modified By     Comments
+	18-May-2015		CMayeda			Initial Version
+	-->
+
+	<!-- describe the SP used to calculate the smart field values -->
+
+	<CreateProcedureSQL>
+		<![CDATA[
+create procedure dbo.USR_USP_SMARTFIELD_LASTESTAUTOCANCELLEDSPONSORSHIPDATE
+(
+	@ASOF datetime 
+)
+as
+	-- write sql to calculate the smart field values based on the parameters and ASOF date
+
+with CancellationReasons as
+(
+select
+	sp.CONSTITUENTID,
+	sp.ENDDATE,	
+	sp.[REASON] as ENDSPONSORSHIPREASON
+	
+from 
+	dbo.USR_V_QUERY_SPONSORSHIPEXTENSION as sp_ext
+	left outer join dbo.V_QUERY_SPONSORSHIP as sp on sp_ext.ID = sp.ID
+	inner join dbo.V_QUERY_SPONSORSHIPOPPORTUNITY as so on sp_ext.SPONSORSHIPOPPORTUNITYID = so.ID
+	left outer join dbo.V_QUERY_SPONSORSHIPTRANSACTION as sp_trans on sp.[ID] = sp_trans.CONTEXTSPONSORSHIPID
+	
+where 
+	so.[TYPE] = N'Child'
+and (	 sp_trans.[ACTION] in (N'Terminate', N'Cancel')
+	 and sp_trans.ISLASTTRANSACTION = 1
+	 and ((sp_trans.REASON not  in (N'Account Correction', N'User Correction')) or sp_trans.REASON is null or sp_trans.REASON = '')
+    )
+and sp_ext.CURRENTOPPORTUNITYSPONSORSHIPSTATUS in (N'Formerly Sponsored', N'Formerly Unpaid Sponsored')
+
+)
+select distinct
+	c1.CONSTITUENTID,
+	C1.ENDDATE
+from 
+	CancellationReasons c1
+where 
+	ENDDATE = (select max (ENDDATE) from CancellationReasons c2 where c1.CONSTITUENTID = c2.CONSTITUENTID)
+and ENDSPONSORSHIPREASON = 'Autocancel - Delinquent Payment'
+
+		]]>
+</CreateProcedureSQL>
+
+
+<!-- describe any parameters (other than the ASOF date) defined on the SP -->
+<!--<common:FormMetaData>
+		<common:FormFields>
+			<common:FormField Caption="Constituent ID" FieldID="CONSTITUENTID" DataType="Guid"/>
+		</common:FormFields>
+
+		-->
+<!-- optionally indicate the client-side component for the user interface -->
+<!--
+		-->
+<!--<common:FormUIComponent FormUIComponentType="CustomComponent">
+			<common:CustomComponentID AssemblyName="REPLACE_WITH_ASSEMBLYNAME" ClassName="REPLACE_WITH_FULLCLASSNAME" />
+		</common:FormUIComponent>-->
+<!--
+
+	</common:FormMetaData>-->
+
+
+</SmartFieldSpec>

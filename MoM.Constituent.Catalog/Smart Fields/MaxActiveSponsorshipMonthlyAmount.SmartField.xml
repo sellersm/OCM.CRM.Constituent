@@ -1,0 +1,74 @@
+﻿<SmartFieldSpec
+	xmlns="bb_appfx_smartfield"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="E5A254CF-DB94-4543-9838-8046286E470E"
+	Name="Max Active Sponsorship Monthly Amount"
+	Description="Maximum Monthly (converted for non-monthly frequencies) Amount of Active Sponsorships"
+	Author="Cary Mayeda"
+	SPName="USR_USP_SMARTFIELD_MAXACTIVESPONSORSHIPMONTHLYAMOUNT"
+	DataType="Money" 
+	RecordType="Constituent" 
+	DisplayName="Highest Active Sponsorship Monthly Amount" 
+	SmartFieldFolder="Constituent"
+	>
+	<!-- 
+	Remarks:    
+
+	History:
+	Date            Modified By     Comments
+	18-May-2015		CMayeda			Initial Version
+	-->
+	
+	<!-- describe the SP used to calculate the smart field values -->
+	<CreateProcedureSQL>
+		<![CDATA[
+create procedure dbo.USR_USP_SMARTFIELD_MAXACTIVESPONSORSHIPMONTHLYAMOUNT
+(
+	@ASOF datetime 
+)
+as
+	-- write sql to calculate the smart field values based on the parameters and ASOF date
+select 
+	s.CONSTITUENTID,
+	max (
+			case 
+				when rsch.FREQUENCYCODE = 0 then ft.TRANSACTIONAMOUNT / 12 			-- Annually
+				when rsch.FREQUENCYCODE = 1 then ft.TRANSACTIONAMOUNT / 6 			-- Semi-annually
+				when rsch.FREQUENCYCODE = 2 then ft.TRANSACTIONAMOUNT / 3 			-- Quarterly
+				when rsch.FREQUENCYCODE = 3 then ft.TRANSACTIONAMOUNT 				-- Monthly
+				when rsch.FREQUENCYCODE = 6 then (ft.TRANSACTIONAMOUNT * 6)  / 12	-- Bimonthly
+				when rsch.FREQUENCYCODE = 7 then (ft.TRANSACTIONAMOUNT * 24) / 12	-- Semi-Monthly
+				when rsch.FREQUENCYCODE = 8 then (ft.TRANSACTIONAMOUNT * 26) / 12	-- Biweekly
+				when rsch.FREQUENCYCODE = 9 then (ft.TRANSACTIONAMOUNT * 52) / 12	-- Weekly
+			end
+		 )
+from 
+	dbo.SPONSORSHIP s
+	join dbo.REVENUESPLIT rs on s.REVENUESPLITID = rs.ID
+	join dbo.FINANCIALTRANSACTION ft on ft.ID = rs.REVENUEID
+	join dbo.REVENUESCHEDULE rsch on ft.ID = rsch.ID
+	
+where 
+	s.STATUSCODE = 1 -- Active
+	
+group by s.CONSTITUENTID
+
+
+		]]>
+	</CreateProcedureSQL>
+
+	<!-- describe any parameters (other than the ASOF date) defined on the SP -->
+	<!--<common:FormMetaData>
+		<common:FormFields>
+			<common:FormField Caption="Parameter 1" FieldID="PARAMETER1" DataType="Integer"/>
+			<common:FormField Caption="Parameter 2" FieldID="PARAMETER2" DataType="Money"/>
+		</common:FormFields>
+
+		--><!-- optionally indicate the client-side component for the user interface --><!--
+		<common:FormUIComponent FormUIComponentType="CustomComponent">
+			<common:CustomComponentID AssemblyName="REPLACE_WITH_ASSEMBLYNAME" ClassName="REPLACE_WITH_FULLCLASSNAME" />
+		</common:FormUIComponent>
+
+	</common:FormMetaData>-->
+
+</SmartFieldSpec>
