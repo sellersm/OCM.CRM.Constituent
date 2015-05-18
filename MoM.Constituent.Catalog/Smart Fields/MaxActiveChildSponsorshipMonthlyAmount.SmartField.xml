@@ -1,18 +1,18 @@
 ﻿<SmartFieldSpec
 	xmlns="bb_appfx_smartfield"
 	xmlns:common="bb_appfx_commontypes" 
-	ID="E5A254CF-DB94-4543-9838-8046286E470E"
-	Name="Max Active Sponsorship Monthly Amount"
-	Description="Maximum Monthly (converted for non-monthly frequencies) Amount of Active Sponsorships"
+	ID="92422106-319A-4200-8032-5F06F97F7C45"
+	Name="Max Active Child Financial Sponsorship Monthly Amount"
+	Description="Maximum Monthly (converted for non-monthly frequencies) Amount of Active Child Sponsorships"
 	Author="Cary Mayeda"
-	SPName="USR_USP_SMARTFIELD_MAXACTIVESPONSORSHIPMONTHLYAMOUNT"
+	SPName="USR_USP_SMARTFIELD_MAXACTIVECHILDSPONSORSHIPMONTHLYAMOUNT"
 	DataType="Money" 
 	RecordType="Constituent" 
-	DisplayName="Largest Active Sponsorship Monthly Amount" 
+	DisplayName="Largest Active Child Financial Sponsorship Monthly Amount" 
 	SmartFieldFolder="Constituent"
 	>
 	<!-- 
-	Remarks:    
+	Remarks:    Max of recurring gift amounts (converted to Monthly) for active financial child sponsorships
 
 	History:
 	Date            Modified By     Comments
@@ -22,14 +22,15 @@
 	<!-- describe the SP used to calculate the smart field values -->
 	<CreateProcedureSQL>
 		<![CDATA[
-create procedure dbo.USR_USP_SMARTFIELD_MAXACTIVESPONSORSHIPMONTHLYAMOUNT
+create procedure dbo.USR_USP_SMARTFIELD_MAXACTIVECHILDSPONSORSHIPMONTHLYAMOUNT
 (
 	@ASOF datetime 
 )
 as
 	-- write sql to calculate the smart field values based on the parameters and ASOF date
+
 select 
-	s.CONSTITUENTID,
+	ft.CONSTITUENTID,
 	max (
 			case 
 				when rsch.FREQUENCYCODE = 0 then ft.TRANSACTIONAMOUNT / 12 			-- Annually
@@ -44,6 +45,7 @@ select
 		 )
 from 
 	dbo.SPONSORSHIP s
+	join dbo.SPONSORSHIPOPPORTUNITYCHILD so_child ON so_child.ID = s.SPONSORSHIPOPPORTUNITYID
 	join dbo.REVENUESPLIT rs on s.REVENUESPLITID = rs.ID
 	join dbo.FINANCIALTRANSACTION ft on ft.ID = rs.REVENUEID
 	join dbo.REVENUESCHEDULE rsch on ft.ID = rsch.ID
@@ -51,8 +53,7 @@ from
 where 
 	s.STATUSCODE = 1 -- Active
 	
-group by s.CONSTITUENTID
-
+group by ft.CONSTITUENTID
 
 		]]>
 	</CreateProcedureSQL>

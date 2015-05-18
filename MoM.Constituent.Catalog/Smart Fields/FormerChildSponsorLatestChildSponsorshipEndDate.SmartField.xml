@@ -1,19 +1,19 @@
 ﻿<SmartFieldSpec
 	xmlns="bb_appfx_smartfield"
-	xmlns:common="bb_appfx_commontypes" 
-	ID="5CF30DDB-5AA4-4D74-AEED-CC73EEE6DCA4"
-	Name="Last Terminated Sponsorship Has Reason of Auto Cancelled Sponsorship Date (Only Financial Sponsors)"
-	Description="Sponsorship End Date of those where the last terminated or cancelled sponsorship has a reason of 'Autocancel - Delinquent Payment'"
+	xmlns:common="bb_appfx_commontypes"
+	ID="5638DA70-AD13-4667-BC65-E45EB3820178"
+	Name="Former Child Sponsor Latest Child Financial Sponsorship End Date"
+	Description="Find when the last child financial sponsorship ended for a Former Child Financial Sponsor"
 	Author="Cary Mayeda"
-	SPName="USR_USP_SMARTFIELD_LASTESTAUTOCANCELLEDSPONSORSHIPDATE"
+	SPName="USR_USP_SMARTFIELD_FORMERCHILDSPONSORLATESTSPONSORSHIPENDDATE"
 	DataType="Date"
 	RecordType="Constituent"
-	DisplayName="Last Terminated Sponsorship Has Reason of Auto Cancelled Sponsorship Date (Only Financial Sponsors)"
+	DisplayName="Last Terminated Financial Sponsorship Has Reason of Auto Cancelled Sponsorship Date"
 	SmartFieldFolder="Constituent"
 	>
 	
 	<!-- 
-	Remarks:    This is used to find the Child Financial Sponsors whose latest cancellation reason was 'Autocancel - Delinquent Payment'
+	Remarks:    This is used to determine when the last child sponsorship ended for a Former Child Sponsor (financial sponsors only).				
 				
 	History:
 	Date            Modified By     Comments
@@ -24,12 +24,14 @@
 
 	<CreateProcedureSQL>
 		<![CDATA[
-create procedure dbo.USR_USP_SMARTFIELD_LASTESTAUTOCANCELLEDSPONSORSHIPDATE
+create procedure dbo.USR_USP_SMARTFIELD_FORMERCHILDSPONSORLATESTSPONSORSHIPENDDATE
 (
 	@ASOF datetime 
 )
 as
 	-- write sql to calculate the smart field values based on the parameters and ASOF date
+
+
 with CancellationReasons as
 (
 select
@@ -57,7 +59,6 @@ and sp_ext.CURRENTOPPORTUNITYSPONSORSHIPSTATUS in (N'Formerly Sponsored', N'Form
 select distinct
 	c1.CONSTITUENTID,
 	C1.ENDDATE
-into USR_TEMP_FINANCIALSP
 from 
 	CancellationReasons c1
 where 
