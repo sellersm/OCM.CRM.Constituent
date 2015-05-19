@@ -14,10 +14,12 @@
 	
 	<!-- 
 	Remarks:    This is used to determine the when the person started financial sponsorships children at OCM (not correspondents).				
+				D4 refers to >= D4
 				
 	History:
 	Date            Modified By     Comments
 	18-May-2015		CMayeda			Initial Version
+	19-May-2015		CMayeda			Updated to add a false value to all those that are not D3 or D4
 	-->
 
 	<!-- describe the SP used to calculate the smart field values -->
@@ -86,6 +88,8 @@ begin
 	where numberOfMonthsPastDue < 3;
 
 	select distinct financialSponsorID, 1 from @d4ResultsTable
+	union
+	select ID, 0 from dbo.CONSTITUENT c where not exists (select 1 from @d4ResultsTable d4 where c.ID = d4.financialSponsorID)
 
 end
 		]]>
