@@ -6,7 +6,7 @@
 	Description="Constituent Lifetime Number of Gifts - Mission and Vision Trip registrations are excluded"
 	Author="Cary Mayeda"
 	SPName="USR_USP_SMARTFIELD_LIFETIMENUMBEROFGIFTSWITHOUTMISSIONANDVISIONTRIPS"
-	DataType="Money" 
+	DataType="Integer" 
 	RecordType="Constituent" 
 	DisplayName="Constituent lifetime number of gifts without mission and vision trip registration payments" 
 	SmartFieldFolder="Constituent\Revenue"
