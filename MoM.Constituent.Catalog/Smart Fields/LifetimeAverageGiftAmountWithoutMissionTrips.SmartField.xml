@@ -1,0 +1,116 @@
+﻿<SmartFieldSpec
+	xmlns="bb_appfx_smartfield"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="D7DEFA06-D2E6-479E-AC9C-C8E4DB289B18"
+	Name="Constituent Lifetime Average Gift Amount without Mission and Vision Trips"
+	Description="Constituent Lifetime - Mission and Vision Trip registrations are excluded"
+	Author="Cary Mayeda"
+	SPName="USR_USP_SMARTFIELD_LIFETIMEAVERAGEGIFTWITHOUTMISSIONANDVISIONTRIPS"
+	DataType="Money" 
+	RecordType="Constituent" 
+	DisplayName="Constituent lifetime average gift amount without mission and vision trip registration payments" 
+	SmartFieldFolder="Constituent\Revenue"
+	>
+	<!-- 
+	Remarks:    Lifetime average gift amount - only inludes donations and payments, no recurring gifts or pledges
+				M- and V- designations are excluded, except for the following
+					M-9001, M-0004, M-0005, M-0006
+
+
+	History:
+	Date            Modified By     Comments
+	21-May-2015		CMayeda			Initial Version
+	-->
+	
+	<!-- describe the SP used to calculate the smart field values -->
+	<CreateProcedureSQL>
+		<![CDATA[
+create procedure dbo.USR_USP_SMARTFIELD_LIFETIMEAVERAGEGIFTWITHOUTMISSIONANDVISIONTRIPS
+(
+	@ASOF datetime 
+)
+as
+	-- write sql to calculate the smart field values based on the parameters and ASOF date
+begin
+
+	with NewRevenueAmounts as
+	(
+	select 
+		r.ID, 
+		r.LOOKUPID,  
+		r.AMOUNT,
+		r.DATE,
+		r.TRANSACTIONTYPECODE,
+		r.TRANSACTIONTYPE,
+		sum(rs.AMOUNT) as NEWAMOUNT
+
+	from 
+		dbo.REVENUE r
+		join dbo.REVENUESPLIT rs on r.ID = rs.REVENUEID
+		join dbo.DESIGNATION d on rs.DESIGNATIONID = d.ID
+
+	where (d.VANITYNAME like 'M-%' or d.VANITYNAME like 'V-%')
+	and d.VANITYNAME <> 'M-9001'
+	and d.VANITYNAME <> 'M-0004'
+	and d.VANITYNAME <> 'M-0005'
+	and d.VANITYNAME <> 'M-0006'
+
+	group by 	
+		r.ID, 
+		r.LOOKUPID,  
+		r.AMOUNT,
+		r.DATE,
+		r.TRANSACTIONTYPECODE,
+		r.TRANSACTIONTYPE
+	),
+	ConstituentRevenueCount as
+	(
+	select r.CONSTITUENTID, count (distinct r.ID) RevenueCount from revenue r
+	left join NewRevenueAmounts ra on r.ID = ra.ID
+	where r.AMOUNT - coalesce (NEWAMOUNT, 0) > 0
+	  and r.TRANSACTIONTYPECODE = 0 -- PAYMENT
+	group by r.CONSTITUENTID
+	),
+
+	ConstituentRevenueTotal as
+	(
+	select r.CONSTITUENTID, sum(r.AMOUNT - coalesce (NEWAMOUNT, 0)) as RevenueTotal 
+	  from revenue r
+	left join NewRevenueAmounts ra on r.ID = ra.ID
+	where r.AMOUNT - coalesce (NEWAMOUNT, 0) > 0
+	  and r.TRANSACTIONTYPECODE = 0 -- PAYMENT
+	group by r.CONSTITUENTID
+	)
+
+	select 
+		c.ID,
+		case 
+			when coalesce(rcount.RevenueCount, 0) = 0  then 0
+			when rtotal.RevenueTotal is null then 0
+			else rtotal.RevenueTotal / rcount.RevenueCount
+		end as AverageGiftAmount
+	from dbo.CONSTITUENT c
+	left join ConstituentRevenueCount rcount on rcount.CONSTITUENTID = c.ID
+	left join ConstituentRevenueTotal rtotal on rtotal.CONSTITUENTID = c.ID
+
+
+end
+
+		]]>
+	</CreateProcedureSQL>
+
+	<!-- describe any parameters (other than the ASOF date) defined on the SP -->
+	<!--<common:FormMetaData>
+		<common:FormFields>
+			<common:FormField Caption="Parameter 1" FieldID="PARAMETER1" DataType="Integer"/>
+			<common:FormField Caption="Parameter 2" FieldID="PARAMETER2" DataType="Money"/>
+		</common:FormFields>
+
+		--><!-- optionally indicate the client-side component for the user interface --><!--
+		<common:FormUIComponent FormUIComponentType="CustomComponent">
+			<common:CustomComponentID AssemblyName="REPLACE_WITH_ASSEMBLYNAME" ClassName="REPLACE_WITH_FULLCLASSNAME" />
+		</common:FormUIComponent>
+
+	</common:FormMetaData>-->
+
+</SmartFieldSpec>

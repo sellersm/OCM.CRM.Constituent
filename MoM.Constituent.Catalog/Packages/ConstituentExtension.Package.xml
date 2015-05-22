@@ -39,6 +39,15 @@
 	07-Feb-2013		CMayeda			Added new data lists and page expression data form for the Sponsorships, Additional giving, and Church member tabs
 	31-Mar-2013		CMayeda			Added ChurchMemberCorrespondents.Query.xml
 	29-May-2014		CMayeda			Added Constituent.ActiveChildSponsorships.View.xml
+	22-May-2015		CMayeda			Added new smart fields
+										MaxActiveChildSponsorshipMonthlyAmount.SmartField.xml
+										MaxActiveSponsorshipMonthlyAmount.SmartField.xml
+										FormerChildSponsorLatestChildSponsorshipEndDate.SmartField.xml
+										LastestAutoCancelledSponsorshipDate.SmartField.xml
+										D3OrD4Sponsors.SmartField.xml
+										LifetimeAverageGiftAmountWithoutMissionTrips.SmartField.xml
+										LifetimeGivingWithoutMissionTrips.SmartField.xml
+										LifetimeNumberOfGiftsWithoutMissionTrips.SmartField.xml
 	-->
 
 	<!-- Note:  the order of the items listed here is important.  For example, you won't be able to load a data form that references 
@@ -135,7 +144,15 @@
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.AverageMonthsDelinquentByAmountDue.SmartField.xml" />
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.NumberOfLKFinancialSponsorships.SmartField.xml" />
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.NumberOfActiveCorrespondentChildSponsorships.SmartField.xml" />
-
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.MaxActiveChildSponsorshipMonthlyAmount.SmartField.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.MaxActiveSponsorshipMonthlyAmount.SmartField.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.FormerChildSponsorLatestChildSponsorshipEndDate.SmartField.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.LastestAutoCancelledSponsorshipDate.SmartField.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.D3OrD4Sponsors.SmartField.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.LifetimeAverageGiftAmountWithoutMissionTrips.SmartField.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.LifetimeGivingWithoutMissionTrips.SmartField.xml" />
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.LifetimeNumberOfGiftsWithoutMissionTrips.SmartField.xml" />
+		
 		<!-- Package Versions -->
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.PackageVersion.DataList.xml" />
 		
