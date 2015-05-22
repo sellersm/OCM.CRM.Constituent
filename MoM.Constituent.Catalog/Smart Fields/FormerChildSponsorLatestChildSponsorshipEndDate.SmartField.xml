@@ -2,13 +2,13 @@
 	xmlns="bb_appfx_smartfield"
 	xmlns:common="bb_appfx_commontypes"
 	ID="5638DA70-AD13-4667-BC65-E45EB3820178"
-	Name="Former Child Sponsor Latest Child Financial Sponsorship End Date"
+	Name="Latest Child Financial Sponsorship End Date"
 	Description="Find when the last child financial sponsorship ended for a Former Child Financial Sponsor"
 	Author="Cary Mayeda"
 	SPName="USR_USP_SMARTFIELD_FORMERCHILDSPONSORLATESTSPONSORSHIPENDDATE"
 	DataType="Date"
 	RecordType="Constituent"
-	DisplayName="Last Terminated Financial Sponsorship Has Reason of Auto Cancelled Sponsorship Date"
+	DisplayName="Latest Child Financial Sponsorship End Date"
 	SmartFieldFolder="Constituent"
 	>
 	
@@ -32,12 +32,9 @@ as
 	-- write sql to calculate the smart field values based on the parameters and ASOF date
 
 
-with CancellationReasons as
-(
 select
 	ft.CONSTITUENTID,
-	sp.ENDDATE,	
-	sp.[REASON] as ENDSPONSORSHIPREASON
+	max(sp.ENDDATE)
 	
 from 
 	dbo.USR_V_QUERY_SPONSORSHIPEXTENSION as sp_ext
@@ -55,15 +52,10 @@ and (	 sp_trans.[ACTION] in (N'Terminate', N'Cancel')
     )
 and sp_ext.CURRENTOPPORTUNITYSPONSORSHIPSTATUS in (N'Formerly Sponsored', N'Formerly Unpaid Sponsored')
 
-)
-select distinct
-	c1.CONSTITUENTID,
-	C1.ENDDATE
-from 
-	CancellationReasons c1
-where 
-	ENDDATE = (select max (ENDDATE) from CancellationReasons c2 where c1.CONSTITUENTID = c2.CONSTITUENTID)
-and ENDSPONSORSHIPREASON = 'Autocancel - Delinquent Payment'
+group by 
+	ft.CONSTITUENTID
+
+
 
 		]]>
 </CreateProcedureSQL>
