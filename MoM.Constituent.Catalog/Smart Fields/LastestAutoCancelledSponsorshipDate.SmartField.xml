@@ -8,7 +8,7 @@
 	SPName="USR_USP_SMARTFIELD_LASTESTAUTOCANCELLEDSPONSORSHIPDATE"
 	DataType="Date"
 	RecordType="Constituent"
-	DisplayName="Last Terminated Sponsorship Has Reason of Auto Cancelled Sponsorship Date (Only Financial Sponsors)"
+	DisplayName="Last terminated sponsorship has reason of auto cancelled sponsorship date (only financial sponsors)"
 	SmartFieldFolder="Constituent"
 	>
 	

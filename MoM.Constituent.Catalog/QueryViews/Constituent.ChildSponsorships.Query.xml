@@ -8,8 +8,17 @@
 	IsRoot="true"
 	PrimaryKeyField="ID"
 	RecordType="CONSTITUENT"
-	common:SecurityUIFolder="CONSITUENT"
+	common:SecurityUIFolder="CONSTITUENT"
 	>
+
+	<!-- 
+	Remarks:    
+
+	History:
+	Date            Modified By     Comments
+	22-Jun-2015		CMayeda			Updated SecurityUIFolder
+	-->
+
 
 	<!-- define the view used to return data for the query -->
 	<ViewImplementation ViewName="USR_V_QUERY_CONSTITUENTCHILDSPONSORSHIP">

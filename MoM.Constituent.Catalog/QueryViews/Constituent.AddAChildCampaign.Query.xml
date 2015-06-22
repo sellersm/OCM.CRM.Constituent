@@ -1,0 +1,107 @@
+﻿<QueryViewSpec
+	xmlns="bb_appfx_queryview"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="1a4f1353-1ab0-40ae-88db-e58815df56fa"
+	Name="Add a Child Campaign Sponsorships Query"
+	Description="Find sponsorships with a source of the Add a Child Campaign"
+	Author="Cary Mayeda"
+	IsRoot="true"
+	PrimaryKeyField="ID"
+	RecordType="CONSTITUENT"
+	common:SecurityUIFolder="CONSTITUENT"
+	>
+
+	<!-- 
+	Remarks:    Used for the email alert for the Add a Child Campaign.
+
+	History:
+	Date            Modified By     Comments
+	22-Jun-2015		CMayeda			Initial Version
+	-->
+
+	<!-- define the view used to return data for the query -->
+	<ViewImplementation ViewName="USR_V_QUERY_ADDACHILDCAMPAIGN_SPONSORSHIPS">
+		<ViewSQL>
+			<![CDATA[
+			
+with AddAChildSponsorships as
+(
+select 
+	s.CONSTITUENTID,
+	s.ID as SPONSORSHIPID,
+	so_child.ID as CHILDID,
+	dbo.USR_UFN_CHILD_GETCOUNTRYID (so_child.ID) as COUNTRYID,
+	s.STARTDATE as SPONSORSHIPSTARTDATE,
+	so.LOOKUPID as CHILDLOOKUPID,
+	so_child.NAME as CHILDNAME,
+	APPEAL.NAME as APPEALNAME
+from 
+	dbo.SPONSORSHIP s
+	join dbo.REVENUESPLIT rs on s.REVENUESPLITID = rs.ID
+	join dbo.REVENUE r on rs.REVENUEID = r.ID
+	join dbo.APPEAL on r.APPEALID = APPEAL.ID
+	join dbo.SPONSORSHIPOPPORTUNITY so on s.SPONSORSHIPOPPORTUNITYID = so.ID
+	join dbo.SPONSORSHIPOPPORTUNITYCHILD so_child on s.SPONSORSHIPOPPORTUNITYID = so_child.ID
+where
+	s.STATUSCODE = 1
+and	r.APPEALID = '4761ea46-f39f-4aa2-a52f-65451f467342'	-- 10575 - Add a Child / Finish Strong Campaign
+)
+select
+	c.ID,
+	c.LOOKUPID,
+	c.NAME as CONSTITUENTNAME,
+	c_appeal.APPEALID,
+	c_appeal.MKTPACKAGE_DESCRIPTION,
+	RESPONSE.RESPONSE,
+	addachild.SPONSORSHIPID,
+	addachild.CHILDID,
+	addachild.SPONSORSHIPSTARTDATE,
+	addachild.CHILDLOOKUPID,
+	addachild.CHILDNAME,
+	country.NAME as COUNTRYNAME,
+	addachild.APPEALNAME as SPONSORSHIPAPPEALNAME,
+	dbo.USR_UFN_SPONSORSHIP_GETACTIVECHILDSPONSORSHIPSFORSPONSOR(c.ID) as NUMBEROFCHLDSPONSORSHIPS
+from 
+	dbo.CONSTITUENT c
+	left join AddAChildSponsorships addachild on c.ID = addachild.CONSTITUENTID 
+	left join dbo.CONSTITUENT country on addachild.COUNTRYID = country.ID
+	join dbo.V_QUERY_CONSTITUENTAPPEAL c_appeal on c_appeal.CONSTITUENTID = c.ID
+	left join dbo.CONSTITUENTAPPEALRESPONSE c_appealresponse on c_appealresponse.CONSTITUENTAPPEALID = c_appeal.ID
+	left join dbo.RESPONSE ON dbo.RESPONSE.ID = c_appealresponse.RESPONSEID
+where 
+	c_appeal.APPEALID = '4761ea46-f39f-4aa2-a52f-65451f467342'	-- 10575 - Add a Child / Finish Strong Campaign
+
+]]>
+		</ViewSQL>
+	</ViewImplementation>
+
+	<!-- describe each field in the view output -->
+	<Output>
+		<OutputFields>
+			<OutputField Caption="System record ID" Category="System Fields" Name="ID" />
+			<OutputField Name="LOOKUPID" Caption="Lookup ID" DataType="String" />
+			<OutputField Name="CONSTITUENTNAME" Caption="Name" DataType="String" />
+			<OutputField Name="APPEALID" Caption="Appeal ID" Category="System Fields" DataType="Guid" />
+			<OutputField Name="MKTPACKAGE_DESCRIPTION" Caption="Add a Child Direct Mail Package" DataType="String" />
+			<OutputField Name="RESPONSE" Caption="Response" DataType="String" />
+			<OutputField Name="SPONSORSHIPID" Caption="Sponsorship ID" Category="System Fields" DataType="Guid" />
+			<OutputField Name="CHILDID" Caption="Child ID" Category="System Fields" DataType="Guid" />
+			<OutputField Name="SPONSORSHIPSTARTDATE" Caption="Sponsorship Start Date" DataType="Date" />
+			<OutputField Name="CHILDLOOKUPID" Caption="Child Lookup ID" DataType="String" />
+			<OutputField Name="CHILDNAME" Caption="Child Name" DataType="String" />
+			<OutputField Name="COUNTRYNAME" Caption="Country Name" DataType="String" />
+			<OutputField Name="SPONSORSHIPAPPEALNAME" Caption="Sponsorship Appeal Name" DataType="String" />
+			<OutputField Name="SPONSORSHIPAPPEALNAME" Caption="Sponsorship Appeal Name" DataType="String" />
+			<OutputField Name="NUMBEROFCHLDSPONSORSHIPS" Caption="Number of Child Sponsorships" DataType="Integer" />
+
+		</OutputFields>
+	</Output>
+
+	<RelationshipOperations>
+		<AddRelatedView Field="ID" RelatedView="V_QUERY_CONSTITUENT" RelatedField="ID" PathAlias="Constituent"/>
+		<AddRelatedView Field="APPEALID" RelatedView="V_QUERY_APPEAL" RelatedField="ID" PathAlias="Appeal"/>
+		<AddRelatedView Field="SPONSORSHIPID" RelatedView="V_QUERY_SPONSORSHIP" RelatedField="ID" PathAlias="Sponsorship"/>
+		<AddRelatedView Field="CHILDID" RelatedView="V_QUERY_SPONSORSHIPOPPORTUNITYCHILD" RelatedField="ID" PathAlias="Sponsorship Opportunity Child"/>
+	</RelationshipOperations>
+</QueryViewSpec>
+

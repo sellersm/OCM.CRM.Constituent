@@ -8,7 +8,7 @@
 	SPName="USR_USP_SMARTFIELD_FORMERCHILDSPONSORLATESTSPONSORSHIPENDDATE"
 	DataType="Date"
 	RecordType="Constituent"
-	DisplayName="Latest Child Financial Sponsorship End Date"
+	DisplayName="Latest child financial sponsorship end date"
 	SmartFieldFolder="Constituent"
 	>
 	
