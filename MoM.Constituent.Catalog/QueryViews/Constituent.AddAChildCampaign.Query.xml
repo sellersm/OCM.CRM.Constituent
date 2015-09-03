@@ -8,7 +8,7 @@
 	IsRoot="true"
 	PrimaryKeyField="ID"
 	RecordType="CONSTITUENT"
-	common:SecurityUIFolder="CONSTITUENT"
+	common:SecurityUIFolder="Constituent"
 	>
 
 	<!-- 
@@ -79,18 +79,17 @@ where
 	<Output>
 		<OutputFields>
 			<OutputField Caption="System record ID" Category="System Fields" Name="ID" />
-			<OutputField Name="LOOKUPID" Caption="Lookup ID" DataType="String" />
-			<OutputField Name="CONSTITUENTNAME" Caption="Name" DataType="String" />
+			<OutputField Name="LOOKUPID" Caption="Constituent Lookup ID" DataType="String" />
+			<OutputField Name="CONSTITUENTNAME" Caption="Constituent Name" DataType="String" />
 			<OutputField Name="APPEALID" Caption="Appeal ID" Category="System Fields" DataType="Guid" />
 			<OutputField Name="MKTPACKAGE_DESCRIPTION" Caption="Add a Child Direct Mail Package" DataType="String" />
-			<OutputField Name="RESPONSE" Caption="Response" DataType="String" />
+			<OutputField Name="RESPONSE" Caption="Appeal Response" DataType="String" />
 			<OutputField Name="SPONSORSHIPID" Caption="Sponsorship ID" Category="System Fields" DataType="Guid" />
 			<OutputField Name="CHILDID" Caption="Child ID" Category="System Fields" DataType="Guid" />
 			<OutputField Name="SPONSORSHIPSTARTDATE" Caption="Sponsorship Start Date" DataType="Date" />
 			<OutputField Name="CHILDLOOKUPID" Caption="Child Lookup ID" DataType="String" />
 			<OutputField Name="CHILDNAME" Caption="Child Name" DataType="String" />
 			<OutputField Name="COUNTRYNAME" Caption="Country Name" DataType="String" />
-			<OutputField Name="SPONSORSHIPAPPEALNAME" Caption="Sponsorship Appeal Name" DataType="String" />
 			<OutputField Name="SPONSORSHIPAPPEALNAME" Caption="Sponsorship Appeal Name" DataType="String" />
 			<OutputField Name="NUMBEROFCHLDSPONSORSHIPS" Caption="Number of Child Sponsorships" DataType="Integer" />
 

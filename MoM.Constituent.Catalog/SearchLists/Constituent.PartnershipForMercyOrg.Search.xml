@@ -21,6 +21,7 @@
 	03-Oct-2012		CMayeda			Added "Partner - Group" and "Partner - Church" - FogBugz Case 877
 	16-Oct-2012		CMayeda			Renamed with prefix "USR"	
 	21-Oct-2012		CMayeda			Limited addresses to Primary only and added distinct
+	28-Aug-2015		CMayeda			Changed raiserror syntax to work with SQL Server 2012 (CRM 4.0)
 	-->
 
 	<!-- describe the SP used to fetch the results from the given filters.  Note that the @MAXROWS parameter is required, and should be 
@@ -51,15 +52,15 @@ as
 	begin try
 		select @partnerConstituentCodeID = ID from dbo.CONSTITUENCYCODE where DESCRIPTION = lower ('Partnership for Mercy - Partner')
 		if @partnerConstituentCodeID is null 
-			RAISERROR 1000000 'Could not find "Partnership for Mercy - Partner" constituency code'
+			RAISERROR ('Could not find "Partnership for Mercy - Partner" constituency code', 16, 1)
 
 	select @partnerChurchConstituentCodeID = ID from dbo.CONSTITUENCYCODE where DESCRIPTION = lower ('Partner - Church')
 		if @partnerChurchConstituentCodeID is null 
-			RAISERROR 1000000 'Could not find "Partner - Church" constituency code'
+			RAISERROR ('Could not find "Partner - Church" constituency code', 16, 1)
 
 	select @partnerGroupConstituentCodeID = ID from dbo.CONSTITUENCYCODE where DESCRIPTION = lower ('Partner - Group')
 		if @partnerGroupConstituentCodeID is null 
-			RAISERROR 1000000 'Could not find "Partner - Group" constituency code'
+			RAISERROR ('Could not find "Partner - Group" constituency code', 16, 1)
 	end try
 	begin catch
 	    exec dbo.USP_RAISE_ERROR

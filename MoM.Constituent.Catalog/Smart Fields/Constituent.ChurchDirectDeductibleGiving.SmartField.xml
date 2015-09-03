@@ -1,0 +1,131 @@
+﻿<SmartFieldSpec
+	xmlns="bb_appfx_smartfield"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="eec04b53-811e-4b80-abd1-c14a9737abf0"
+	Name="Church Direct Deductible Giving Smart Field"
+	Description="Total deductible giving of a Church (does not include member giving)"
+	Author="Cary Mayeda"
+	SPName="USR_USP_SMARTFIELD_CHURCHDIRECTDEDUCTIBLEGIVING"
+	DataType="Money" 
+	RecordType="Constituent" 
+	DisplayName="Church direct deductible giving" 
+	SmartFieldFolder="Constituent"
+	>
+	<!-- 
+	Remarks:    
+
+	History:
+	Date            Modified By     Comments
+	03-Sep-2015		CMayeda			Initial Version
+	-->
+
+	<!-- describe the SP used to calculate the smart field values -->
+	<CreateProcedureSQL>
+		<![CDATA[
+create procedure dbo.USR_USP_SMARTFIELD_CHURCHDIRECTDEDUCTIBLEGIVING
+(
+	@STARTDATE date,
+	@ENDDATE date,
+	@ASOF datetime 
+)
+as
+	-- write sql to calculate the smart field values based on the parameters and ASOF date
+begin
+
+	; with Churches as
+	(
+	select
+		CONSTITUENCY.CONSTITUENTID as CONSTITUENTID,
+		CONSTITUENCYCODE.DESCRIPTION [CONSTITUENCY],
+		CONSTITUENCY.DATEFROM,
+		CONSTITUENCY.DATETO		
+	from 
+		dbo.CONSTITUENCY 
+		join dbo.CONSTITUENCYCODE on CONSTITUENCYCODE.ID = CONSTITUENCY.CONSTITUENCYCODEID
+	where 
+		CONSTITUENCYCODE.[DESCRIPTION] = 'Church'
+	--and CONSTITUENCY.DATETO is null
+	),
+
+	ChurchPayments as
+	(
+	select distinct
+		ft.CALCULATEDUSERDEFINEDID as REVENUELOOKUPID,
+		split.ID as FINANCIALTRANSACTIONLINEITEMID,
+		split_ext.APPLICATION as APPLICATION,
+		ft.[TYPE] as REVENUETYPE,
+		cast (ft.[DATE] as date) as REVENUEDATE,
+		split.BASEAMOUNT as SPLITAMOUNT,
+		case 
+			when split_designation.USERID is null then event.LOOKUPID
+			else split_designation.USERID 
+		end as DESIGNATIONLOOKUPID,
+		case 
+			when split_designation.NAME is null then event.NAME
+			else split_designation.NAME 
+		end as DESIGNATIONNAME,
+		rg_application.CALCULATEDUSERDEFINEDID,
+		c.ID as CONSTITUENTID,
+		c.LOOKUPID as CONSTITUENTLOOKUPID,
+		case
+			when rg_application_ext.RECEIPTAMOUNT is null then eventpayment.RECEIPTAMOUNT
+			else rg_application_ext.RECEIPTAMOUNT 
+		end as RECEIPTAMOUNT,
+		case
+			when rg_application.BASEAMOUNT is null then eventpayment.AMOUNT
+			else rg_application.BASEAMOUNT 
+		end as AMOUNT,
+		event.LOOKUPID,
+		event.NAME,
+		eventpayment.RECEIPTAMOUNT as EVENTRECEIPTAMOUNT,
+		eventpayment.AMOUNT as EVENTAMOUNT
+	from 
+		dbo.FINANCIALTRANSACTION ft
+		left join dbo.FINANCIALTRANSACTIONLINEITEM split on ft.ID = split.FINANCIALTRANSACTIONID and split.DELETEDON is null and split.typecode = 0 -- standard
+		left join dbo.REVENUESPLIT_EXT split_ext on split_ext.ID = split.ID
+		left join dbo.DESIGNATION split_designation on split_designation.ID = split_ext.DESIGNATIONID
+		left join dbo.RECURRINGGIFTACTIVITY rg_activity on rg_activity.PAYMENTREVENUEID = split.ID
+		left join dbo.FINANCIALTRANSACTION rg_application ON rg_application.ID = rg_activity.SOURCEREVENUEID and rg_application.DELETEDON is null
+		left join dbo.REVENUE_EXT rg_application_ext on rg_application.ID = rg_application_ext.ID --and rg_application.DELETEDON is null
+		left join dbo.CONSTITUENT c on c.ID = ft.CONSTITUENTID
+		left join dbo.EVENTREGISTRANTPAYMENT eventpayment on eventpayment.PAYMENTID = split.ID
+		left join dbo.REGISTRANT registrant on registrant.ID = eventpayment.REGISTRANTID
+		left join dbo.EVENT event on registrant.EVENTID = event.ID
+	where 
+		cast(ft.[DATE] as date) between @STARTDATE and @ENDDATE
+	and ft.BASEAMOUNT > 0
+	and ft.TYPECODE = 0
+	and ft.CONSTITUENTID in (select CONSTITUENTID from Churches)  --('61122258-BFF5-4412-8CD2-8A8FB851BC86') --
+
+	and (coalesce (split_designation.USERID, event.LOOKUPID) not like 'M-%'
+		or 
+		coalesce (split_designation.USERID, event.LOOKUPID) = 'M-9001'
+		)
+	and coalesce (split_designation.USERID, event.LOOKUPID) not like 'V-%'
+
+	)
+	select  
+		distinct
+		CONSTITUENTID,
+		sum (SPLITAMOUNT) as TOTALGIVING
+	from 
+		ChurchPayments -- ** NEED TO ADD THIS -- where RECEIPTAMOUNT <> AMOUNT
+	group by 
+		CONSTITUENTID
+
+end
+
+
+		]]>
+	</CreateProcedureSQL>
+
+	<!-- describe any parameters (other than the ASOF date) defined on the SP -->
+	<common:FormMetaData>
+		<common:FormFields>
+			<common:FormField Caption="Start Date" FieldID="STARTDATE" DataType="Date"/>
+			<common:FormField Caption="End Date" FieldID="ENDDATE" DataType="Date"/>
+		</common:FormFields>
+
+	</common:FormMetaData>
+
+</SmartFieldSpec>

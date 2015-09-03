@@ -8,7 +8,7 @@
 	IsRoot="true"
 	PrimaryKeyField="ID"
 	RecordType="CONSTITUENT"
-	common:SecurityUIFolder="CONSTITUENT"
+	common:SecurityUIFolder="Constituent"
 	>
 
 	<!-- 
