@@ -1,0 +1,96 @@
+﻿<SmartFieldSpec
+	xmlns="bb_appfx_smartfield"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="CAF3CAD3-F82F-4B41-B900-993E2432229F"
+	Name="Not tested Earliest Sponsorship Date Smart Field"
+	Description="Not tested Earliest child sponsorship date of all financial sponsorships or gifted sponsorships for a constituent. Includes former sponsorships as well."
+	Author="Cary Mayeda"
+	SPName="USR_USP_SMARTFIELD_EARLIESTCHILDFINANCIALORGIFTEDSPONSORSHIPDATEFORCONSTITUENT"
+	DataType="Date"
+	RecordType="Constituent"
+	DisplayName="Earliest Child Sponsorship or Correspondent Date"
+	SmartFieldFolder="Constituent"
+	>
+	
+	<!-- 
+	Remarks:    This is used to determine the when the person started financial sponsorships or correspondents at OCM .				
+				
+	History:
+	Date            Modified By     Comments
+	28-Jul-2014		CMayeda			Initial Version
+	-->
+
+	<!-- describe the SP used to calculate the smart field values -->
+
+	<CreateProcedureSQL>
+		<![CDATA[
+create procedure dbo.USR_USP_SMARTFIELD_EARLIESTCHILDFINANCIALORGIFTEDSPONSORSHIPDATEFORCONSTITUENT
+(
+	@ASOF datetime 
+)
+as
+	-- write sql to calculate the smart field values based on the parameters and ASOF date
+
+begin
+	; with financialSponsors as
+	(
+	select distinct
+		c.ID, min(s.STARTDATE) as EARLIESTSTARTDATE
+	 from 
+		dbo.CONSTITUENT c 
+		join dbo.FINANCIALTRANSACTION ft on ft.CONSTITUENTID = c.ID
+		join dbo.REVENUESPLIT rsplit on ft.ID = rsplit.REVENUEID
+		join dbo.SPONSORSHIP s on s.REVENUESPLITID = rsplit.ID
+		join dbo.SPONSORSHIPOPPORTUNITYCHILD so_child on so_child.ID = s.SPONSORSHIPOPPORTUNITYID
+
+	group by c.ID
+	),
+	sponsors as
+	(
+	select distinct
+		c.ID, min(s.STARTDATE) as EARLIESTSTARTDATE
+	 from 
+		dbo.CONSTITUENT c 
+		join dbo.SPONSORSHIP s on s.CONSTITUENTID = c.ID
+		join dbo.SPONSORSHIPOPPORTUNITYCHILD so_child on so_child.ID = s.SPONSORSHIPOPPORTUNITYID
+
+	group by c.ID
+	)
+
+	select
+		coalesce (fs.ID, s.ID) as ID, 
+		case
+			when fs.EARLIESTSTARTDATE is null then s.EARLIESTSTARTDATE
+			when s.EARLIESTSTARTDATE is null then fs.EARLIESTSTARTDATE
+			when fs.EARLIESTSTARTDATE < s.EARLIESTSTARTDATE then fs.EARLIESTSTARTDATE 
+			else s.EARLIESTSTARTDATE
+		end as EARLIESTSTARTDATE
+	from 
+		financialSponsors fs
+		full outer join sponsors s on fs.ID = s.ID
+end	
+
+
+		]]>
+</CreateProcedureSQL>
+
+
+<!-- describe any parameters (other than the ASOF date) defined on the SP -->
+<!--<common:FormMetaData>
+		<common:FormFields>
+			<common:FormField Caption="Constituent ID" FieldID="CONSTITUENTID" DataType="Guid"/>
+		</common:FormFields>
+
+		-->
+<!-- optionally indicate the client-side component for the user interface -->
+<!--
+		-->
+<!--<common:FormUIComponent FormUIComponentType="CustomComponent">
+			<common:CustomComponentID AssemblyName="REPLACE_WITH_ASSEMBLYNAME" ClassName="REPLACE_WITH_FULLCLASSNAME" />
+		</common:FormUIComponent>-->
+<!--
+
+	</common:FormMetaData>-->
+
+
+</SmartFieldSpec>
