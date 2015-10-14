@@ -1,0 +1,53 @@
+﻿<SmartFieldSpec
+	xmlns="bb_appfx_smartfield"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="901e5fb1-390a-4329-9c91-9d9e2efb5d70"
+	Name="Constituent Active Relation Only Smart Field"
+	Description="Active Constituents who have the constituency Relation Only"
+	Author="Cary Mayeda"
+	SPName="USR_USP_SMARTFIELD_RELATIONONLYCONSTITUENT"
+	DataType="Boolean" 
+	RecordType="Constituent" 
+	DisplayName="Constituent Active Relation Only Smart Field" 
+	SmartFieldFolder="Constituent"
+	>
+	<!-- describe the SP used to calculate the smart field values -->
+	<CreateProcedureSQL>
+		<![CDATA[
+create procedure dbo.USR_USP_SMARTFIELD_RELATIONONLYCONSTITUENT
+(
+	@ASOF datetime 
+)
+as
+	-- write sql to calculate the smart field values based on the parameters and ASOF date
+	select 
+		ID, 
+		1
+	from
+		dbo.CONSTITUENT
+	where 
+		ISINACTIVE = 0
+	and exists (select DESCRIPTION from UFN_CONSTITUENT_GETALLCONSTITUENCIES (constituent.ID) where CONSTITUENCYCODEID = '8B6ECCFD-6829-4FBC-B092-58CA083F9322')
+
+
+		]]>
+	</CreateProcedureSQL>
+
+	<!-- describe any parameters (other than the ASOF date) defined on the SP -->
+	<!--<common:FormMetaData>
+		<common:FormFields>
+			<common:FormField Caption="Constituent ID" FieldID="CONSTITUENTID" DataType="Guid"/>
+		</common:FormFields>
+
+		-->
+	<!-- optionally indicate the client-side component for the user interface -->
+	<!--
+		-->
+	<!--<common:FormUIComponent FormUIComponentType="CustomComponent">
+			<common:CustomComponentID AssemblyName="REPLACE_WITH_ASSEMBLYNAME" ClassName="REPLACE_WITH_FULLCLASSNAME" />
+		</common:FormUIComponent>-->
+	<!--
+
+	</common:FormMetaData>-->
+
+</SmartFieldSpec>
