@@ -275,7 +275,10 @@
     <EmbeddedResource Include="Smart Fields\Constituent.ChurchTotalDeductibleGiving.SmartField.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Smart Fields\Constituent.RelationOnly.SmartField.xml" />
+    <EmbeddedResource Include="Smart Fields\Constituent.RelationOnly.Active.SmartField.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Smart Fields\Constituent.RelationOnly.Inactive.SmartField.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

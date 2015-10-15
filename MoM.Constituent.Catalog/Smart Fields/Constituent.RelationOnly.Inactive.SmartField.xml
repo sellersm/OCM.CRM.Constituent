@@ -1,20 +1,20 @@
 ﻿<SmartFieldSpec
 	xmlns="bb_appfx_smartfield"
 	xmlns:common="bb_appfx_commontypes" 
-	ID="901e5fb1-390a-4329-9c91-9d9e2efb5d70"
-	Name="Constituent Active Relation Only Smart Field"
-	Description="Active Constituents who have the constituency Relation Only"
+	ID="30C0D75D-50DF-4611-8415-5A1795850781"
+	Name="Relation Only Constituent - Inactive Smart Field"
+	Description="Inactive Constituents who have the constituency Relation Only"
 	Author="Cary Mayeda"
-	SPName="USR_USP_SMARTFIELD_RELATIONONLYCONSTITUENT"
+	SPName="USR_USP_SMARTFIELD_RELATIONONLYCONSTITUENT_INACTIVE"
 	DataType="Boolean" 
 	RecordType="Constituent" 
-	DisplayName="Constituent Active Relation Only Smart Field" 
+	DisplayName="Relation Only Constituent - Inactive Smart Field" 
 	SmartFieldFolder="Constituent"
 	>
 	<!-- describe the SP used to calculate the smart field values -->
 	<CreateProcedureSQL>
 		<![CDATA[
-create procedure dbo.USR_USP_SMARTFIELD_RELATIONONLYCONSTITUENT
+create procedure dbo.USR_USP_SMARTFIELD_RELATIONONLYCONSTITUENT_INACTIVE
 (
 	@ASOF datetime 
 )
@@ -26,7 +26,7 @@ as
 	from
 		dbo.CONSTITUENT
 	where 
-		ISINACTIVE = 0
+		ISINACTIVE = 1
 	and exists (select DESCRIPTION from UFN_CONSTITUENT_GETALLCONSTITUENCIES (constituent.ID) where CONSTITUENCYCODEID = '8B6ECCFD-6829-4FBC-B092-58CA083F9322')
 
 
