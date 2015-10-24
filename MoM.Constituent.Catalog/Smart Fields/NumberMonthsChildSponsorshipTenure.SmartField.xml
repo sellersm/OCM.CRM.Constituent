@@ -1,0 +1,81 @@
+﻿<SmartFieldSpec
+	xmlns="bb_appfx_smartfield"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="db3e925b-447e-4666-9ad9-fa646e5c0439"
+	Name="Number of Months of Child Sponsorship (Tenure)"
+	Description="Number of Months of Child Sponsorship (Tenure)"
+	Author="Memphis Sellers"
+	SPName="USR_USP_SMARTFIELD_NUMBERMONTHSCHILDSPONSORSHIPTENURE"
+	DataType="Integer" 
+	RecordType="Constituent" 
+	DisplayName="Number of Months of Child Sponsorship (Tenure)" 
+	SmartFieldFolder="Constituent"
+	>
+
+	<!-- 
+	Remarks:	New SmartField needs to be:
+				- **Something like this: Last child financial sponsorship end date
+				- Constituent Type smartfield
+				- Go off the ESSD basis, difference between that & Last child financial sponsorship end date
+
+	History:
+	Date            Modified By     Comments
+	23-Oct-2015		Memphis			Initial Version
+	-->
+
+	<!-- describe the SP used to calculate the smart field values -->
+	<CreateProcedureSQL>
+		<![CDATA[
+create procedure dbo.USR_USP_SMARTFIELD_NUMBERMONTHSCHILDSPONSORSHIPTENURE
+(
+	@ASOF datetime 
+)
+as
+;with cteLatestChildSponsorshipEndDate as (
+select
+	ft.CONSTITUENTID as PayerID,
+	max(sp.ENDDATE) as SponEndDate
+	
+from 
+	dbo.USR_V_QUERY_SPONSORSHIPEXTENSION as sp_ext
+	join dbo.V_QUERY_SPONSORSHIP as sp on sp_ext.ID = sp.ID
+	join dbo.REVENUESPLIT rs on sp.REVENUESPLITID = rs.ID
+	join dbo.FINANCIALTRANSACTION ft on ft.ID = rs.REVENUEID
+	join dbo.V_QUERY_SPONSORSHIPOPPORTUNITY as so on sp_ext.SPONSORSHIPOPPORTUNITYID = so.ID
+	left outer join dbo.V_QUERY_SPONSORSHIPTRANSACTION as sp_trans on sp.[ID] = sp_trans.CONTEXTSPONSORSHIPID
+	
+where 
+	so.[TYPE] = N'Child'
+and (	 sp_trans.[ACTION] in (N'Terminate', N'Cancel')
+	 and sp_trans.ISLASTTRANSACTION = 1
+	 and ((sp_trans.REASON not  in (N'Account Correction', N'User Correction')) or sp_trans.REASON is null or sp_trans.REASON = '')
+    )
+and sp_ext.CURRENTOPPORTUNITYSPONSORSHIPSTATUS in (N'Formerly Sponsored', N'Formerly Unpaid Sponsored')
+group by 
+	ft.CONSTITUENTID)
+	
+select cte.PayerID,
+		datediff(mm, ESSD.VALUE, SponEndDate) as MonthsTenure
+from cteLatestChildSponsorshipEndDate cte
+inner join dbo.SMARTFIELD41F1739DAA7F433DAF1DDDA18D6C8A6B ESSD on cte.PayerID = ESSD.ID --and ESSD.VALUE >= '1/1/2009'	
+
+
+
+		]]>
+	</CreateProcedureSQL>
+
+	<!-- describe any parameters (other than the ASOF date) defined on the SP -->
+	<!--<common:FormMetaData>
+		<common:FormFields>
+			<common:FormField Caption="Parameter 1" FieldID="PARAMETER1" DataType="Integer"/>
+			<common:FormField Caption="Parameter 2" FieldID="PARAMETER2" DataType="Money"/>
+		</common:FormFields>
+
+		--><!-- optionally indicate the client-side component for the user interface --><!--
+		<common:FormUIComponent FormUIComponentType="CustomComponent">
+			<common:CustomComponentID AssemblyName="REPLACE_WITH_ASSEMBLYNAME" ClassName="REPLACE_WITH_FULLCLASSNAME" />
+		</common:FormUIComponent>
+
+	</common:FormMetaData>-->
+
+</SmartFieldSpec>
