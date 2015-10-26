@@ -57,7 +57,7 @@ group by
 select cte.PayerID,
 		datediff(mm, ESSD.VALUE, SponEndDate) as MonthsTenure
 from cteLatestChildSponsorshipEndDate cte
-inner join dbo.SMARTFIELD41F1739DAA7F433DAF1DDDA18D6C8A6B ESSD on cte.PayerID = ESSD.ID --and ESSD.VALUE >= '1/1/2009'	
+inner join dbo.SMARTFIELD35EFF8A4CA954D9AA9BA012A8C82C5E3 ESSD on cte.PayerID = ESSD.ID --and ESSD.VALUE >= '1/1/2009'	
 
 
 
