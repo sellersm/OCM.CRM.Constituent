@@ -48,6 +48,7 @@
 										LifetimeAverageGiftAmountWithoutMissionTrips.SmartField.xml
 										LifetimeGivingWithoutMissionTrips.SmartField.xml
 										LifetimeNumberOfGiftsWithoutMissionTrips.SmartField.xml
+	26-Oct-2015		Memphis			Added new Smart Field:  NumberMonthsChildSponsorshipTenure.SmartField.xml
 	-->
 
 	<!-- Note:  the order of the items listed here is important.  For example, you won't be able to load a data form that references 
@@ -152,7 +153,8 @@
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.LifetimeAverageGiftAmountWithoutMissionTrips.SmartField.xml" />
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.LifetimeGivingWithoutMissionTrips.SmartField.xml" />
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.LifetimeNumberOfGiftsWithoutMissionTrips.SmartField.xml" />
-		
+		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.NumberMonthsChildSponsorshipTenure.SmartField.xml" />
+
 		<!-- Package Versions -->
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.PackageVersion.DataList.xml" />
 		
