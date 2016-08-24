@@ -1,0 +1,226 @@
+﻿<PageDefinitionSpec 
+    xmlns="bb_appfx_pagedefinition" 
+    xmlns:c="bb_appfx_commontypes"
+    ID="f6f59d94-135e-48e2-ad82-a7ace26aaced"
+    Name="Alter Constituent Page Fundraiser Tab"
+    Description="Alter constituent page fundraiser tab."
+    Author="Memphis Sellers"
+    ContextRecordType="Constituent"	
+    >
+
+	<!-- Note:  A page can optionally have a view form associated with it as the "Expression form".  While implemented as a view data form,
+	this form has no UI in this context, and is simply used as a way of loading additional information associated with the page.  The fields
+	returned by the expression form can be used as expressions in various properties throughout the page.  To specify an expression form for this
+	page, add the following attribute:		ExpressionDataFormID="<some guid>"-->
+
+	<!-- define how the page header should appear -->
+	<PageHeader Caption="REPLACE_WITH_CAPTION" ImageKey="REPLACE_WITH_IMAGEKEY" />
+
+	<AlterExistingPages xmlns="bb_appfx_pagedefinition">
+		<AlterPages>
+			<AlterPage PageID="88159265-2b7e-4c7b-82a2-119d01ecd40f">
+				<AlterTabs>
+					<!-- Add the Reserved Children, Reservation Interactions, Appeals custom Tabs under Fundraiser Tab-->
+					<AlterTab TabID="969aad2a-cf5a-4bcb-8856-a90c7e46de67">
+						<AlterTabs>
+							<AddTab Sequence="0">
+								<Tab Caption="Reserved Children" ID="41c46d33-fd14-4161-95fa-c86e650ab603">
+									<Sections>
+										<Section
+										  ID="8dc6cc6f-9a44-4e7e-8199-290aef707c3b"
+										  Caption="Reserved children">
+											<DataList
+											  ID="66346118-c8f9-425f-a622-28ef2b61d86b">
+												<RenderStyle>
+													<StandardView />
+												</RenderStyle>
+											</DataList>
+											<SectionContext>
+												<PageContextID xmlns="bb_appfx_commontypes" />
+											</SectionContext>
+											<Actions>
+												<Action
+												  ID="36ffb477-6d68-478d-808c-3ba70cf2d58e"
+												  Caption="Go to Child"
+												  ImageKey="RES:goto_round">
+													<ShowPage
+													  PageID="0f392d71-5884-4363-b6e3-a75755f8402a"
+													  TabID="00000000-0000-0000-0000-000000000000"
+													  SectionID="00000000-0000-0000-0000-000000000000" xmlns="bb_appfx_commontypes">
+														<ActionContext>
+															<SectionField>System record ID</SectionField>
+														</ActionContext>
+													</ShowPage>
+												</Action>
+												<Action
+												  ID="8974e4e0-0ec0-41cd-9532-6b0ede293c5f"
+												  Caption="View Report"
+												  ImageKey="RES:reports">
+													<ShowReport
+													  ReportID="b5a63f0b-c350-4dd5-9256-bda42757db92" xmlns="bb_appfx_commontypes" />
+												</Action>
+											</Actions>
+										</Section>
+									</Sections>
+								</Tab>
+							</AddTab>
+							<AddTab Sequence="1">
+								<Tab Caption="Reservation Interactions" ID="bc472f47-f512-442e-aed1-ef158e20f577">
+									<Sections>
+										<Section
+										  ID="5c5b3fbf-5019-4583-8756-67c0a37d02c3"
+										  Caption="Reservation requests">
+											<DataList
+											  ID="40a2f973-db6a-4076-876f-aa35b370346e">
+												<RenderStyle>
+													<StandardView>
+														<DetailViewForm
+														  ViewDataFormID="b525985b-be02-4f02-a9b8-c110411cf936"
+														  RecordIDField="Constituent\Interactions\System record ID" />
+													</StandardView>
+												</RenderStyle>
+											</DataList>
+											<SectionContext>
+												<PageContextID xmlns="bb_appfx_commontypes" />
+											</SectionContext>
+											<Actions>
+												<Action
+												  ID="57b6a818-ad3f-48d6-8a6d-027766300dec"
+												  Caption="Go to Interaction"
+												  ImageKey="RES:goto_round">
+													<ShowPage
+													  PageID="c7fb41d2-840f-4c19-a4fc-3f8ce7ece1aa"
+													  TabID="00000000-0000-0000-0000-000000000000"
+													  SectionID="00000000-0000-0000-0000-000000000000" xmlns="bb_appfx_commontypes">
+														<ActionContext>
+															<SectionField>Constituent\Interactions\System record ID</SectionField>
+														</ActionContext>
+													</ShowPage>
+													<HelpKey>CRMGoToConsInteraction.html</HelpKey>
+												</Action>
+												<Action
+												  ID="1f7f84a9-94b8-4f0e-881f-d21f39f9b704"
+												  Caption="Add"
+												  ImageKey="RES:NewItem">
+													<ShowAddDataForm
+													  DataFormID="723ad883-f995-4c40-afed-6a7914b536e3" xmlns="bb_appfx_commontypes">
+														<ActionContext>
+															<PageContextID />
+														</ActionContext>
+														<PostActionEvent>
+															<RefreshSection />
+														</PostActionEvent>
+													</ShowAddDataForm>
+												</Action>
+												<Action
+												  ID="31f43628-f125-4ae2-a3fe-a796b49af07d"
+												  Caption="Edit"
+												  ImageKey="RES:Edit">
+													<ActionGroup>
+														<Actions>
+															<Action
+															  ID="8a689f62-45d9-456f-b6d4-1e56be19d39a"
+															  Caption="Interaction"
+															  ImageKey="RES:Edit">
+																<ShowDataForm
+																  DataFormID="ab3b9569-4c7c-4646-a793-347856753b60" xmlns="bb_appfx_commontypes">
+																	<ActionContext>
+																		<SectionField>Constituent\Interactions\System record ID</SectionField>
+																	</ActionContext>
+																</ShowDataForm>
+																<HelpKey>CRMEditConstituentInteractions.html</HelpKey>
+															</Action>
+															<Action
+															  ID="cdb5e24b-0bc4-4d53-8e51-8e8d17ed73bf"
+															  Caption="Responses"
+															  ImageKey="RES:Edit">
+																<ShowDataForm
+																  DataFormID="ddb74740-0698-46cd-bb8e-77605fcdf7de" xmlns="bb_appfx_commontypes">
+																	<ActionContext>
+																		<SectionField>Constituent\Interactions\System record ID</SectionField>
+																	</ActionContext>
+																</ShowDataForm>
+																<HelpKey>CRMEditConstituentInteractionResponses.html</HelpKey>
+															</Action>
+														</Actions>
+													</ActionGroup>
+												</Action>
+											</Actions>
+										</Section>
+									</Sections>
+								</Tab>
+							</AddTab>
+							<AddTab Sequence="2">
+								<Tab Caption="Appeals" ID="0ae38618-afa8-4245-ac8b-2cf016530acd">
+									<Sections>
+										<Section
+										  ID="98498cea-9785-470b-89d6-69d94b71c44e"
+										  Caption="Appeals"
+										  DisplayStyle="Inline">
+											<DataList
+											  ID="2f5c8123-5f99-4ee1-8b84-9224f4abbf6c"
+											  ShowBorder="true">
+												<RenderStyle>
+													<StandardView />
+												</RenderStyle>
+											</DataList>
+											<SectionContext>
+												<PageContextID xmlns="bb_appfx_commontypes" />
+											</SectionContext>
+											<Actions>
+												<Action
+												  ID="9248a437-e6af-482c-bf5b-37e978c951bf"
+												  Caption="Go to Appeal"
+												  ImageKey="RES:goto_round">
+													<ShowPage
+													  PageID="8142773c-ca9b-4f4d-83a7-bdd306394838"
+													  TabID="00000000-0000-0000-0000-000000000000"
+													  SectionID="00000000-0000-0000-0000-000000000000" xmlns="bb_appfx_commontypes">
+														<ActionContext>
+															<SectionField>System record ID</SectionField>
+														</ActionContext>
+													</ShowPage>
+												</Action>
+												<Action
+												  ID="cc876a8e-7cdc-4d7a-b441-3693e5da8aeb"
+												  Caption="Add"
+												  ImageKey="RES:newitem">
+													<ShowAddDataForm
+													  DataFormID="2736a8b5-ab2e-4330-ba15-98818321c643" xmlns="bb_appfx_commontypes">
+														<ActionContext>
+															<PageContextID />
+														</ActionContext>
+														<PostActionEvent>
+															<GoToPage>
+																<SpecificPage
+																  PageID="8142773c-ca9b-4f4d-83a7-bdd306394838"
+																  TabID="00000000-0000-0000-0000-000000000000"
+																  SectionID="00000000-0000-0000-0000-000000000000" />
+															</GoToPage>
+														</PostActionEvent>
+													</ShowAddDataForm>
+												</Action>
+												<Action
+												  ID="cd248918-ca29-49f0-ab12-9e8384aceb2b"
+												  Caption="Edit"
+												  ImageKey="RES:Edit">
+													<ShowDataForm
+													  DataFormID="1c33786d-e31b-42fa-ba4c-c25fe281782e" xmlns="bb_appfx_commontypes">
+														<ActionContext>
+															<SectionField>System record ID</SectionField>
+														</ActionContext>
+													</ShowDataForm>
+												</Action>
+											</Actions>
+										</Section>
+									</Sections>
+								</Tab>
+							</AddTab>
+						</AlterTabs>
+					</AlterTab>
+				</AlterTabs>
+			</AlterPage>
+		</AlterPages>
+	</AlterExistingPages>
+	
+</PageDefinitionSpec>

@@ -49,14 +49,13 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Blackbaud.AppFx.Server, Version=2.93.2034.13, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Blackbaud.AppFx, Version=4.0.5.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\References\Third Party\Blackbaud.AppFx.Server.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\..\References\Third Party\4.0.5\Blackbaud.AppFx.dll</HintPath>
     </Reference>
-    <Reference Include="Blackbaud.AppFx.XmlTypes, Version=2.93.2034.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\References\Third Party\Blackbaud.AppFx.XmlTypes.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Blackbaud.AppFx.Server, Version=4.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\References\Third Party\4.0.5\Blackbaud.AppFx.Server.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -282,6 +281,24 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Smart Fields\NumberMonthsChildSponsorshipTenure.SmartField.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Pages\CRM4_Constituent.Page.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Pages\AlterConstituentPage_ActionGroups.Page.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Pages\AlterConstituentPage_SponsorTab.Page.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Pages\AlterConstituentPage_InteractionTab.Page.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Pages\AlterConstituentPage_VolunteerTab.Page.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Pages\AlterConstituentPage_FundraiserTab.Page.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,0 +1,191 @@
+﻿<PageDefinitionSpec 
+    xmlns="bb_appfx_pagedefinition" 
+    xmlns:c="bb_appfx_commontypes"
+    ID="126e3a46-c093-4499-b45f-3689eb43b70d"
+    Name="AlterConstituentPage SponsorTab Page"
+    Description="Alter constituent page sponsortab"
+    Author="Memphis Sellers"
+    ContextRecordType="Constituent"	
+    >
+
+	<!-- Note:  A page can optionally have a view form associated with it as the "Expression form".  While implemented as a view data form,
+	this form has no UI in this context, and is simply used as a way of loading additional information associated with the page.  The fields
+	returned by the expression form can be used as expressions in various properties throughout the page.  To specify an expression form for this
+	page, add the following attribute:		ExpressionDataFormID="<some guid>"-->
+
+	<!-- define how the page header should appear -->
+	<PageHeader Caption="REPLACE_WITH_CAPTION" ImageKey="REPLACE_WITH_IMAGEKEY" />
+
+	<AlterExistingPages xmlns="bb_appfx_pagedefinition">
+		<AlterPages>
+			<AlterPage PageID="88159265-2b7e-4c7b-82a2-119d01ecd40f">
+				<AlterTabs>
+					<!-- Add our custom Tabs & Sections to existing Sponsor Tab-->
+					<AlterTab TabID="7f06eed6-03ba-4ff1-8cdc-72649f7feaf7">
+						<AlterTabs>
+							<AddTab Sequence="0">
+								<Tab Caption="Active sponsorships" ID="571fccb5-8f09-431c-b97e-4aa181a72ad9">
+									<Sections>
+										<Section
+										  ID="37898c03-c6e5-486b-98b4-c4815500faeb"
+										  Caption="Active child sponsorships"
+										  DisplayStyle="InlineBlock">
+											<DataList
+											  ID="1835dffc-7a48-4e7f-ba35-9d1c88a02f02">
+												<RenderStyle>
+													<StandardView>
+														<DetailViewForm
+														  ViewDataFormID="5335a08b-66d0-4863-9bdf-cb0ba2d7437e"
+														  RecordIDField="SPONSORSHIPID" />
+													</StandardView>
+												</RenderStyle>
+											</DataList>
+											<SectionContext>
+												<PageContextID xmlns="bb_appfx_commontypes" />
+											</SectionContext>
+											<Actions>
+												<Action
+												  ID="e389cc1e-b5bd-4ac6-aef7-2cc474d9cdd3"
+												  Caption="Go to child"
+												  ImageKey="RES:goto_round">
+													<ShowPage
+													  PageID="0f392d71-5884-4363-b6e3-a75755f8402a"
+													  TabID="b6cecb36-a9ab-4f9b-a9f5-c4e2cf10e790"
+													  SectionID="00000000-0000-0000-0000-000000000000" xmlns="bb_appfx_commontypes">
+														<ActionContext>
+															<SectionField>SPONSORSHIPOPPORTUNITYID</SectionField>
+														</ActionContext>
+													</ShowPage>
+												</Action>
+												<Action
+												  ID="6136b94c-aaaf-4de7-af36-89aa5ec3a743"
+												  Caption="Go to sponsorship"
+												  ImageKey="RES:goto_round">
+													<ShowPage
+													  PageID="428f040a-eb45-4171-8c52-a030b9992d65"
+													  TabID="64e81aea-cc0c-42b2-b354-58d9871e5fe9"
+													  SectionID="00000000-0000-0000-0000-000000000000" xmlns="bb_appfx_commontypes">
+														<ActionContext>
+															<SectionField>SPONSORSHIPID</SectionField>
+														</ActionContext>
+													</ShowPage>
+												</Action>
+												<Action
+												  ID="e94ea5f9-fb5b-44fd-a0a1-9868a3121ef1"
+												  Caption="Go to correspondent"
+												  ImageKey="RES:goto_round"
+												  Visible="=Fields!ISGIFTSPONSORSHIP= &quot;Yes&quot;">
+													<ShowPage
+													  PageID="88159265-2b7e-4c7b-82a2-119d01ecd40f"
+													  TabID="00000000-0000-0000-0000-000000000000"
+													  SectionID="00000000-0000-0000-0000-000000000000" xmlns="bb_appfx_commontypes">
+														<ActionContext>
+															<SectionField>CORRESPONDENTID</SectionField>
+														</ActionContext>
+													</ShowPage>
+												</Action>
+												<Action
+												  ID="3bd4abf5-46cc-4973-bdb3-912c27c953a6"
+												  Caption="Go to recurring gift"
+												  ImageKey="RES:goto_round">
+													<ShowPage
+													  PageID="387f861b-6c03-486c-9ff5-9cc5bb7a5275"
+													  TabID="00000000-0000-0000-0000-000000000000"
+													  SectionID="00000000-0000-0000-0000-000000000000" xmlns="bb_appfx_commontypes">
+														<ActionContext>
+															<SectionField>SPONSORSHIPRECURRINGGIFTID</SectionField>
+														</ActionContext>
+													</ShowPage>
+												</Action>
+											</Actions>
+										</Section>
+										<Section
+										  ID="ecd7fa79-4f41-4535-bf40-0b1e93c0c4a5"
+										  Caption="Active project sponsorships">
+											<DataList
+											  ID="3ba335de-4b5a-49f8-b9b2-ae1302e97921">
+												<RenderStyle>
+													<StandardView />
+												</RenderStyle>
+											</DataList>
+											<SectionContext>
+												<PageContextID xmlns="bb_appfx_commontypes" />
+											</SectionContext>
+										</Section>
+									</Sections>
+								</Tab>
+							</AddTab>
+							<AddTab Sequence="99">
+								<Tab Caption="Rate Increase"  ID="b63c8a30-6070-4cc0-b961-29ae6bbdc07f">
+									<Sections>
+										<Section
+										  ID="958c6966-ffcd-491e-9091-dbabef722996"
+										  Caption="Rate Change Appeal 2014"
+										  Collapsible="true">
+											<DataForm
+											  ID="37aaae9a-1bde-4cb0-9de8-fbd982faa81d"
+											  IsScrollable="true" />
+											<SectionContext>
+												<PageContextID xmlns="bb_appfx_commontypes" />
+											</SectionContext>
+										</Section>
+										<Section
+										  ID="c7b116ad-7ffd-43d9-9a85-80af251f97bd"
+										  Caption="Rate Increase Responses"
+										  Collapsible="true">
+											<DataList
+											  ID="c32a5449-87d1-470a-bcad-b5946021ba72">
+												<RenderStyle>
+													<StandardView>
+														<DetailViewForm
+														  ViewDataFormID="=Fields!ViewFormID" />
+													</StandardView>
+												</RenderStyle>
+											</DataList>
+											<SectionContext>
+												<PageContextID xmlns="bb_appfx_commontypes" />
+											</SectionContext>
+											<Actions>
+												<Action
+												  ID="a0c70631-39cc-4d26-8cc4-0e78126347de"
+												  Caption="Add Appeal Response"
+												  ImageKey="RES:newItem">
+													<ShowAddDataForm
+													  DataFormID="8c264407-0155-4147-b528-b2b4110d7f7f" xmlns="bb_appfx_commontypes">
+														<ActionContext>
+															<SectionField>SPONSORID</SectionField>
+														</ActionContext>
+														<PostActionEvent>
+															<RefreshSection />
+														</PostActionEvent>
+													</ShowAddDataForm>
+												</Action>
+												<Action
+												  ID="af5533c1-6795-4ef7-a98a-02636b1804fa"
+												  Caption="Edit"
+												  ImageKey="RES:edit"
+												  DefaultAction="True">
+													<ShowDataForm
+													  DataFormID="0144c06d-d442-4640-bf0c-b0eca083cf74" xmlns="bb_appfx_commontypes">
+														<ActionContext>
+															<SectionField>ID</SectionField>
+														</ActionContext>
+														<PostActionEvent>
+															<RefreshSection />
+														</PostActionEvent>
+													</ShowDataForm>
+												</Action>
+											</Actions>
+										</Section>
+									</Sections>
+								</Tab>
+							</AddTab>
+						</AlterTabs>
+					</AlterTab>
+				</AlterTabs>
+			</AlterPage>
+		</AlterPages>
+	</AlterExistingPages>
+	
+
+</PageDefinitionSpec>

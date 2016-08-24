@@ -1,0 +1,156 @@
+﻿<PageDefinitionSpec 
+    xmlns="bb_appfx_pagedefinition" 
+    xmlns:c="bb_appfx_commontypes"
+    ID="74335ebe-1959-42eb-a72f-497b1c1df361"
+    Name="AlterConstituentPage ActionGroups Page"
+    Description="Alters the constituent page actiongroups"
+    Author="Memphis Sellers"
+    ContextRecordType="Constituent"	
+    >
+
+	<!-- Note:  A page can optionally have a view form associated with it as the "Expression form".  While implemented as a view data form,
+	this form has no UI in this context, and is simply used as a way of loading additional information associated with the page.  The fields
+	returned by the expression form can be used as expressions in various properties throughout the page.  To specify an expression form for this
+	page, add the following attribute:		ExpressionDataFormID="<some guid>"-->
+
+	<!-- define how the page header should appear -->
+	<PageHeader Caption="REPLACE_WITH_CAPTION" ImageKey="REPLACE_WITH_IMAGEKEY" />
+
+	<AlterExistingPages>
+		<AlterPages>
+			<AlterPage PageID="88159265-2b7e-4c7b-82a2-119d01ecd40f">
+				<AlterPageActionGroups>
+					<AlterPageActionGroup PageActionGroupID="6459a910-09ae-44bd-9240-31d2ebbafa7c">
+						<!-- remove the existing Sponsor related tasks from the Tasks group  -->
+						<AlterActions>
+							<!--  Add Sponsorship action -->
+							<RemoveAddDataFormAction DataFormID="bd01386b-95f1-47d4-aab5-49822ed9126f"  ActionID="936e39a1-651c-49ba-a233-a62b5029a175"/>
+							<!--  Add Prospect Sponsorship action -->
+							<RemoveAddDataFormAction DataFormID="54a5433c-2d47-4c21-921b-1edac0478f1f" ActionID="6b40ffd0-239a-4d88-adbb-c24559475d41"/>
+							<!--  Add Unavailable Sponsorship action -->
+							<RemoveAddDataFormAction DataFormID="58bb4565-dd08-4e06-a29c-904188103f25" ActionID="69ee72ac-b6dc-4ffb-9d4b-b27c2c0e87e4"/>
+							<!--  Add a project sponsorship action -->
+							<RemoveAddDataFormAction DataFormID="0eaaf756-2faa-4798-b445-60000ad298f5" ActionID="640e8097-30ce-458c-bc49-b1b6e0fa747c"/>
+						</AlterActions>
+					</AlterPageActionGroup>
+				</AlterPageActionGroups>
+
+				<AlterOrAddPageActionGroups> 
+					<!-- Add these to the new Sponsor ActionGroup -->
+					<AlterOrAddPageActionGroup
+					  ID="78eb464b-ac5a-48d4-acdf-778fbb5bb8ec"
+				  Caption="Sponsor" Visible="True">
+						<AddAction Sequence="0">
+							<Action 
+							  ID="9433718f-385c-4f85-ad1b-1041631d3fe8"
+							  Caption="Add sponsorship"
+							  ImageKey="CATALOG:Blackbaud.AppFx.Sponsorship.Catalog,Blackbaud.AppFx.Sponsorship.Catalog.sponsor_new_32.png"
+							  Visible="=((Not Page.Fields!CURRENTPROSPECTSPONSOR) And (Page.Fields!CURRENTSPONSOR)) Or ((Not Page.Fields!CURRENTPROSPECTSPONSOR ) And ( Not Page.Fields!CURRENTSPONSOR ))">
+								<ShowAddDataForm
+								  DataFormID="bd01386b-95f1-47d4-aab5-49822ed9126f" xmlns="bb_appfx_commontypes">
+									<ActionContext>
+										<PageContextID />
+									</ActionContext>
+									<PostActionEvent>
+										<RefreshPage />
+									</PostActionEvent>
+								</ShowAddDataForm>
+							</Action>
+						</AddAction>
+					</AlterOrAddPageActionGroup>
+					
+					<AlterOrAddPageActionGroup
+					  ID="78eb464b-ac5a-48d4-acdf-778fbb5bb8ec"
+				  Caption="Sponsor">
+							<AddAction Sequence="1" >
+						<Action
+						  ID="9c3d9639-b66a-4e25-b35b-a120e3e21282"
+						  Caption="Add prospect sponsorship"
+						  ImageKey="CATALOG:Blackbaud.AppFx.Sponsorship.Catalog,Blackbaud.AppFx.Sponsorship.Catalog.sponsor_new_32.png"
+						  Enabled="=(Page.Fields!CURRENTPROSPECTSPONSOR) Or ((Not Page.Fields!CURRENTSPONSOR) And (Not Page.Fields!CURRENTPROSPECTSPONSOR))">
+							<ShowAddDataForm
+							  DataFormID="54a5433c-2d47-4c21-921b-1edac0478f1f" xmlns="bb_appfx_commontypes">
+								<ActionContext>
+									<PageContextID />
+								</ActionContext>
+								<PostActionEvent>
+									<RefreshPage />
+								</PostActionEvent>
+							</ShowAddDataForm>
+						</Action>
+							</AddAction>
+						</AlterOrAddPageActionGroup>
+
+					<AlterOrAddPageActionGroup
+					  ID="78eb464b-ac5a-48d4-acdf-778fbb5bb8ec"
+				  Caption="Sponsor">
+						<AddAction Sequence="2" >
+							<Action
+						  ID="b04036a9-c75c-4eea-9757-dec858010045"
+						  Caption="Add unavailable sponsorship"
+						  ImageKey="CATALOG:Blackbaud.AppFx.Sponsorship.Catalog,Blackbaud.AppFx.Sponsorship.Catalog.sponsor_new_32.png">
+							<ShowAddDataForm
+							  DataFormID="58bb4565-dd08-4e06-a29c-904188103f25" xmlns="bb_appfx_commontypes">
+								<ActionContext>
+									<PageContextID />
+								</ActionContext>
+								<PostActionEvent>
+									<RefreshPage />
+								</PostActionEvent>
+							</ShowAddDataForm>
+						</Action>
+						</AddAction>
+					</AlterOrAddPageActionGroup>
+
+
+					<AlterOrAddPageActionGroup
+					  ID="78eb464b-ac5a-48d4-acdf-778fbb5bb8ec"
+				  Caption="Sponsor">
+						<AddAction Sequence="3" >
+							<Action
+						  ID="7fe40d42-6dfc-43db-b32f-17e5b02af9c1"
+						  Caption="Add project sponsorship"
+						  ImageKey="CATALOG:Blackbaud.AppFx.Sponsorship.Catalog,Blackbaud.AppFx.Sponsorship.Catalog.project_32.png">
+							<ShowAddDataForm
+							  DataFormID="0eaaf756-2faa-4798-b445-60000ad298f5" xmlns="bb_appfx_commontypes">
+								<ActionContext>
+									<PageContextID />
+								</ActionContext>
+								<PostActionEvent>
+									<RefreshPage />
+								</PostActionEvent>
+							</ShowAddDataForm>
+						</Action>
+						</AddAction>
+					</AlterOrAddPageActionGroup>
+
+
+					<AlterOrAddPageActionGroup
+					  ID="78eb464b-ac5a-48d4-acdf-778fbb5bb8ec"
+				  Caption="Sponsor" >
+						<AddAction Sequence="4" >
+							<Action
+						  ID="769f0cfb-46ae-4480-8606-24f194fc1ce9"
+						  Caption="Convert prospect sponsor"
+						  Visible="=(Page.Fields!CURRENTPROSPECTSPONSOR) Or ((Not Page.Fields!CURRENTSPONSOR) And (Not Page.Fields!CURRENTPROSPECTSPONSOR))">
+							<ExecuteRecordOperation
+							  RecordOperationID="111fcd26-7526-4564-8cec-5cc3ba4b020d" xmlns="bb_appfx_commontypes">
+								<ActionContext>
+									<PageContextID />
+								</ActionContext>
+								<PostActionEvent>
+									<RefreshPage />
+								</PostActionEvent>
+							</ExecuteRecordOperation>
+						</Action>
+						</AddAction>
+					</AlterOrAddPageActionGroup>
+
+				</AlterOrAddPageActionGroups>
+
+
+			</AlterPage>
+		</AlterPages>
+	</AlterExistingPages>
+	
+</PageDefinitionSpec>

@@ -1,0 +1,95 @@
+﻿<PageDefinitionSpec 
+    xmlns="bb_appfx_pagedefinition" 
+    xmlns:c="bb_appfx_commontypes"
+    ID="306e80d3-94b1-4261-b519-84b2a0d0264f"
+    Name="Alter Constituent Page Volunteer Tab Page"
+    Description="Alter constituent page volunteer tab"
+    Author="Memphis Sellers"
+    ContextRecordType="Constituent"	
+    >
+
+	<!-- Note:  A page can optionally have a view form associated with it as the "Expression form".  While implemented as a view data form,
+	this form has no UI in this context, and is simply used as a way of loading additional information associated with the page.  The fields
+	returned by the expression form can be used as expressions in various properties throughout the page.  To specify an expression form for this
+	page, add the following attribute:		ExpressionDataFormID="<some guid>"-->
+
+	<!-- define how the page header should appear -->
+	<PageHeader Caption="REPLACE_WITH_CAPTION" ImageKey="REPLACE_WITH_IMAGEKEY" />
+
+	<AlterExistingPages xmlns="bb_appfx_pagedefinition">
+		<AlterPages>
+			<AlterPage PageID="88159265-2b7e-4c7b-82a2-119d01ecd40f">
+				<AlterTabs>
+					<!-- Add the Volunteer Solicitor custom Tab under Volunteer Tab-->
+					<AlterTab TabID="3408d610-8a4a-46e2-915b-d70383b12fef">
+						<AlterTabs>
+							<AddTab Sequence="99">
+								<Tab Caption="Volunteer Solicitor" ID="2ed7eef2-ab56-4fd7-91c6-39b4b96535de">
+									<Sections>
+										<Section
+										  ID="73dc5bdf-3cc6-4c33-bb77-cb9aa7bc148c"
+										  Caption="Sponsorships"
+										  Collapsible="true">
+											<DataList
+											  ID="f2954c26-91ba-440a-b8d3-1e0124c0859d">
+												<RenderStyle>
+													<StandardView />
+												</RenderStyle>
+											</DataList>
+											<SectionContext>
+												<PageContextID xmlns="bb_appfx_commontypes" />
+											</SectionContext>
+											<Actions>
+												<Action
+												  ID="cce1df98-37a2-4729-a689-86554c2df171"
+												  Caption="Go to Sponsorship"
+												  ImageKey="RES:goto_round">
+													<ShowPage
+													  PageID="428f040a-eb45-4171-8c52-a030b9992d65"
+													  TabID="00000000-0000-0000-0000-000000000000"
+													  SectionID="00000000-0000-0000-0000-000000000000" xmlns="bb_appfx_commontypes">
+														<ActionContext>
+															<SectionField>Sponsorship ID</SectionField>
+														</ActionContext>
+													</ShowPage>
+												</Action>
+												<Action
+												  ID="ec10ef6c-5724-400d-b2a4-b2027e248c3c"
+												  Caption="Go to Sponsor"
+												  ImageKey="RES:goto_round">
+													<ShowPage
+													  PageID="35740996-3dbb-4414-903f-c992d7504afb"
+													  TabID="00000000-0000-0000-0000-000000000000"
+													  SectionID="00000000-0000-0000-0000-000000000000" xmlns="bb_appfx_commontypes">
+														<ActionContext>
+															<SectionField>Sponsor ID</SectionField>
+														</ActionContext>
+													</ShowPage>
+												</Action>
+											</Actions>
+										</Section>
+										<Section
+										  ID="1c6df252-e679-4c35-aee6-22d29724772a"
+										  Caption="Summary Information"
+										  Collapsible="true">
+											<DataList
+											  ID="1fe17df0-f4e2-4541-9f5c-3ae1132bd75f">
+												<RenderStyle>
+													<StandardView />
+												</RenderStyle>
+											</DataList>
+											<SectionContext>
+												<PageContextID xmlns="bb_appfx_commontypes" />
+											</SectionContext>
+										</Section>
+									</Sections>
+								</Tab>
+							</AddTab>
+						</AlterTabs>
+					</AlterTab>
+				</AlterTabs>
+			</AlterPage>
+		</AlterPages>
+	</AlterExistingPages>
+	
+</PageDefinitionSpec>
