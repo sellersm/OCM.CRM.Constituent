@@ -289,7 +289,9 @@
     <EmbeddedResource Include="Pages\AlterConstituentPage_ActionGroups.Page.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Pages\AlterConstituentPage_SponsorTab.Page.xml" />
+    <EmbeddedResource Include="Pages\AlterConstituentPage_SponsorTab.Page.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Pages\AlterConstituentPage_InteractionTab.Page.xml" />
@@ -299,6 +301,17 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Pages\AlterConstituentPage_FundraiserTab.Page.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Pages\Alter_4_0_ConstituentPages.Package.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Pages\AlterConstituentPage_AddRGL_SponsorTab.Page.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Pages\AlterConstituentPage_AddChurchMembers_ToRelationshipsTab.Page.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

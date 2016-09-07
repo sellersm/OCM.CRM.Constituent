@@ -1,0 +1,73 @@
+﻿<PageDefinitionSpec 
+    xmlns="bb_appfx_pagedefinition" 
+    xmlns:c="bb_appfx_commontypes"
+    ID="979ee0e8-544e-4b95-b67b-902011ab76e2"
+    Name="Alter Constituent Page Add Church Members To Relationships Tab"
+    Description="Alter constituent page to add church members to relationships tab."
+    Author="Memphis Sellers"
+    ContextRecordType="Constituent"	
+    >
+
+	<!-- Note:  A page can optionally have a view form associated with it as the "Expression form".  While implemented as a view data form,
+	this form has no UI in this context, and is simply used as a way of loading additional information associated with the page.  The fields
+	returned by the expression form can be used as expressions in various properties throughout the page.  To specify an expression form for this
+	page, add the following attribute:		ExpressionDataFormID="<some guid>"-->
+
+	<!-- define how the page header should appear -->
+	<PageHeader Caption="REPLACE_WITH_CAPTION" ImageKey="REPLACE_WITH_IMAGEKEY" />
+
+	<!-- define the tabs for the page - note that if only one tab is present, then that tab's sections are promoted to the page level (ie., the tab
+	itself isn't shown -->
+	<AlterExistingPages xmlns="bb_appfx_pagedefinition">
+		<AlterPages>
+			<AlterPage PageID="88159265-2b7e-4c7b-82a2-119d01ecd40f">
+				<AlterTabs>
+					<!-- Add Church Members tab to existing Relationships Tab-->
+					<AlterTab TabID="c4de985a-73fe-422d-bc37-6258ba424f0c">
+						<AlterTabs>
+							<AddTab Sequence="99">
+								<Tab Caption="Church Members" ID="1d29f0a1-9751-4591-8a5f-4bd2446df652" Visible="=Page.Fields!HASCHURCHMEMBERS">
+									<Sections>
+										<Section ID="96e91036-e171-4054-8fd2-0410fdaff5f0" Caption="Church member child sponsorships">
+											<DataList ID="a57c8175-7d3e-4c26-9d36-7ef21adc9f5a">
+												<RenderStyle>
+													<StandardView AutoSize="true" />
+												</RenderStyle>
+											</DataList>
+											<Actions>
+												<Action ID="5a0e644d-6eb8-4de8-96bf-128515b287b0" Caption="Go to Constituent" ImageKey="RES:goto_round" DefaultAction="True">
+													<ShowPage PageID="88159265-2b7e-4c7b-82a2-119d01ecd40f" TabID="15a22f9c-4c1b-11dc-8314-0800200c9a66" SectionID="00000000-0000-0000-0000-000000000000" xmlns="bb_appfx_commontypes">
+														<ActionContext>
+															<SectionField>MEMBERID</SectionField>
+														</ActionContext>
+													</ShowPage>
+												</Action>
+											</Actions>
+										</Section>
+										<Section ID="82a35d96-10b6-4c14-88e7-ab1947ccec3b" Caption="Church members without child sponsorships">
+											<DataList ID="4df33eb2-89b7-4f2b-8e87-81122518f003">
+												<RenderStyle>
+													<StandardView AutoSize="true" />
+												</RenderStyle>
+											</DataList>
+											<Actions>
+												<Action ID="880e1093-3dff-4c8f-b580-c93835084a22" Caption="Go to Constituent" ImageKey="RES:goto_round" DefaultAction="True">
+													<ShowPage PageID="88159265-2b7e-4c7b-82a2-119d01ecd40f" TabID="15a22f9c-4c1b-11dc-8314-0800200c9a66" SectionID="00000000-0000-0000-0000-000000000000" xmlns="bb_appfx_commontypes">
+														<ActionContext>
+															<SectionField>MEMBERID</SectionField>
+														</ActionContext>
+													</ShowPage>
+												</Action>
+											</Actions>
+										</Section>
+									</Sections>
+								</Tab>
+							</AddTab>
+						</AlterTabs>
+					</AlterTab>
+				</AlterTabs>
+			</AlterPage>
+		</AlterPages>
+	</AlterExistingPages>
+	
+</PageDefinitionSpec>

@@ -1,0 +1,81 @@
+﻿<PageDefinitionSpec 
+    xmlns="bb_appfx_pagedefinition" 
+    xmlns:c="bb_appfx_commontypes"
+    ID="fecc2648-5409-49c7-ad28-180c71a8c156"
+    Name="Alter Constituent Page Add RGL To Sponsor Tab"
+    Description="Add rgl section to sponsor tab on Constituent Page."
+    Author="Memphis Sellers"
+    ContextRecordType="Constituent"	
+    >
+
+	<!-- Note:  A page can optionally have a view form associated with it as the "Expression form".  While implemented as a view data form,
+	this form has no UI in this context, and is simply used as a way of loading additional information associated with the page.  The fields
+	returned by the expression form can be used as expressions in various properties throughout the page.  To specify an expression form for this
+	page, add the following attribute:		ExpressionDataFormID="<some guid>"-->
+
+	<!-- define how the page header should appear -->
+	<PageHeader Caption="REPLACE_WITH_CAPTION" ImageKey="REPLACE_WITH_IMAGEKEY" />
+
+	<!-- define the tabs for the page - note that if only one tab is present, then that tab's sections are promoted to the page level (ie., the tab
+	itself isn't shown -->
+	<AlterExistingPages xmlns="bb_appfx_pagedefinition">
+		<AlterPages>
+			<AlterPage PageID="88159265-2b7e-4c7b-82a2-119d01ecd40f">
+				<AlterTabs>
+					<!-- Add our custom RGL Section to existing Sponsor Tab-->
+					<AlterTab TabID="416dc73b-1209-4a0b-a939-c367f54b4f1d">
+						<AlterSections>
+							<AddSection Sequence="99">
+								<Section ID="f974923c-e772-4e60-922b-82ef6527fb53" Caption="RGL-Recurring Gift Line">
+									<DataList ID="749a0a07-a782-4729-8538-4b714b36c527" AutoLoadList="false" AutoDisplayFilters="true">
+										<RenderStyle>
+											<RelationalView
+											  IDField="ID"
+											  ParentField="PARENTID"
+											  SequenceField="COMMITMENTSEQUENCE"
+											  ExpandFirstLevelNodes="false">
+												<DetailViewForm ViewDataFormID="afa8948d-6ef5-419b-abe1-462237f63b8b" />
+											</RelationalView>
+										</RenderStyle>
+									</DataList>
+									<SectionContext>
+										<PageExpressionField xmlns="bb_appfx_commontypes">CONSTITUENTID</PageExpressionField>
+									</SectionContext>
+									<Actions>
+										<Action
+										  ID="6434d725-8cd0-4787-a002-1cf72491c96e"
+										  Caption="Go to recurring gift"
+										  ImageKey="RES:goto_round"
+										  Visible="=Not Fields!RECURRINGGIFTID.Equals(String.Empty)"
+										  CaptionResourceKey="$$go_to_recurring_gift">
+											<ShowPage
+											  PageID="387f861b-6c03-486c-9ff5-9cc5bb7a5275"
+											  TabID="00000000-0000-0000-0000-000000000000"
+											  SectionID="00000000-0000-0000-0000-000000000000" xmlns="bb_appfx_commontypes">
+												<ActionContext>
+													<SectionField>RECURRINGGIFTID</SectionField>
+												</ActionContext>
+											</ShowPage>
+										</Action>
+										<Action ID="980dc510-7e0f-43d1-9877-1ee4eaf16dab" Caption="Refresh RGL" ImageKey="RES:RecordOperationSpec">
+											<ExecuteRecordOperation
+											  RecordOperationID="af9999fc-a36a-448f-a086-7b4a10f1f301" xmlns="bb_appfx_commontypes">
+												<ActionContext>
+													<PageContextID />
+												</ActionContext>
+												<PostActionEvent>
+													<RefreshPage />
+												</PostActionEvent>
+											</ExecuteRecordOperation>
+										</Action>
+									</Actions>
+								</Section>
+							</AddSection>
+						</AlterSections>
+					</AlterTab>
+				</AlterTabs>
+			</AlterPage>
+		</AlterPages>
+	</AlterExistingPages>
+
+</PageDefinitionSpec>
