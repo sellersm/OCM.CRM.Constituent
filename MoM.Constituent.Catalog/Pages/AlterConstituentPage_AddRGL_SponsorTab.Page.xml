@@ -68,6 +68,13 @@
 												</PostActionEvent>
 											</ExecuteRecordOperation>
 										</Action>
+										<Action ID="031cf3d8-c39b-49bc-b23f-176658a77702" Caption="Merge Commitments">
+											<ShowAddDataForm DataFormID="2550b89f-5e59-411f-8fc2-7da80f56f80a" xmlns="bb_appfx_commontypes">
+												<ActionContext>
+													<PageContextID />
+												</ActionContext>
+											</ShowAddDataForm>
+										</Action>
 									</Actions>
 								</Section>
 							</AddSection>

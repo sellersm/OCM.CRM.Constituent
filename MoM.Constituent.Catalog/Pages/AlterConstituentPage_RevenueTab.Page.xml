@@ -1,9 +1,9 @@
 ﻿<PageDefinitionSpec 
     xmlns="bb_appfx_pagedefinition" 
     xmlns:c="bb_appfx_commontypes"
-    ID="979ee0e8-544e-4b95-b67b-902011ab76e2"
-    Name="Alter Constituent Page Add Church Members To Relationships Tab"
-    Description="Alter constituent page to add church members to relationships tab."
+    ID="e646a9c9-fa3b-462a-b589-7f8fc747bc27"
+    Name="Alter Constituent Page Revenue Tab"
+    Description="Alter constituent page revenue tab."
     Author="Memphis Sellers"
     ContextRecordType="Constituent"	
     >
@@ -18,43 +18,44 @@
 
 	<!-- define the tabs for the page - note that if only one tab is present, then that tab's sections are promoted to the page level (ie., the tab
 	itself isn't shown -->
+
 	<AlterExistingPages xmlns="bb_appfx_pagedefinition">
 		<AlterPages>
 			<AlterPage PageID="88159265-2b7e-4c7b-82a2-119d01ecd40f">
 				<AlterTabs>
-					<!-- Add Church Members tab to existing Relationships Tab-->
-					<AlterTab TabID="c4de985a-73fe-422d-bc37-6258ba424f0c">
+					<!-- Add our custom Additional Giving to the OOB Revenue Tab-->
+					<AlterTab TabID="7f789fee-1aa4-4341-801a-f31d1daf1bcc">
 						<AlterTabs>
-							<AddTab Sequence="1">
-								<Tab Caption="Church Members" ID="1d29f0a1-9751-4591-8a5f-4bd2446df652" Visible="=Page.Fields!HASCHURCHMEMBERS">
+							<AddTab Sequence="0">
+								<Tab Caption="Additional Giving" ID="6c9df243-0ff6-4985-8cd2-87a3dc89fd5d" Visible="=Page.Fields!HASADDITIONALGIVING">
 									<Sections>
-										<Section ID="96e91036-e171-4054-8fd2-0410fdaff5f0" Caption="Church member child sponsorships">
-											<DataList ID="a57c8175-7d3e-4c26-9d36-7ef21adc9f5a">
+										<Section ID="9f3f5bb3-9b9c-4f1e-b6e1-a76b4c5e1a25" Caption="Non-sponsorship recurring gifts">
+											<DataList ID="f3387804-c191-4428-b635-3d0bbe7b8e26">
 												<RenderStyle>
 													<StandardView AutoSize="true" />
 												</RenderStyle>
 											</DataList>
 											<Actions>
-												<Action ID="5a0e644d-6eb8-4de8-96bf-128515b287b0" Caption="Go to Constituent" ImageKey="RES:goto_round" DefaultAction="True">
-													<ShowPage PageID="88159265-2b7e-4c7b-82a2-119d01ecd40f" TabID="15a22f9c-4c1b-11dc-8314-0800200c9a66" SectionID="00000000-0000-0000-0000-000000000000" xmlns="bb_appfx_commontypes">
+												<Action ID="66a706df-daf9-4214-bd83-acce730cdcac" Caption="Go to recurring gift" ImageKey="RES:goto_round" DefaultAction="True">
+													<ShowPage PageID="387f861b-6c03-486c-9ff5-9cc5bb7a5275" TabID="00000000-0000-0000-0000-000000000000" SectionID="00000000-0000-0000-0000-000000000000" xmlns="bb_appfx_commontypes">
 														<ActionContext>
-															<SectionField>MEMBERID</SectionField>
+															<SectionField>RECURRINGGIFTID</SectionField>
 														</ActionContext>
 													</ShowPage>
 												</Action>
 											</Actions>
 										</Section>
-										<Section ID="82a35d96-10b6-4c14-88e7-ab1947ccec3b" Caption="Church members without child sponsorships">
-											<DataList ID="4df33eb2-89b7-4f2b-8e87-81122518f003">
+										<Section ID="1c274778-e793-4caf-9c0f-c1e2974dab36" Caption="Donations" DisplayStyle="InlineBlock">
+											<DataList ID="292b4c87-7316-40f8-af5c-c111761eec29" ShowBorder="true">
 												<RenderStyle>
 													<StandardView AutoSize="true" />
 												</RenderStyle>
 											</DataList>
 											<Actions>
-												<Action ID="880e1093-3dff-4c8f-b580-c93835084a22" Caption="Go to Constituent" ImageKey="RES:goto_round" DefaultAction="True">
-													<ShowPage PageID="88159265-2b7e-4c7b-82a2-119d01ecd40f" TabID="15a22f9c-4c1b-11dc-8314-0800200c9a66" SectionID="00000000-0000-0000-0000-000000000000" xmlns="bb_appfx_commontypes">
+												<Action ID="7942fca1-c6a3-4783-a4ae-0e7fb757fd6e" Caption="Go to revenue" ImageKey="RES:goto_round" DefaultAction="True">
+													<ShowPage PageID="387f861b-6c03-486c-9ff5-9cc5bb7a5275" TabID="00000000-0000-0000-0000-000000000000" SectionID="00000000-0000-0000-0000-000000000000" xmlns="bb_appfx_commontypes">
 														<ActionContext>
-															<SectionField>MEMBERID</SectionField>
+															<SectionField>System record ID</SectionField>
 														</ActionContext>
 													</ShowPage>
 												</Action>
@@ -69,5 +70,6 @@
 			</AlterPage>
 		</AlterPages>
 	</AlterExistingPages>
-	
+
+
 </PageDefinitionSpec>

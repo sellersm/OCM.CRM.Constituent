@@ -286,7 +286,9 @@
     <EmbeddedResource Include="Pages\CRM4_Constituent.Page.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Pages\AlterConstituentPage_ActionGroups.Page.xml" />
+    <EmbeddedResource Include="Pages\AlterConstituentPage_ActionGroups.Page.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Pages\AlterConstituentPage_SponsorTab.Page.xml">
@@ -312,6 +314,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Pages\AlterConstituentPage_AddChurchMembers_ToRelationshipsTab.Page.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Pages\AlterConstituentPage_RevenueTab.Page.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Pages\AlterConstituentPage_AddCancelAction_SponsorshipsTab.Page.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

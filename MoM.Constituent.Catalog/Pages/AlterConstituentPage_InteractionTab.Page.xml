@@ -106,7 +106,7 @@
 															  ImageKey="RES:Edit"
 															  CaptionResourceKey="$$interaction">
 																<ShowDataForm
-																  DataFormID="ab3b9569-4c7c-4646-a793-347856753b60" xmlns="bb_appfx_commontypes">
+																  DataFormID="a91623e5-e341-43ba-9736-ba7ddcf0b355" xmlns="bb_appfx_commontypes">
 																	<ActionContext>
 																		<SectionField>ID</SectionField>
 																	</ActionContext>
@@ -238,7 +238,7 @@
 															  ImageKey="RES:Edit"
 															  CaptionResourceKey="$$interaction">
 																<ShowDataForm
-																  DataFormID="ab3b9569-4c7c-4646-a793-347856753b60" xmlns="bb_appfx_commontypes">
+																  DataFormID="A91623E5-E341-43BA-9736-BA7DDCF0B355" xmlns="bb_appfx_commontypes">
 																	<ActionContext>
 																		<SectionField>ID</SectionField>
 																	</ActionContext>
@@ -370,7 +370,7 @@
 															  ImageKey="RES:Edit"
 															  CaptionResourceKey="$$interaction">
 																<ShowDataForm
-																  DataFormID="ab3b9569-4c7c-4646-a793-347856753b60" xmlns="bb_appfx_commontypes">
+																  DataFormID="A91623E5-E341-43BA-9736-BA7DDCF0B355" xmlns="bb_appfx_commontypes">
 																	<ActionContext>
 																		<SectionField>ID</SectionField>
 																	</ActionContext>

@@ -1,0 +1,76 @@
+﻿<PageDefinitionSpec
+    xmlns="bb_appfx_pagedefinition"
+    xmlns:c="bb_appfx_commontypes"
+    ID="e4015447-7ab8-40ca-ab7c-e618b784ab4a"
+    Name="AlterConstituentPage AddCancelAction SponsorshipsTab Page"
+    Description="A page for displaying information about alterconstituentpage addcancelaction sponsorshipstab records"
+    Author="BETHESDA\msellers"
+    ContextRecordType="REPLACE_WITH_RECORDTYPE"
+    >
+
+	<!-- Note:  A page can optionally have a view form associated with it as the "Expression form".  While implemented as a view data form,
+	this form has no UI in this context, and is simply used as a way of loading additional information associated with the page.  The fields
+	returned by the expression form can be used as expressions in various properties throughout the page.  To specify an expression form for this
+	page, add the following attribute:		ExpressionDataFormID="<some guid>"-->
+
+	<!-- define how the page header should appear -->
+	<PageHeader Caption="REPLACE_WITH_CAPTION" ImageKey="REPLACE_WITH_IMAGEKEY" />
+	<AlterExistingPages xmlns="bb_appfx_pagedefinition">
+		<AlterPages>
+			<AlterPage PageID="88159265-2b7e-4c7b-82a2-119d01ecd40f">
+				<AlterTabs>
+					<!-- Add our custom RGL Section to existing Sponsor Tab-->
+					<AlterTab TabID="416dc73b-1209-4a0b-a939-c367f54b4f1d">
+						<AlterSections>
+							<!--<AlterDataListSection SectionID="08adb764-c56e-452b-bea6-4b7d65c4791f"   DataListID="b87f9b24-91e9-40c2-b54a-f6fbcc09f6f0" >
+							-->
+							<AlterDataListSection SectionID="08adb764-c56e-452b-bea6-4b7d65c4791f"   DataListID="bb24aaa6-e00f-47b6-a4fe-a85e7098cfd9">
+								<AlterActions>
+									<AddAction Sequence="9">
+										<Action ID="8a5afa9f-2e63-40b7-8334-742c268436cb" Caption="Cancel sponsorship" ImageKey="RES:do_not_symbol" Visible="=Fields!STATUS=&quot;Active (Transfer pending)&quot; OrElse Fields!STATUS=&quot;Pending&quot;" CaptionResourceKey="$$cancel">
+											<ShowDataForm DataFormID="edde2945-0141-4677-8155-bbc3a80eb66b" xmlns="bb_appfx_commontypes">
+												<ActionContext>
+													<SectionField>CONTEXTSPONSORSHIPID</SectionField>
+												</ActionContext>
+												<PostActionEvent>
+													<RefreshSection />
+												</PostActionEvent>
+											</ShowDataForm>
+											<HelpKey>SPSponsorPageCancel.html</HelpKey>
+										</Action>
+									</AddAction>
+									<AddAction Sequence="8">
+										<Action ID="f2956ffe-d984-4167-99aa-936d8884c167" Caption="Cancel sponsorship" ImageKey="RES:do_not_symbol" Visible="=Fields!STATUS.StartsWith(&quot;Active&quot;) AndAlso Fields!STATUS&lt;&gt;&quot;Active (Transfer pending)&quot;" CaptionResourceKey="$$cancel">
+											<ShowDataForm DataFormID="3e5de54f-e0f7-4187-bdd1-0bfff1156e2d" xmlns="bb_appfx_commontypes">
+												<ActionContext>
+													<SectionField>CONTEXTSPONSORSHIPID</SectionField>
+												</ActionContext>
+												<PostActionEvent>
+													<RefreshSection />
+												</PostActionEvent>
+											</ShowDataForm>
+											<HelpKey>SPSponsorPageCancel.html</HelpKey>
+										</Action>
+									</AddAction>
+									<AddAction Sequence="9">
+										<Action ID="b2416e10-a163-413d-a472-ed783a7254cf" Caption="Update reason" ToolTipText="Update sponsorship reason" Enabled="=Fields!REASON &lt;&gt; &quot;&quot;&#xA;">
+											<ShowDataForm DataFormID="068023d8-b2b8-4ffc-a2c1-d5435a5bc5c1" xmlns="bb_appfx_commontypes">
+												<ActionContext>
+													<SectionField>SPONSORSHIPID</SectionField>
+												</ActionContext>
+												<PostActionEvent>
+													<RefreshSection />
+												</PostActionEvent>
+											</ShowDataForm>
+										</Action>
+									</AddAction>
+								</AlterActions>
+							</AlterDataListSection>
+						</AlterSections>
+					</AlterTab>
+				</AlterTabs>
+			</AlterPage>
+		</AlterPages>
+	</AlterExistingPages>
+
+</PageDefinitionSpec>
