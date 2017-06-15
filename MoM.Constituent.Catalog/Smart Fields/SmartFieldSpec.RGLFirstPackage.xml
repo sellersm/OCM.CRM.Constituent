@@ -1,0 +1,39 @@
+﻿<SmartFieldSpec
+	xmlns="bb_appfx_smartfield"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="c113bfd4-2dfe-448c-aea3-ec743cae3acc"
+	Name="RGL First Package for Constituent Smart Field"
+	Description="Get the first package for the constituent within the RGL subset of sponsorships"
+	Author="Jeff Mawhirter"
+	SPName="USR_USP_RGLFIRSTAPPEALPACKAGE"
+	DataType="String" 
+	RecordType="Constituent" 
+	DisplayName="RGL first appeal package" 
+	SmartFieldFolder="Constituent\Appeal"
+	>
+
+	<!-- describe the SP used to calculate the smart field values -->
+	<CreateProcedureSQL>
+		<![CDATA[
+create procedure dbo.USR_USP_RGLFIRSTAPPEALPACKAGE
+(
+	@ASOF datetime 
+)
+as
+SELECT origin.sponsorid, origin.appeal_name
+-- subselect to get the appeal info from the first RGL row per constituent 
+from (select distinct COALESCE(rgl1.financialsponsorid, sponsorid) as sponsorid, rgl1.startdate, rgl1.sourcecategory as appeal_cat, rgl1.package as appeal_name, rgl1.source from USR_COMMITMENTLINE_RECURRINGGIFT rgl1
+	join smartfieldBB91D38CB66F44A3A65E37E7F4D99941 ed on coalesce(rgl1.financialsponsorid, rgl1.sponsorid) =  ed.id
+	join RevenueSplit rs on rgl1.RecurringGiftID = rs.RevenueID
+	join Sponsorship s on rs.id = s.RevenueSplitId
+	join usr_sponsorshipextension se on s.id = se.id
+	where rgl1.startdate <= ed.value 
+	and rgl1.startdate = (select min(startdate) from USR_COMMITMENTLINE_RECURRINGGIFT rgl2 where coalesce(rgl2.financialsponsorid, rgl2.sponsorid) = coalesce(rgl1.financialsponsorid, rgl1.sponsorid)) 
+	and sequenceid = (select min(sequenceid) from USR_COMMITMENTLINE_RECURRINGGIFT rgl3 where rgl3.startdate = rgl1.startdate and coalesce(rgl3.financialsponsorid, rgl3.sponsorid) = coalesce(rgl1.financialsponsorid, rgl1.sponsorid))
+	and rgl1.type in('Direct', 'Prospect', 'Conversion') and se.isaccountcorrection = 0
+) origin 
+
+		]]>
+	</CreateProcedureSQL>
+
+</SmartFieldSpec>

@@ -1,0 +1,65 @@
+﻿<QueryViewSpec
+	xmlns="bb_appfx_queryview"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="6d94de67-06fe-4957-9df5-e981f8b60c36"
+	Name="Partnership Missing Elements Query"
+	Description="Query to detect missing elements of the partner/sponsor linkages"
+	Author="Jeff Mawhirter"
+	IsRoot="true"
+	PrimaryKeyField="CONSTITUENTID"
+	RecordType="Constituent"
+	common:SecurityUIFolder="CONSTITUENT"
+	>
+
+	<!-- define the view used to return data for the query -->
+	<ViewImplementation ViewName="USR_V_QUERY_PARTNERSHIPMISSINGELEMENTS">
+		<ViewSQL>
+			<![CDATA[
+select distinct member.id as constituentid,
+	member.lookupid as MemberID, 
+	shouldbechurch.lookupid as ShouldBeChurchID, 
+	shouldbechurch.name as ShouldBeChurchName,
+	cons.constituency 
+from 
+    CONSTITUENT member
+    -- appeal code 
+	inner join [V_QUERY_REVENUE] rev on member.[ID] = rev.[CONSTITUENTID]
+	inner join [V_QUERY_APPEAL] a on rev.[APPEALID] = a.[ID]
+	inner join dbo.CONSTITUENT shouldbechurch on shouldbechurch.lookupid = substring(a.description, 1, len(shouldbechurch.lookupid)) 
+		and shouldbechurch.ISORGANIZATION = 1 and shouldbechurch.isinactive = 0
+    -- church relationship (using GUID for relationship type to avoid performance problems doing it by name)
+    left outer join dbo.RELATIONSHIP rel on rel.RELATIONSHIPCONSTITUENTID = member.ID 
+		and (rel.ENDDATE is null or rel.enddate > getdate()) 
+		and (rel.startdate is null or rel.startdate < getdate())
+		and (rel.relationshiptypecodeid = '88F2E488-8696-4640-85FB-605F395B06ED'
+		or rel.relationshiptypecodeid = '60CB4FB0-6133-4BDB-98E7-43A354073919')
+    left outer join dbo.CONSTITUENT church on church.ID = rel.RECIPROCALCONSTITUENTID and church.ISORGANIZATION = 1 
+	-- need to use the shouldbechurch constituency code to restrict this to partner churches
+	inner join [V_QUERY_CONSTITUENCY] sbccons on shouldbechurch.id = sbccons.[CONSTITUENTID] 
+		and sbccons.[CONSTITUENCY] in (N'Partner - Church', N'Partnership for Mercy - Partner')
+	-- constituency codes for the sponsor
+	left outer join [V_QUERY_CONSTITUENCY] cons on member.id = cons.[CONSTITUENTID] and cons.[CONSTITUENCY] 
+		in (N'Partner - Church', N'Church Partnership', N'Partnership for Mercy - Partner', N'Partnership for Mercy')
+where
+	church.lookupid is null or cons.[CONSTITUENTID] is null  
+				
+			]]>
+		</ViewSQL>
+	</ViewImplementation>
+
+	<!-- describe each field in the view output -->
+	<Output>
+		<OutputFields>
+			<OutputField Caption="System record ID" Category="System Fields" Name="CONSTITUENTID" />
+			<OutputField Name="MemberID" Caption="Sponsor Lookup ID" DataType="String" />
+			<OutputField Name="ShouldBeChurchID" Caption="Missing Relationship Church Lookup ID" DataType="String" />
+			<OutputField Name="ShouldBeChurchName" Caption="Missing Relationship Church Name" DataType="String" />
+			<OutputField Name="constituency" Caption="Relevant Constituency Code" DataType="String" />
+		</OutputFields>
+	</Output>
+	<RelationshipOperations>
+		<AddRelatedView RelatedView="V_QUERY_CONSTITUENT" Field="CONSTITUENTID" RelatedField="ID" PathAlias="Constituent"/>
+	</RelationshipOperations>
+
+</QueryViewSpec>
+

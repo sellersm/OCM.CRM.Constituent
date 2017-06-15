@@ -321,6 +321,21 @@
   <ItemGroup>
     <EmbeddedResource Include="Pages\AlterConstituentPage_AddCancelAction_SponsorshipsTab.Page.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DataForms\Constituent.ActiveChild.CorrespondingSponsorships.View.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DataLists\Constituent.ActiveChild.CorrespondingSponsorships.DataList.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="QueryViews\CheckForTabsInConstituentAddress.Query.xml" />
+    <EmbeddedResource Include="QueryViews\PartnershipMissingElements.Query.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Smart Fields\SmartFieldSpec.RGLFirstAppealCat.xml" />
+    <EmbeddedResource Include="Smart Fields\SmartFieldSpec.RGLFirstPackage.xml" />
+    <EmbeddedResource Include="Smart Fields\SmartFieldSpec.RGLFirstSourceForConstituent.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

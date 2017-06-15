@@ -1,0 +1,74 @@
+﻿<QueryViewSpec
+	xmlns="bb_appfx_queryview"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="bddd1c46-3def-44fa-8bc3-c377c03439e3"
+	Name="Check For Tabs In Constituent Address Query"
+	Description="Displays records that have tab characters in address fields"
+	Author="Memphis Sellers"
+	IsRoot="true"
+	PrimaryKeyField="ID"
+	RecordType="Constituent"
+	common:SecurityUIFolder="Constituent"
+	>
+
+	<!-- 
+	Remarks:	Used to display any Constituent Address records, no matter IsPrimary or not, 
+					that have a Tab character in it.  Run as part of Statements QC process
+					because a Tab character will throw off the data sent to Endpoint.
+
+	History:
+	Date            Modified By     Comments
+	07-Nov-2016		Memphis			Initial Version
+	-->
+
+	
+	<!-- define the view used to return data for the query -->
+	<ViewImplementation ViewName="USR_V_QUERY_CONSTITUENT_ADDRESSFIELDS_WITH_TABS">
+		<ViewSQL>
+			<![CDATA[
+select 
+	c.[ID],
+	case 
+		when [ADDRESSBLOCK] like '%' + CHAR(9) + '%' then 'Address Field'
+		when City like '%' + CHAR(9) + '%' then 'City Field'
+		when POSTCODE like '%' + CHAR(9) + '%' then 'PostCode Field'
+		when dbo.[ADDRESS].[DESCRIPTION] like '%' + CHAR(9) + '%' then 'Description Field'
+	end as FIELDWITHTABS,
+	c.LOOKUPID as CONSTITUENTID,
+	[ADDRESSBLOCK],
+	[CITY],
+	[POSTCODE],
+	dbo.[ADDRESS].[DESCRIPTION],
+	atc.[DESCRIPTION] as ADDRESSTYPE,
+	ctry.ABBREVIATION as CONTRYABBREVIATION,
+	ctry.[DESCRIPTION] as COUNTRYDESCRIPTION
+from dbo.[ADDRESS]
+	join dbo.CONSTITUENT c on c.ID = CONSTITUENTID
+	join dbo.COUNTRY ctry on ctry.ID = COUNTRYID
+	join dbo.ADDRESSTYPECODE atc on atc.ID = ADDRESSTYPECODEID
+where [ADDRESSBLOCK] like '%' + CHAR(9) + '%'
+	or City like '%' + CHAR(9) + '%'
+	or POSTCODE like '%' + CHAR(9) + '%'
+	or dbo.[ADDRESS].[DESCRIPTION] like '%' + CHAR(9) + '%'
+			]]>
+		</ViewSQL>
+	</ViewImplementation>
+
+	<!-- describe each field in the view output -->
+	<Output>
+		<OutputFields>
+			<OutputField Caption="System record ID" Category="System Fields" Name="ID" />
+			<OutputField Name="FIELDWITHTABS" Caption="Field With Tabs" DataType="String" />
+			<OutputField Name="CONSTITUENTID" Caption="Constituent Id" DataType="String" />
+			<OutputField Name="ADDRESSBLOCK" Caption="Address" DataType="String" />
+			<OutputField Name="CITY" Caption="City" DataType="String" />
+			<OutputField Name="POSTCODE" Caption="Post Code" DataType="String" />
+			<OutputField Name="DESCRIPTION" Caption="Address Description" DataType="String" />
+			<OutputField Name="ADDRESSTYPE" Caption="Address Type" DataType="String" />
+			<OutputField Name="CONTRYABBREVIATION" Caption="Country Abbreviation" DataType="String" />
+			<OutputField Name="COUNTRYDESCRIPTION" Caption="Country Name" DataType="String" />
+		</OutputFields>
+	</Output>
+
+</QueryViewSpec>
+

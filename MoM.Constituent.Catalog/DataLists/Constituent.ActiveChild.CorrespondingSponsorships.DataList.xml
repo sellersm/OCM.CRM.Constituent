@@ -1,0 +1,99 @@
+﻿<DataListSpec 
+	xmlns="bb_appfx_datalist"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="65d22a2c-14d0-4b2d-84e9-a358e5196abf" 
+	Name="Constituent Active Sponsorship Recipient Sponsorships"
+	Description="List of all Active Sponsorships where Sponsor is Correspondent-Recipient." 
+	Author="Memphis Sellers"
+	common:SecurityUIFolder="Constituent"	
+	>
+
+	<!-- 
+	Remarks:	The Number of Active Sponsorships is repeated on each row, when a sponsor sponsors more than one child
+				This only displays child sponsorships for Corresonding/Recipient Sponsors.  Copy of Constituent Active Child Sponsorships Data List
+				modified to only display rows where the given Sponsor is a Recipient/Corresponding Sponsor,
+				and just the columns related to the Sponsorship (No RG $ info).
+
+	History:
+	Date            Modified By     Comments
+	30-Jan-2017		Memphis			Initial Version
+	-->
+
+
+	<!-- define the SP that returns the data for the datalist -->
+	<SPDataList SPName="USR_USP_DATALIST_CONSTITUENT_ACTIVECHILD_CORRESPONDINGSPONSORSHIPS">
+		<common:CreateProcedureSQL>
+			<![CDATA[
+create procedure dbo.USR_USP_DATALIST_CONSTITUENT_ACTIVECHILD_CORRESPONDINGSPONSORSHIPS(@CONTEXTID uniqueidentifier)
+as
+	set nocount on;
+
+	select 
+		financialsponsor.ID as FINANCIALSPONSORID,
+		correspondent.ID as CORRESPONDENTID,
+		sp.ID as SPONSORSHIPID,
+		rev.ID as SPONSORSHIPRECURRINGGIFTID,
+		sp.SPONSORSHIPOPPORTUNITYID,
+		spc.LOOKUPID as COMMITMENTLOOKUPID,		
+		coalesce (slocation.LOOKUPID,'') as PROJECTLOOKUPID,
+		so.LOOKUPID as CHILDLOOKUPID,
+		so_child.NAME as CHILDNAME,				
+		statusCode.DESCRIPTION as SPONSORSHIPSTATUS,
+		sp.STARTDATE
+	from	
+		dbo.SPONSORSHIP sp
+		inner join dbo.SPONSORSHIPCOMMITMENT spc on sp.SPONSORSHIPCOMMITMENTID = spc.ID
+		inner join dbo.REVENUESPLIT revsplit on sp.REVENUESPLITID = revsplit.ID
+		inner join dbo.REVENUE rev on revsplit.REVENUEID = rev.ID
+		left  join dbo.USR_FINANCIALTRANSACTION_EXTENSION ft_ext on rev.ID = ft_ext.ID
+		inner join dbo.REVENUESCHEDULE revschedule on revschedule.ID = rev.ID --REVENUE.ID		
+		inner join dbo.CONSTITUENT financialsponsor on rev.CONSTITUENTID = financialsponsor.ID
+		inner join dbo.CONSTITUENT correspondent on sp.CONSTITUENTID = correspondent.ID
+		inner join dbo.SPONSORSHIPOPPORTUNITY so on so.ID = sp.SPONSORSHIPOPPORTUNITYID
+		inner join dbo.SPONSORSHIPOPPORTUNITYCHILD so_child on so_child.ID = sp.SPONSORSHIPOPPORTUNITYID
+		inner join dbo.USR_CHILDEXTENSION so_child_ext on so_child.ID = so_child_ext.SPONSORSHIPOPPORTUNITYCHILDID
+		left  join dbo.USR_SPONSORSHIPEXTENSION se on se.ID = sp.ID
+		left  join dbo.USR_CURRENTOPPORTUNITYSPONSORSHIPSTATUSCODE statusCode on 
+						statusCode.ID = se.CURRENTOPPORTUNITYSPONSORSHIPSTATUSCODEID and statusCode.DESCRIPTION in ('Sponsored', 'Prospect Sponsored', 'Unpaid Sponsored')
+		inner join dbo.SPONSORSHIPLOCATION slocation on so.SPONSORSHIPLOCATIONID = slocation.ID 	
+		inner join dbo.REVENUEPAYMENTMETHOD rev_paymethod on rev_paymethod.REVENUEID = revsplit.REVENUEID
+
+	where  
+		(sp.STATUSCODE = 1   
+		and (sp.CONSTITUENTID = @CONTEXTID
+		and rev.CONSTITUENTID <> @CONTEXTID))
+
+			]]>
+		</common:CreateProcedureSQL>
+	</SPDataList>
+
+	<!-- describe the context ID parameter for the SP (if applicable)-->
+	<Context ContextRecordType="CONSTITUENT" RecordIDParameter="CONTEXTID"/>
+
+	<!-- describe any parameters (other than the context ID) defined on the SP
+	<Parameters>
+		<common:FormMetaData>
+			<common:FormFields>
+				<common:FormField FieldID="PARAMETER1" Caption="Paramter1" DataType="REPLACE_WITH_DATATYPE"/>
+			</common:FormFields>
+		</common:FormMetaData>
+	</Parameters>-->
+
+	<!-- define the output fields in the list -->
+	<Output>
+		<OutputFields>
+			<OutputField FieldID="FINANCIALSPONSORID" Caption="ID" DataType="Guid" IsHidden="true" />
+			<OutputField FieldID="CORRESPONDENTID" Caption="Corresponding Sponsor System ID" DataType="Guid" IsHidden="true" />
+			<OutputField FieldID="SPONSORSHIPID" Caption="Sponsorship System ID" DataType="Guid" IsHidden="true" />
+			<OutputField FieldID="SPONSORSHIPRECURRINGGIFTID" Caption="Sponsorship Recurring Gift System ID" DataType="Guid" IsHidden="true" />
+			<OutputField FieldID="SPONSORSHIPOPPORTUNITYID" Caption="Sponsorship Opportunity System ID" DataType="Guid" IsHidden="true" />
+			<OutputField FieldID="COMMITMENTLOOKUPID" Caption="Commitment ID" DataType="String" />
+			<OutputField FieldID="PROJECTLOOKUPID" Caption="Project ID" DataType="String" />
+			<OutputField FieldID="CHILDLOOKUPID" Caption="Child ID" DataType="String" />
+			<OutputField FieldID="CHILDNAME" Caption="Child name" DataType="String" />
+			<OutputField FieldID="SPONSORSHIPSTATUS" Caption="Sponsorship status" DataType="String" />
+			<OutputField FieldID="STARTDATE" Caption="Start Date" DataType="Date" />
+		</OutputFields>
+	</Output>
+
+</DataListSpec>

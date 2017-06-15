@@ -8,7 +8,7 @@
 	IsRoot="true"
 	PrimaryKeyField="ID"
 	RecordType="CONSTITUENT"
-	common:SecurityUIFolder="CONSITUENT"
+	common:SecurityUIFolder="CONSTITUENT"
 	>
 
 	<!-- define the view used to return data for the query -->
