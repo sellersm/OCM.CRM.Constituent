@@ -98,17 +98,21 @@
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.PartnershipForMercyOrg.Search.xml" />
 
 		<!-- Data Lists -->
-		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.ActiveChildSponsorships.DataList.xml" />
-		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.ActiveProjectSponsorships.DataList.xml" />
-		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.ChurchMembersNoSponsorships.DataList.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.ActiveChild.CorrespondingSponsorships.DataList.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.ActiveChildSponsorships.DataList.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.ActiveProjectSponsorships.DataList.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.ChurchMembersNoSponsorships.DataList.xml" />
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.ChurchMemberSponsorships.DataList.xml" />
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.NonSponsorshipDonations.DataList.xml" />
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.NonSponsorshipRecurringGifts.DataList.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.PackageVersion.DataList.xml" />
 
-		<!-- Data Forms -->
+    <!-- Data Forms -->
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.ActiveChildSponsorships.View.xml" />
-		
-		<!-- Pages -->
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.ActiveChild.CorrespondingSponsorships.View.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.PrimaryAddress.View.xml" />
+
+    <!-- Pages -->
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.Constituent.Page.xml" />
 		
 		<!-- Tasks -->
@@ -131,29 +135,53 @@
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.OCM.PageExpressionDataForm.View.xml" />
 		
 		<!-- Query Views -->
-		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.RecurringGiftOrGiftInBatch.Query.xml" />
-		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.NewsletterUpdateOnlyCorrespondents.Query.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.ChurchMemberCorrespondents.Query.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.CheckForTabsInConstituentAddress.Query.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.ChristmasOrnamentsCorrespondents.Query.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.ChristmasOrnamentsFinancialSponsors.Query.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.RecurringGiftOrGiftInBatch.Query.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.AddAChildCampaign.Query.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.ChildSponsorships.Query.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.NonUniqueConstituencies.Query.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.NewsletterUpdateOnlyCorrespondents.Query.xml" />
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.NewsletterUpdateOnlyFinancialSponsors.Query.xml" />
-		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.PhotoUpdateCorrespondents.Query.xml" />
-		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.PhotoUpdateFinancialSponsors.Query.xml" />
-		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.ChurchMemberCorrespondents.Query.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.PartnershipMissingElements.Query.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.PhotoUpdateCorrespondents.Query.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.PhotoUpdateFinancialSponsors.Query.xml" />
 
-		<!-- Smart Fields: these have a dependency on a UFN in Sponsorship -->
+    <!-- Smart Fields: these have a dependency on a UFN in Sponsorship -->
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.AverageMonthsDelinquent.SmartField.xml" />
-		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.NumberOfActiveFinancialChildSponsorships.SmartField.xml" />
-		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.AverageRecurringGift.SmartField.xml" />
-		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.AverageMonthsDelinquentByAmountDue.SmartField.xml" />
-		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.NumberOfLKFinancialSponsorships.SmartField.xml" />
-		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.NumberOfActiveCorrespondentChildSponsorships.SmartField.xml" />
-		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.MaxActiveChildSponsorshipMonthlyAmount.SmartField.xml" />
-		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.MaxActiveSponsorshipMonthlyAmount.SmartField.xml" />
-		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.FormerChildSponsorLatestChildSponsorshipEndDate.SmartField.xml" />
-		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.LastestAutoCancelledSponsorshipDate.SmartField.xml" />
-		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.D3OrD4Sponsors.SmartField.xml" />
-		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.LifetimeAverageGiftAmountWithoutMissionTrips.SmartField.xml" />
-		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.LifetimeGivingWithoutMissionTrips.SmartField.xml" />
-		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.LifetimeNumberOfGiftsWithoutMissionTrips.SmartField.xml" />
-		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.NumberMonthsChildSponsorshipTenure.SmartField.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.AverageMonthsDelinquentByAmountDue.SmartField.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.AverageRecurringGift.SmartField.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.ChurchDirectDeductibleGiving.SmartField.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.ChurchMemberDeductibleGiving.SmartField.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.ChurchTotalDeductibleGiving.SmartField.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.RelationOnly.Active.SmartField.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.RelationOnly.Inactive.SmartField.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.D3OrD4Sponsors.SmartField.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.EarliestChildFinancialOrGiftedSponsorshipStartDate.SmartField.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.EarliestSponsorshipDate.SmartField.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.FormerChildSponsorLatestChildSponsorshipEndDate.SmartField.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.HasChildSponsorshipCash.SmartField.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.HasChildSponsorshipOnEFT.SmartField.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.LastestAutoCancelledSponsorshipDate.SmartField.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.LifetimeAverageGiftAmountWithoutMissionTrips.SmartField.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.LifetimeGivingWithoutMissionTrips.SmartField.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.LifetimeNumberOfGiftsWithoutMissionTrips.SmartField.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.MaxActiveChildSponsorshipMonthlyAmount.SmartField.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.MaxActiveSponsorshipMonthlyAmount.SmartField.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.NumberMonthsChildSponsorshipTenure.SmartField.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.NumberOfActiveCorrespondentChildSponsorships.SmartField.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.NumberOfActiveCorrespondentChildSponsorshipsFixesDCIssues.SmartField.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.NumberOfActiveFinancialChildSponsorships.SmartField.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.NumberOfGiftedSponsoredChildrenWithCompletedPhotoInteractions.SmartField.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.NumberOfLKFinancialSponsorships.SmartField.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.NumberOfSponsoredChildrenWithCompletedPhotoInteractions.SmartField.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.NumberOfTotalFinanciallySponsoredChildrenWithCompletedPhotoInteractions.SmartField.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.SmartFieldSpec.RGLFirstAppealCat.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.SmartFieldSpec.RGLFirstPackage.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.SmartFieldSpec.RGLFirstSourceForConstituent.xml" />
+    <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Statements.AverageMonthsDelinquentByAmountDue.SmartField.xml" />
 
 		<!-- Package Versions -->
 		<common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.Constituent.PackageVersion.DataList.xml" />
