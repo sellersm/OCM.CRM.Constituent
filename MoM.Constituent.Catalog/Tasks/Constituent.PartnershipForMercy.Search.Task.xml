@@ -2,8 +2,8 @@
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	ID="04045a5e-35bc-4869-aadc-e658c2198270" 
-	Name="Partnership search" 
-	Description="Find a partnership organization" 
+	Name="Partner search" 
+	Description="Find a partner organization" 
 	Author="Cary Mayeda" 
 	ImageKey="CATALOG:Blackbaud.AppFx.Constituent.Catalog,Blackbaud.AppFx.Constituent.Catalog.mergedconstituentsearch.png" 
 	FunctionalAreaID="00050ce8-8abb-4a86-b9af-70a035ce0582" 	
@@ -18,6 +18,7 @@
 	Date            Modified By     Comments
 	27-Aug-2012		CMayeda			Initial Version
 	03-Oct-2012		CMayeda			Modifed the name to be reflect the change to find other partners - FogBugz Case 877
+  18-Jul-2017   MSellers    Partnership is now changed to Partner.
 	-->
 
 	<ShowPage PageID="88159265-2b7e-4c7b-82a2-119d01ecd40f" TabID="00000000-0000-0000-0000-000000000000" xmlns="bb_appfx_commontypes">
