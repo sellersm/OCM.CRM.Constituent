@@ -99,18 +99,62 @@
 												</Action>
 											</Actions>
 										</Section>
+                    <Section ID="6A49692D-0930-4BC6-9B3E-42960842EF8F" Caption="Active correspondent sponsorships" DisplayStyle="InlineBlock">
+                      <DataList ID="65d22a2c-14d0-4b2d-84e9-a358e5196abf">
+                        <RenderStyle>
+                          <StandardView AutoSize="true">
+                            <DetailViewForm ViewDataFormID="61ff58ad-85eb-4840-ba69-fcea42103687" RecordIDField="SPONSORSHIPID" />
+                          </StandardView>
+                        </RenderStyle>
+                      </DataList>
+                      <Actions>
+                        <Action ID="0ba97171-55b1-439a-8a1f-8c2d319f5a9e" Caption="Go to child" ImageKey="res:goto_round">
+                          <c:ShowPage PageID="0f392d71-5884-4363-b6e3-a75755f8402a" TabID="b6cecb36-a9ab-4f9b-a9f5-c4e2cf10e790">
+                            <c:ActionContext>
+                              <c:SectionField>SPONSORSHIPOPPORTUNITYID</c:SectionField>
+                            </c:ActionContext>
+                          </c:ShowPage>
+                        </Action>
+                        <Action ID="c646dcce-9d33-4d23-a12d-3367b0ff5b28" Caption="Go to sponsorship" ImageKey="res:goto_round">
+                          <c:ShowPage PageID="428f040a-eb45-4171-8c52-a030b9992d65" TabID="64e81aea-cc0c-42b2-b354-58d9871e5fe9">
+                            <c:ActionContext>
+                              <c:SectionField>SPONSORSHIPID</c:SectionField>
+                            </c:ActionContext>
+                          </c:ShowPage>
+                        </Action>
+                      </Actions>
+                    </Section>
 										<Section
 										  ID="ecd7fa79-4f41-4535-bf40-0b1e93c0c4a5"
 										  Caption="Active project sponsorships">
-											<DataList
-											  ID="3ba335de-4b5a-49f8-b9b2-ae1302e97921">
-												<RenderStyle>
-													<StandardView />
-												</RenderStyle>
-											</DataList>
-											<SectionContext>
-												<PageContextID xmlns="bb_appfx_commontypes" />
-											</SectionContext>
+                      <DataList ID="3ba335de-4b5a-49f8-b9b2-ae1302e97921">
+                        <RenderStyle>
+                          <StandardView AutoSize="true" />
+                        </RenderStyle>
+                      </DataList>
+                      <Actions>
+                        <Action ID="17695334-0a0a-48bc-8aac-2c41d0fd48ca" Caption="Go to project" ImageKey="RES:goto_round">
+                          <c:ShowPage PageID="0f392d71-5884-4363-b6e3-a75755f8402a" TabID="00000000-0000-0000-0000-000000000000">
+                            <c:ActionContext>
+                              <c:SectionField>SPONSORSHIPOPPORTUNITYID</c:SectionField>
+                            </c:ActionContext>
+                          </c:ShowPage>
+                        </Action>
+                        <Action ID="28c2dd49-f572-401d-b4f3-c05086c55b35" Caption="Go to sponsorship" ImageKey="RES:goto_round">
+                          <c:ShowPage PageID="428f040a-eb45-4171-8c52-a030b9992d65" TabID="00000000-0000-0000-0000-000000000000">
+                            <c:ActionContext>
+                              <c:SectionField>SPONSORSHIPID</c:SectionField>
+                            </c:ActionContext>
+                          </c:ShowPage>
+                        </Action>
+                        <Action ID="267cccbc-06e7-4520-80ae-1bfcaf8d341c" Caption="Go to recurring gift">
+                          <c:ShowPage PageID="387f861b-6c03-486c-9ff5-9cc5bb7a5275" TabID="00000000-0000-0000-0000-000000000000">
+                            <c:ActionContext>
+                              <c:SectionField>SPONSORSHIPRECURRINGGIFTID</c:SectionField>
+                            </c:ActionContext>
+                          </c:ShowPage>
+                        </Action>
+                      </Actions>
 										</Section>
 									</Sections>
 								</Tab>
