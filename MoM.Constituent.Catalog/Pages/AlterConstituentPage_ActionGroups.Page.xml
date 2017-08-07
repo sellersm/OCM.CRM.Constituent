@@ -132,9 +132,35 @@
 								</ExecuteRecordOperation>
 							</Action>
 						</AddAction>
-					</AlterOrAddPageActionGroup>
+          </AlterOrAddPageActionGroup>
 
-					<!-- Add this Task to a new Admin action group-->
+          <AlterOrAddPageActionGroup ID="78eb464b-ac5a-48d4-acdf-778fbb5bb8ec" Caption="Sponsor" >
+              <AddAction Sequence="5" >
+                <Action ID="a7369386-b35a-4cc5-a8e5-eaee45a86f83" Caption="Add Onboarding Interactions">
+              <ShowAddDataForm DataFormID="9750acd7-94ca-4a74-96cb-bc2803caafb8" xmlns="bb_appfx_commontypes">
+                <ActionContext>
+                  <PageContextID />
+                </ActionContext>
+              </ShowAddDataForm>
+            </Action>
+              </AddAction>
+          </AlterOrAddPageActionGroup>
+
+          <AlterOrAddPageActionGroup ID="78eb464b-ac5a-48d4-acdf-778fbb5bb8ec" Caption="Sponsor" >
+            <AddAction Sequence="6" >
+              <Action ID="aa0d949d-ef74-4927-8fe0-2a99dba0ab60" Caption="Complete Web Sponsorship">
+            <ShowAddDataForm DataFormID="ed807a08-e800-41c2-9e05-a6da01eb4493" xmlns="bb_appfx_commontypes">
+              <ActionContext>
+                <PageContextID />
+              </ActionContext>
+            </ShowAddDataForm>
+          </Action>
+          </AddAction>
+          </AlterOrAddPageActionGroup>
+
+
+
+          <!-- Add this Task to a new Admin action group-->
 					<AlterOrAddPageActionGroup Caption="Admin">
 						<AddAction Sequence="99">
 							<Action ID="67cea0bb-bc72-4476-9377-c15e897b2424" Caption="Edit financial sponsor date range">
