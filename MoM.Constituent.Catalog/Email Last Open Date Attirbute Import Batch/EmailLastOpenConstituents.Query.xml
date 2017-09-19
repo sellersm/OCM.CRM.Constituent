@@ -1,0 +1,43 @@
+﻿<QueryViewSpec
+	xmlns="bb_appfx_queryview"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="e785b2bb-62fb-4a47-97aa-9bdaea288e54"
+	Name="Email Last Open Constituents Query"
+	Description="Query of Email Last Open data."
+	Author="Mark Sellers"
+	IsRoot="true"
+	PrimaryKeyField="ID"
+	RecordType="Constituent"
+	common:SecurityUIFolder="Constituent"	
+	>
+
+	<!-- define the view used to return data for the query -->
+	<ViewImplementation ViewName="USR_V_QUERY_EMAIL_LAST_OPEN_CONSTITUENTS">
+		<ViewSQL>
+			<![CDATA[
+SELECT ID
+      ,SPONSORID
+      ,EMAILADDRESS
+	  ,(select ID from dbo.CONSTITUENT where LOOKUPID = SPONSORID) as CONID
+FROM dbo.USR_EMAIL_LAST_OPEN_DATE_CONSTITUENTS
+			]]>
+		</ViewSQL>
+	</ViewImplementation>
+
+	<!-- describe each field in the view output -->
+	<Output>
+		<OutputFields>
+			<OutputField Caption="System record ID" Category="System Fields" Name="ID" />
+			<OutputField Name="SPONSORID" Caption="Sponsor ID" DataType="String" />
+			<OutputField Name="EMAILADDRESS" Caption="Email Address" DataType="String" />
+			<OutputField Name="CONID" Caption="Constituent ID" DataType="Guid" />
+		</OutputFields>
+	</Output>
+
+	<RelationshipOperations>
+		<AddRelatedView RelatedView="V_QUERY_CONSTITUENT" RelatedField="ID" Field="CONID" PathAlias="EmailSponsor"/>
+		<AddToParentView Field="CONID" ParentView="V_QUERY_CONSTITUENT" ParentViewRelatedField="ID" PathAlias="EmailSponsor"/>
+	</RelationshipOperations>
+
+</QueryViewSpec>
+

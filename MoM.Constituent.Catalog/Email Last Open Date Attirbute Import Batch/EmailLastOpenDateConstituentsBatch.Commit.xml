@@ -1,0 +1,150 @@
+﻿<AddDataFormTemplateSpec 
+	xmlns="bb_appfx_adddataformtemplate"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="eb868148-ed6f-486d-954c-d87f5dfce4fa" 
+	Name="Email Last Open Date Constituents Batch Commit"
+	Description="Commits our custom batch import." 
+	Author="Mark Sellers"
+	DataFormInstanceID="3522eec9-9707-48eb-a7c7-8ea9e4c6e6fb" 
+	RecordType="EMAILLASTOPENBATCH"
+	common:SecurityUIFolder="Constiutent"
+	>
+
+	<!-- 
+	Remarks:    Batch commit row spec for our custom batch used to import data from spreadsheet containing constituentIDs that opened
+				the last marketing email campaign. Populated by our custom Import. Used in a query
+				as base for a selection that's fed into the 'Add Constituent Attribute' Global Change
+				to update the Last Email Open Date attribute.
+
+	History:
+	Date            Modified By     Comments
+	07-Sep-2017		MSellers		Initial Version	
+	-->
+
+
+	<SPDataForm>
+		<!-- describe the save SP -->
+		<SaveImplementation SPName="USR_USP_DATAFORMTEMPLATE_COMMIT_EMAIL_LAST_OPEN_CONSTITUENTS_BATCH">
+			<common:CreateProcedureSQL>
+				<![CDATA[
+create procedure dbo.USR_USP_DATAFORMTEMPLATE_COMMIT_EMAIL_LAST_OPEN_CONSTITUENTS_BATCH
+(
+    @ID uniqueidentifier = null output,
+	@VALIDATEONLY bit = 0,
+	@BATCHID uniqueidentifier,
+	--@BATCHROWID uniqueidentifier,
+	@SEQUENCE int = null,
+    @CHANGEAGENTID uniqueidentifier = null,
+	@SPONSORID nvarchar(10) = '',
+	@EMAILADDRESS nvarchar(250) = ''
+	--@ISPROCESSED bit = 0,
+	--@PROCESSDATE datetime = null
+)
+as
+
+set nocount on;
+
+if @ID is null
+    set @ID = newid()
+
+if @CHANGEAGENTID is null  
+    exec dbo.USP_CHANGEAGENT_GETORCREATECHANGEAGENT @CHANGEAGENTID output
+
+declare @CURRENTDATE datetime
+set @CURRENTDATE = getdate()
+
+begin try
+	-- first time that this particular Batch has been run, clear out the old data
+	-- get the BatchNumber:
+	declare @BATCH_NUMBER nvarchar(100)
+	--select @BATCH_NUMBER = BATCHNUMBER from USR_EMAIL_LAST_OPEN_DATE_CONSTITUENTS_BATCH
+	select @BATCH_NUMBER =  MAX(batchnumber)
+	from dbo.USR_EMAIL_LAST_OPEN_DATE_CONSTITUENTS_BATCH
+	--where BATCHID = @BATCHID;
+
+	--declare @batchOutput nvarchar(100);
+	--select @batchOutput = '@BATCHID value = ' + cast(@BATCHID as nvarchar(64));
+	--raiserror (@batchOutput,13,1);	
+
+	if @BATCH_NUMBER is null
+		raiserror ('@BATCH_NUMBER is Null!!',13,1);	
+
+	-- Call the WaitingList Kids sproc, but only if not already called for this Batch!
+	-- will return a table of projectID values that are "locked", if this Child's projectID is in that list,
+	declare @lockFailed USR_UDT_LOCKFAILURE
+	if not exists(select BATCHNUMBER from USR_BATCHSTARTED where BATCHNUMBER = @BATCH_NUMBER and HASBATCHSTARTED = 1)
+	begin
+		--run script here that should only run once
+		delete dbo.USR_EMAIL_LAST_OPEN_DATE_CONSTITUENTS
+            
+		-- insert a row so next time we know this batch has started already
+		insert into USR_BATCHSTARTED (BATCHNUMBER, HASBATCHSTARTED) values (@BATCH_NUMBER, 1)
+	end
+
+	-- handle inserting the data
+	insert into dbo.USR_EMAIL_LAST_OPEN_DATE_CONSTITUENTS
+           ([ID]
+           ,[SPONSORID]
+		   --,SEQUENCE
+           ,[EMAILADDRESS]
+           --,[ISPROCESSED]
+           --,[PROCESSDATE]
+           ,[ADDEDBYID]
+           ,[CHANGEDBYID]
+           ,[DATEADDED]
+           ,[DATECHANGED])
+     values
+           (@ID
+           ,@SPONSORID
+		   --,@SEQUENCE
+           ,@EMAILADDRESS
+           --,@ISPROCESSED
+           --,@PROCESSDATE
+           ,@CHANGEAGENTID
+           ,@CHANGEAGENTID
+           ,@CURRENTDATE
+           ,@CURRENTDATE
+		   )
+	
+	if @ID is not null
+		begin		
+			-- pad SPONSORID column value:  00000x  must start with appropriate number of zeroes
+			update dbo.USR_EMAIL_LAST_OPEN_DATE_CONSTITUENTS
+			set SPONSORID = right('000000'+ rtrim(SPONSORID), 6)
+			where len(SPONSORID) < 6
+			and ID = @ID;
+		end
+
+end try
+
+begin catch
+    exec dbo.USP_RAISE_ERROR
+    return 1
+end catch
+
+return 0				
+				]]>
+			</common:CreateProcedureSQL>
+		</SaveImplementation>
+	</SPDataForm>
+
+	<!-- describe the context ID for this form (if applicable), which corresponds to a parameter in the SP. -->
+	<Context ContextRecordType="BATCH" RecordIDParameter="BATCHID"/>
+
+	<!-- describe fields on the form, which correspond to parameters on the SP.  Note that system parameters 
+	like the context @ID, @CONTEXTID, and @CURRENTAPPUSERID need not be listed. -->
+	<common:FormMetaData FixedDialog="true">
+		<common:FormFields>
+			<common:FormField FieldID="VALIDATEONLY" DataType="Boolean" Caption="Validate only" />
+			<common:FormField FieldID="SEQUENCE" Required="true" Hidden="true" Caption="Sequence" />
+			<common:FormField FieldID="SPONSORID" Caption="Sponsor ID" DataType="String" MaxLength="10" />
+			<common:FormField FieldID="EMAILADDRESS" Caption="Email Address" DataType="String" MaxLength="250" />
+		</common:FormFields>
+
+		<!-- indicate the client-side component for the user interface -->
+		<!--<common:FormUIComponent FormUIComponentType="CustomComponent">
+			<common:CustomComponentID AssemblyName="REPLACE_WITH_ASSEMBLYNAME" ClassName="REPLACE_WITH_FULLCLASSNAME" />
+		</common:FormUIComponent>-->
+	</common:FormMetaData>
+
+</AddDataFormTemplateSpec>

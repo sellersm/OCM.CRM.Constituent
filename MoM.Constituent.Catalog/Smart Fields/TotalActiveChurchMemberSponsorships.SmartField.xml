@@ -1,0 +1,72 @@
+﻿<SmartFieldSpec
+	xmlns="bb_appfx_smartfield"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="d7a080de-9286-4390-a50e-ba2cf712d602"
+	Name="Total Active Church Member Sponsorships Smart Field"
+	Description="Count of member sponsorships for a given church."
+	Author="Mark Sellers"
+	SPName="USR_USP_SMARTFIELD_TOTAL_ACTIVE_CHURCH_MEMBER_SPONSORSHIPS"
+	DataType="Integer" 
+	RecordType="Constituent" 
+	DisplayName="Total Active Church Member Sponsorships" 
+	SmartFieldFolder="Constituent"
+	>
+
+	<!-- 
+	Remarks:    Counts the number of active sponsorships for members of a given Church (Constituent record).
+
+	History:
+	Date            Modified By     Comments
+	13-Sep-2017		MSellers		Initial Version.
+	-->
+
+
+	<!-- describe the SP used to calculate the smart field values -->
+	<CreateProcedureSQL>
+		<![CDATA[
+create procedure dbo.USR_USP_SMARTFIELD_TOTAL_ACTIVE_CHURCH_MEMBER_SPONSORSHIPS
+(
+	@ASOF datetime 
+)
+as
+	-- write sql to calculate the smart field values based on the parameters and ASOF date
+	select 
+		distinct (church.ID) as CONSTITUENTID
+		,count(member.ID) as [Total Member Sponsorships]
+	 from 
+		CONSTITUENT church
+		inner join dbo.RELATIONSHIP r on r.RECIPROCALCONSTITUENTID = church.ID and r.ENDDATE is null
+		inner join dbo.RELATIONSHIPTYPECODE rc on r.RELATIONSHIPTYPECODEID = rc.ID
+		inner join dbo.CONSTITUENT member on member.ID = r.RELATIONSHIPCONSTITUENTID
+		inner join dbo.FINANCIALTRANSACTION ft on ft.CONSTITUENTID = member.ID
+		inner join dbo.REVENUESPLIT revsplit on revsplit.REVENUEID = ft.ID
+		inner join dbo.SPONSORSHIP s on s.REVENUESPLITID = revsplit.ID
+		inner join dbo.SPONSORSHIPOPPORTUNITY so on so.ID = s.SPONSORSHIPOPPORTUNITYID
+		inner join dbo.SPONSORSHIPOPPORTUNITYCHILD so_child on so_child.ID = s.SPONSORSHIPOPPORTUNITYID
+		inner join dbo.SPONSORSHIPLOCATION slocation on so.SPONSORSHIPLOCATIONID = slocation.ID 	
+
+	where
+		--church.ID = '258E16E4-A67F-490D-8921-A34C06F90DC8' --@CONTEXTID
+	church.ISORGANIZATION = 1
+	and rc.DESCRIPTION = 'Church Member'
+	and s.STATUSCODE = 1
+	group by church.ID
+
+		]]>
+	</CreateProcedureSQL>
+
+	<!-- describe any parameters (other than the ASOF date) defined on the SP -->
+	<!--<common:FormMetaData>
+		<common:FormFields>
+			<common:FormField Caption="Parameter 1" FieldID="PARAMETER1" DataType="Integer"/>
+			<common:FormField Caption="Parameter 2" FieldID="PARAMETER2" DataType="Money"/>
+		</common:FormFields>
+
+		--><!-- optionally indicate the client-side component for the user interface --><!--
+		<common:FormUIComponent FormUIComponentType="CustomComponent">
+			<common:CustomComponentID AssemblyName="REPLACE_WITH_ASSEMBLYNAME" ClassName="REPLACE_WITH_FULLCLASSNAME" />
+		</common:FormUIComponent>
+
+	</common:FormMetaData>-->
+
+</SmartFieldSpec>

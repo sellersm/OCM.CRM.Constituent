@@ -1,0 +1,126 @@
+﻿<AddDataFormTemplateSpec 
+	xmlns="bb_appfx_adddataformtemplate"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="a4cbce51-6360-453c-9144-6ccb198be110" 
+	Name="Email Last Open Date Constituents Batch Add Data Form"
+	Description="Add form for our custom batch import." 
+	Author="Mark Sellers"
+	DataFormInstanceID="edbd02da-5f4c-4303-949c-3475043390b7" 
+	RecordType="EMAILLASTOPENBATCH"
+	common:SecurityUIFolder="Constituent"
+	FormHeader="Add new row to our custom batch import"	
+	>
+
+	<!-- 
+	Remarks:    Add row spec for the custom batch used to import data from spreadsheet containing constituentIDs that opened
+				the last marketing email campaign. Populated by our custom Import. Used in a query
+				as base for a selection that's fed into the 'Add Constituent Attribute' Global Change
+				to update the Last Email Open Date attribute.
+
+	History:
+	Date            Modified By     Comments
+	07-Sep-2017		MSellers		Initial Version	
+	-->
+
+
+	<SPDataForm>
+		<!-- describe the save SP -->
+		<SaveImplementation SPName="USR_USP_DATAFORMTEMPLATE_ADD_EMAIL_LAST_OPEN_CONSTITUENTS_BATCH">
+			<common:CreateProcedureSQL>
+				<![CDATA[
+create procedure dbo.USR_USP_DATAFORMTEMPLATE_ADD_EMAIL_LAST_OPEN_CONSTITUENTS_BATCH
+(
+	@ID uniqueidentifier = null output,
+	@BATCHID uniqueidentifier,
+    @CHANGEAGENTID uniqueidentifier = null,	
+	@SEQUENCE int = null,
+	@SPONSORID nvarchar(10) = '',
+	@EMAILADDRESS nvarchar(250) = ''
+	--@ISPROCESSED bit = 0,
+	--@PROCESSDATE datetime = null
+)
+as
+
+set nocount on;
+
+if @ID is null
+    set @ID = newid()
+
+if @CHANGEAGENTID is null  
+    exec dbo.USP_CHANGEAGENT_GETORCREATECHANGEAGENT @CHANGEAGENTID output
+
+declare @CURRENTDATE datetime
+set @CURRENTDATE = getdate()
+
+begin try
+	-- Get the batch number of this batch & update the row:
+	declare @BATCHNUMBER nvarchar(100)
+	select @BATCHNUMBER = BATCHNUMBER from BATCH
+	where ID = @BATCHID;
+
+	if @BATCHNUMBER is null
+		raiserror ('@BATCHNUMBER is Null!!',13,1);	
+
+	-- handle inserting the data
+	insert into dbo.USR_EMAIL_LAST_OPEN_DATE_CONSTITUENTS_BATCH
+           ([ID]
+		   ,BATCHID
+		   ,SEQUENCE
+           ,[SPONSORID]
+           ,[EMAILADDRESS]
+		   ,BATCHNUMBER
+           --,[ISPROCESSED]
+           --,[PROCESSDATE]
+           ,[ADDEDBYID]
+           ,[CHANGEDBYID]
+           ,[DATEADDED]
+           ,[DATECHANGED])
+     values
+           (@ID
+		   ,@BATCHID
+		   ,@SEQUENCE
+           ,@SPONSORID
+           ,@EMAILADDRESS
+		   ,@BATCHNUMBER
+           --,@ISPROCESSED
+           --,@PROCESSDATE
+           ,@CHANGEAGENTID
+           ,@CHANGEAGENTID
+           ,@CURRENTDATE
+           ,@CURRENTDATE
+		   )
+	
+end try
+
+begin catch
+    exec dbo.USP_RAISE_ERROR
+    return 1
+end catch
+
+return 0				
+				]]>
+			</common:CreateProcedureSQL>
+		</SaveImplementation>
+	</SPDataForm>
+
+	<!-- describe the context ID for this form (if applicable), which corresponds to a parameter in the SP. -->
+	<Context ContextRecordType="BATCH" RecordIDParameter="BATCHID"/>
+
+	<!-- describe fields on the form, which correspond to parameters on the SP.  Note that system parameters 
+	like the context @ID, @CONTEXTID, and @CURRENTAPPUSERID need not be listed. -->
+	<common:FormMetaData FixedDialog="true">
+		<common:FormFields>
+			<common:FormField FieldID="SEQUENCE" Required="true" Hidden="true" Caption="Sequence" />
+			<common:FormField FieldID="SPONSORID" Caption="Sponsor ID" DataType="String" MaxLength="10" />
+			<common:FormField FieldID="EMAILADDRESS" Caption="Email Address" DataType="String" MaxLength="250" />
+			<!--<common:FormField FieldID="ISPROCESSED" Caption="Is Processed" DataType="Boolean" />
+			<common:FormField FieldID="PROCESSDATE" Caption="Processed Date" DataType="Date" />-->
+		</common:FormFields>
+
+		<!-- indicate the client-side component for the user interface -->
+		<!--<common:FormUIComponent FormUIComponentType="CustomComponent">
+			<common:CustomComponentID AssemblyName="REPLACE_WITH_ASSEMBLYNAME" ClassName="REPLACE_WITH_FULLCLASSNAME" />
+		</common:FormUIComponent>-->
+	</common:FormMetaData>
+
+</AddDataFormTemplateSpec>

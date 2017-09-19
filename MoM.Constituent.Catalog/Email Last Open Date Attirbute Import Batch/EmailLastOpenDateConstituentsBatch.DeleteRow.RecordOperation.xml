@@ -1,0 +1,50 @@
+﻿<RecordOperationSpec 
+	xmlns="bb_appfx_recordoperation"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="b7efe7d1-6a73-4815-8b19-2b2f1bfc8593" 
+	Name="Email Last Open Date Constituents Batch Delete row" 
+	Description="Deletes row from Email Last Open Date Constituents Batch."
+	Author="Mark Sellers"
+	OperationType="Delete"
+	RecordType="EMAILLASTOPENBATCH"
+	common:SecurityUIFolder="Constituent"	
+	>
+
+	<!-- 
+	Remarks:    Delete batch row spec for our custom batch used to import data from spreadsheet containing constituentIDs that opened
+				the last marketing email campaign. Populated by our custom Import. Used in a query
+				as base for a selection that's fed into the 'Add Constituent Attribute' Global Change
+				to update the Last Email Open Date attribute.
+
+	History:
+	Date            Modified By     Comments
+	12-Sep-2017		MSellers		Initial Version	
+	-->
+
+	<SPRecord>
+		<SPOperationImplementation SPName="USR_USP_EMAIL_LAST_OPEN_CONSTITUENTS_BATCH_DELETEROW">
+			<common:CreateProcedureSQL>
+				<![CDATA[
+create procedure dbo.USR_USP_EMAIL_LAST_OPEN_CONSTITUENTS_BATCH_DELETEROW
+(
+	@ID uniqueidentifier,
+	@CHANGEAGENTID uniqueidentifier
+)
+as begin
+	--check deletion rules, if any
+	-- use the system generated delete routine to allow proper recording of the deleting agent
+	exec dbo.USP_USR_EMAIL_LAST_OPEN_DATE_CONSTITUENTS_BATCH_DELETEBYID_WITHCHANGEAGENTID @ID, @CHANGEAGENTID
+	return 0;
+	
+end
+				]]>
+			</common:CreateProcedureSQL>
+		</SPOperationImplementation>
+	</SPRecord>
+
+	<!-- optionally, offer a prompt before executing the record operation -->
+	<Prompt>
+		<StandardPrompt Text="Are you sure you want to delete this row?" />
+	</Prompt>
+
+</RecordOperationSpec>

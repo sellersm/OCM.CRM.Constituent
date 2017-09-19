@@ -1,0 +1,46 @@
+﻿<TableSpec 
+	xmlns="bb_appfx_table"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="73316ab4-a94c-4209-98c2-f5f231100793"
+	Name="Email Last Open Date Constiuents Batch"
+	Description="Holds import data for email last open date."
+	Author="Mark Sellers"
+	Tablename="USR_EMAIL_LAST_OPEN_DATE_CONSTITUENTS_BATCH"		   
+	>
+
+	<!-- 
+	Remarks:    Table to hold the Batch imported data from spreadsheet containing constituentIDs that opened
+				the last marketing email campaign. Populated by our custom Import. Populates our custom
+				table: USR_EMAIL_LAST_OPEN_DATE_CONSTITUENTS
+
+	History:
+	Date            Modified By     Comments
+	12-Sep-2017		MSellers		Initial Version	
+	-->
+
+
+	<!-- define fields on the table -->
+	<Fields>
+		<ForeignKeyField Name="BATCHID" ForeignTable="BATCH" Description="The primary ID from the batch table." OnDelete="CascadeDelete" Required="true"/>
+		<SequenceField Name="SEQUENCE" Description="The incremental sequence number to identify each record in a batch."/>
+		<TextField Name="SPONSORID" Description="SponsorId" Length="10" Required="true"/>
+		<TextField Name="EMAILADDRESS" Description="Email address from file" Length="250" Required="true"/>
+		<TextField Description="Batch Number" Name="BATCHNUMBER" Length="100" Required="false"/>
+	</Fields>
+
+	<!-- define any additional check constraints on the table -->
+	<!--<CheckConstraints>
+
+	</CheckConstraints>-->
+
+	<!-- define any indexes on the table -->
+	<!--<Indexes>
+
+	</Indexes>-->
+		
+	<!-- define any triggers on the table -->
+	<!--<Triggers>
+
+	</Triggers>-->
+
+</TableSpec>

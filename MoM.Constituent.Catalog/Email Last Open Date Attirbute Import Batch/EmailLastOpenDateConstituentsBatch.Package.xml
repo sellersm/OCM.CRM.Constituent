@@ -1,0 +1,64 @@
+<PackageSpec 
+    xmlns="bb_appfx_package"
+    xmlns:common="bb_appfx_commontypes"
+    ID="5c14c9a4-c5b1-4f4e-8c8d-05157883e710"
+    Name="Email Last Open Date Constituents Batch Package"
+    Description="Specs for custom Import batch."
+    Author="Mark Sellers"
+    >
+
+	<!-- Note:  the order of the items listed here is important.  For example, you won't be able to load a data form that references 
+	a table that hasn't been loaded, etc.  In general, the following order is recommended:
+	
+		(functions and procedures first)
+		SQLFunctionSpec
+		SQLStoredProcedureSpec
+		TranslationFunctionSpec
+
+		(tables next)
+		CodeTableSpec
+		TableSpec
+
+		(features next)
+		SimpleDataListSpec		
+		SearchListSpec
+		RecordOperationSpec
+		DataListSpec
+		
+		(forms next)
+		AddDataFormTemplateSpec
+		EditDataFormTemplateSpec
+		ViewDataFormTemplateSpec		
+
+		(more feature types)
+		BatchTypeSpec
+		BusinessProcessSpec
+		FlashDashSpec
+		IDMapperSpec
+		KpiSpec
+		MergeConfiguration
+		MergeTaskSpec
+		QueryViewSpec
+		ReportSpec
+		SmartFieldSpec
+		SmartQuerySpec
+
+		(functional areas, pages, and tasks last)
+		PageDefinitionSpec
+		FunctionalAreaSpec
+		TaskSpec	
+	-->
+	
+	<common:DependencyList>
+        <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.EmailLastOpenDateConstituents.Table.xml" />
+        <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.EmailLastOpenDateConstituentsBatchInProcess.Table.xml" />
+        <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.EmailLastOpenDateConstiuentsBatch.Table.xml" />
+        <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.EmailLastOpenDateConstituentsBatch.DeleteRow.RecordOperation.xml" />
+        <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.EmailLastOpenDateConstituentsBatch.Add.xml" />
+        <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.EmailLastOpenDateConstituentsBatch.Commit.xml" />
+        <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.EmailLastOpenDateConstituentsBatch.Edit.xml" />
+        <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.EmailLastOpenConstituents.Query.xml" />
+        <common:Dependency CatalogAssembly="MoM.Constituent.Catalog.dll" CatalogItem="MoM.Constituent.Catalog.EmailLastOpenDateConstituents.Batch.xml" />
+    </common:DependencyList>
+
+</PackageSpec>

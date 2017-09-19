@@ -336,6 +336,21 @@
     <EmbeddedResource Include="Smart Fields\SmartFieldSpec.RGLFirstPackage.xml" />
     <EmbeddedResource Include="Smart Fields\SmartFieldSpec.RGLFirstSourceForConstituent.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Email Last Open Date Attirbute Import Batch\EmailLastOpenConstituents.Query.xml" />
+    <EmbeddedResource Include="Email Last Open Date Attirbute Import Batch\EmailLastOpenDateConstituents.Batch.xml" />
+    <EmbeddedResource Include="Email Last Open Date Attirbute Import Batch\EmailLastOpenDateConstituents.Table.xml" />
+    <EmbeddedResource Include="Email Last Open Date Attirbute Import Batch\EmailLastOpenDateConstituentsBatch.Add.xml" />
+    <EmbeddedResource Include="Email Last Open Date Attirbute Import Batch\EmailLastOpenDateConstituentsBatch.Commit.xml" />
+    <EmbeddedResource Include="Email Last Open Date Attirbute Import Batch\EmailLastOpenDateConstituentsBatch.DeleteRow.RecordOperation.xml" />
+    <EmbeddedResource Include="Email Last Open Date Attirbute Import Batch\EmailLastOpenDateConstituentsBatch.Edit.xml" />
+    <EmbeddedResource Include="Email Last Open Date Attirbute Import Batch\EmailLastOpenDateConstituentsBatch.Package.xml" />
+    <EmbeddedResource Include="Email Last Open Date Attirbute Import Batch\EmailLastOpenDateConstituentsBatchInProcess.Table.xml" />
+    <EmbeddedResource Include="Email Last Open Date Attirbute Import Batch\EmailLastOpenDateConstiuentsBatch.Table.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Smart Fields\TotalActiveChurchMemberSponsorships.SmartField.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

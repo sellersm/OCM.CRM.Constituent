@@ -1,0 +1,82 @@
+﻿<BatchTypeSpec
+	xmlns="bb_appfx_batchtype"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="d9d2e7b4-1aca-40fa-9606-a88d53275396" 
+	Name="Email Last Open Date Constituents Batch"
+	Description="Populates our custom table with date of last email open." 
+	Author="Mark Sellers"
+	BaseTableName="USR_EMAIL_LAST_OPEN_DATE_CONSTITUENTS_BATCH" 
+	Category="Constituent" 
+	AllowImport="true"	
+	>
+
+	<!-- 
+	Remarks:    Used to import data from spreadsheet containing constituentIDs that opened
+				the last marketing email campaign. Used in a query
+				as base for a selection that's fed into the 'Add Constituent Attribute' Global Change
+				to update the Last Email Open Date attribute.
+
+	History:
+	Date            Modified By     Comments
+	07-Sep-2017		MSellers		Initial Version	
+	-->
+
+	<!-- indicate the form used to add a row to the batch (note that this is the template ID, not the instance ID) -->
+	<AddRowDataFormTemplate CatalogItemID="a4cbce51-6360-453c-9144-6ccb198be110" />
+
+	<!-- indicate the form used to edit a row in the batch (note that this is the template ID, not the instance ID) -->
+	<EditRowDataFormTemplate CatalogItemID="3862fd87-78fb-433a-95c4-914b2f02844e" />
+
+	<!-- indicate the form used to commit a row in the batch (note that this is the template ID, not the instance ID) -->
+	<CommitRowDataForms>
+		<CommitRowAddDataFormTemplate CatalogItemID="eb868148-ed6f-486d-954c-d87f5dfce4fa" />
+	</CommitRowDataForms>
+	
+	<!-- indicate the record operation used to delete a row from the batch -->
+	<BatchDeleteRowRecordOperation CatalogItemID="b7efe7d1-6a73-4815-8b19-2b2f1bfc8593" />
+
+	<!-- optionally, you can override the default 'batch delete' behavior by specifying the record operation to use deleting a batch of this type -->
+	<!--<DeleteBatchRecordOperation CatalogItemID="REPLACE_WITH_RECORDOPERATIONID" />-->
+
+	<!-- optionally, describe the batch row context window -->
+	<!--<RowContextWindow Caption="REPLACE_WITH_CAPTION" 
+				      ViewDataFormTemplateID="REPLACE_WITH_FORMID" 
+					  EditDataFormTemplateID="REPLACE_WITH_FORMID" 
+					  ImageKey="REPLACE_WITH_IMAGEKEY" 
+					  RecordType="REPLACE_WITH_RECORDTYPE" 
+					  ContextFieldID="REPLACE_WITH_CONTEXTFIELDID" 
+					  />-->
+
+	<!-- optionally, you can indicate a report to use as the validation report for the batch -->
+	<!--<ValidationReport CatalogItemID="REPLACE_WITH_REPORTID" />-->
+
+	<!-- optionally, describe a control report for batches of this type -->
+	<!--<ControlReport QueryViewSpecID="REPLACE_WITH_QUERYID" 
+				   QueryViewJoinField="REPLACE_WITH_JOINFIELD" 
+				   ReportSpecID="REPLACE_WITH_REPORTID" />-->
+
+	<!-- optionally, describe an exception report for batches of this type -->
+	<!--<ExceptionReport QueryViewSpecID="REPLACE_WITH_QUERYID" 
+				     QueryViewJoinField="REPLACE_WITH_JOINFIELD" 
+					 ReportSpecID="REPLACE_WITH_REPORTID" />-->
+
+	<!-- optionally, describe the client-side summary panel for batches of this type.  This should refer to a class that inherits 
+	from Browser.Batch.BatchSummaryPanelHandler -->
+	<!--<SummaryPanelHandler AssemblyName="REPLACE_WITH_FULLASSEMBLYNAME" ClassName="REPLACE_WITH_FULLCLASSNAME" />-->
+
+	<!-- optionally, list any client-side event handlers that will be plugged into the event model for the batch data entry form.  Each handler
+	refers to a class that inherits from Browser.Batch.BatchEntryHandler -->
+	<!--<EventHandlers>
+		<BatchEventHandler AssemblyName="REPLACE_WITH_FULLASSEMBLYNAME" ClassName="REPLACE_WITH_FULLCLASSNAME" />
+	</EventHandlers>-->
+
+	<!-- optionally, indicate a list of fields from the Add/Edit form that should be included by default in the batch design.  This list
+	does not need to include required or hidden fields, as they are already included by default.	
+	-->
+	<!--<DefaultSelectedFields>
+		<Field>FIELD1</Field>
+		<Field>FIELD2</Field>
+		<Field>FIELD3</Field>
+	</DefaultSelectedFields>-->
+
+</BatchTypeSpec>

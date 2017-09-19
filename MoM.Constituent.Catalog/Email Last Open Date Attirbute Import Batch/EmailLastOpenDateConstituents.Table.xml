@@ -1,0 +1,55 @@
+﻿<TableSpec 
+	xmlns="bb_appfx_table"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="2050cea2-0e32-45c0-88f8-5c59ee9dea2c"
+	Name="Email Last Open Date Constituents"
+	Description="Stores constituent IDs that opened the last marketing email."
+	Author="Mark Sellers"
+	Tablename="USR_EMAIL_LAST_OPEN_DATE_CONSTITUENTS"
+	>
+
+	<!-- 
+	Remarks:    Table to hold the imported data from spreadsheet containing constituentIDs that opened
+				the last marketing email campaign. Populated by our custom Import. Used in a query
+				as base for a selection that's fed into the 'Add Constituent Attribute' Global Change
+				to update the Last Email Open Date attribute.
+				Fields from the CSV data file:
+				Email Address	First Name	Last Name	Lookup ID	Member Rating	Opens
+
+	History:
+	Date            Modified By     Comments
+	07-Sep-2017		MSellers		Initial Version	
+	-->
+
+
+	<!-- define fields on the table -->
+	<Fields>
+		<!--<ForeignKeyField Name="BATCHID" ForeignTable="BATCH" Description="The primary ID from the batch table." OnDelete="CascadeDelete" Required="true"/>
+		<SequenceField Name="SEQUENCE" Description="The incremental sequence number to identify each record in a batch."/>-->
+		<!--<NumberField Name="SEQUENCEID" Type="int" />-->
+		<TextField Name="SPONSORID" Description="SponsorId" Length="10" Required="true"/>
+		<TextField Name="EMAILADDRESS" Description="Email address from file" Length="250" Required="true"/>
+		<!--<BooleanField Name="ISPROCESSED" Description="Has been processed?" />
+		<DateField Name="PROCESSDATE" Description="Date of global change" Required="false"/>-->
+	</Fields>
+
+	<!-- define any additional check constraints on the table -->
+	<!--<CheckConstraints>
+
+	</CheckConstraints>-->
+
+	<!-- define any indexes on the table -->
+	<Indexes>
+		<Index>
+			<IndexFields>
+				<IndexField Name="SPONSORID" />					
+			</IndexFields>
+		</Index> 
+	</Indexes>
+		
+	<!-- define any triggers on the table -->
+	<!--<Triggers>
+
+	</Triggers>-->
+
+</TableSpec>

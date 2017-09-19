@@ -1,0 +1,37 @@
+﻿<TableSpec 
+	xmlns="bb_appfx_table"
+	xmlns:common="bb_appfx_commontypes" 
+	ID="a9a35c90-b766-4995-85ee-d1ab22925939"
+	Name="Email Last Open Date Constituents Batch In Process"
+	Description="Holds one row when Batch is committed."
+	Author="Mark Sellers"
+	Tablename="USR_EMAIL_LAST_OPEN_DATE_CONSTITUENTS_BATCH_INPROCESS"		   
+	>
+
+	<!-- 
+	Remarks:    Holds a row if the Email Last Open Import batch is being run/committed, as we need to know
+				so the commit can delete any previous rows from our custom USR_EMAIL_LAST_OPEN_DATE_CONSTITUENTS table.
+				1 Row is added when the Commit is executed.
+
+	History:
+	Date            Modified By     Comments
+	12-Sep-2017		MSellers		Initial Version	
+	-->
+
+	<!-- define fields on the table -->
+	<Fields>
+		<TextField Name="BATCHNUMBER" Length="100" Required="true"/>
+		<BooleanField Name="HASBATCHSTARTED" Description="Has this batch commit process started or not?"/>
+		<DateField DefaultValue="GETDATE()" IncludeTime="false" Name="BATCHDATE" Required="true"/>
+	</Fields>
+
+	<!-- define any indexes on the table -->
+	<Indexes>
+		<Index IsUnique="true">
+			<IndexFields>
+				<IndexField Name="BATCHNUMBER"/>
+			</IndexFields>
+		</Index>
+	</Indexes>
+
+</TableSpec>
