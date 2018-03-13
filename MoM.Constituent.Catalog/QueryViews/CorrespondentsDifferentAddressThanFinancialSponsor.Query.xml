@@ -1,0 +1,90 @@
+﻿<QueryViewSpec
+	xmlns="bb_appfx_queryview"
+	xmlns:c="bb_appfx_commontypes" 
+	ID="5f79ced7-8cd5-40d3-a41c-3abea4199b36"
+	Name="Correspondents Different Address Than Financial Sponsor Query"
+	Description="Displays correspondents having different address than financial sponsor."
+	Author="Mark Sellers"
+	IsRoot="true"
+	PrimaryKeyField="ID"
+	RecordType="CONSTITUENT"
+	c:SecurityUIFolder="CONSTITUENT"
+	>
+  <!-- 
+	Remarks:    From Pamela's requirements:
+                Returns active correspondents where their primary address is different than the financial sponsor. 
+                # Active child sponsorships = 0 and # active correspondent child sponsorships = greater than one.
+
+	History:
+	Date            Modified By     Comments
+	12-Mar-2018		  MSellers			  Initial version
+	-->  
+  
+	<!-- define the view used to return data for the query -->
+	<ViewImplementation ViewName="USR_V_QUERY_CORRESPONDENTS_DIFFERENT_ADDRESS">
+		<ViewSQL>
+			<![CDATA[
+select *
+from 
+(
+	select 
+		financialsponsor.ID as ID, 
+		financialsponsor.LOOKUPID as FINANCIALSPONSORLOOKUPID, 
+		financialsponsor.NAME as FINANCIALSPONSORNAME,
+		corr.LOOKUPID as CORRESPONDENTID,
+		corr.NAME as CORRESPONDENTNAME,
+		--so.ID as CHILDID,
+		proj_const.LOOKUPID as PROJECTLOOKUPID, 
+		so.LOOKUPID as CHILDLOOKUPID, 
+		so_child.NAME as CHILDNAME,
+		--so_child.FIRSTNAME as CHILDFIRSTNAME,
+		dbo.USR_UFN_SPONSORSHIP_GETACTIVECHILDSPONSORSHIPSFORSPONSOR(s.CONSTITUENTID) as FINANCIALSPONSORSHIPCOUNT,
+		(select	count (so_child.id)
+		  from	dbo.CONSTITUENT c
+		  left	join dbo.SPONSORSHIP s1 ON s1.CONSTITUENTID = c.ID and s1.STATUSCODE = 1
+		  left	join dbo.SPONSORSHIPOPPORTUNITYCHILD so_child on s.SPONSORSHIPOPPORTUNITYID = so_child.ID     
+		  where s1.CONSTITUENTID = s.CONSTITUENTID
+		 group by c.ID
+		) as CORRESPONDENTSPONSORSHIPCOUNT
+	from	
+		dbo.SPONSORSHIP s
+		inner join dbo.SPONSORSHIPOPPORTUNITY so on s.SPONSORSHIPOPPORTUNITYID = so.ID
+		inner join dbo.SPONSORSHIPOPPORTUNITYCHILD so_child on s.SPONSORSHIPOPPORTUNITYID = so_child.ID
+		inner join dbo.SPONSORSHIPLOCATION slocation on so.SPONSORSHIPLOCATIONID = slocation.ID 	
+		inner join dbo.CONSTITUENT proj_const on proj_const.ID = slocation.FIELDOFFICEID
+		inner join dbo.REVENUESPLIT rs on rs.ID = s.REVENUESPLITID
+		inner join dbo.REVENUE r on r.ID = rs.REVENUEID
+		inner join dbo.CONSTITUENT financialsponsor on financialsponsor.ID = r.CONSTITUENTID
+    inner join dbo.CONSTITUENT corr on corr.ID = s.CONSTITUENTID
+		inner join dbo.ADDRESS fs_address on fs_address.CONSTITUENTID = financialsponsor.ID and fs_address.ISPRIMARY = 1
+		inner join dbo.ADDRESS c_address on c_address.CONSTITUENTID = s.CONSTITUENTID and c_address.ISPRIMARY = 1	
+	where 
+		s.STATUSCODE = 1
+	and (dbo.USR_UFN_ADDRESS_ADDRESSBLOCK_NORMALIZE_LOWERCASE(fs_address.ADDRESSBLOCK)<> dbo.USR_UFN_ADDRESS_ADDRESSBLOCK_NORMALIZE_LOWERCASE(c_address.ADDRESSBLOCK)
+		or coalesce (fs_address.STATEID, '00000000-0000-0000-0000-000000000000') <> coalesce (c_address.STATEID, '00000000-0000-0000-0000-000000000000'))
+) as cte
+where (FINANCIALSPONSORSHIPCOUNT = 0
+and CORRESPONDENTSPONSORSHIPCOUNT > 0);
+--order by FINANCIALSPONSORLOOKUPID
+]]>
+		</ViewSQL>
+	</ViewImplementation>
+
+	<!-- describe each field in the view output -->
+	<Output>
+		<OutputFields>
+			<OutputField Caption="System record ID" Category="System Fields" Name="ID" />
+			<OutputField Name="FINANCIALSPONSORLOOKUPID" Caption="Financial Sponsor Id" DataType="String" />
+			<OutputField Name="FINANCIALSPONSORNAME" Caption="Financial Sponsor" DataType="String" />
+			<OutputField Name="CORRESPONDENTID" Caption="Correspondent Id" DataType="String" />
+      <OutputField Name="CORRESPONDENTNAME" Caption="Correspondent" DataType="String" />
+      <OutputField Name="PROJECTLOOKUPID" Caption="Project Id" DataType="String" />
+      <OutputField Name="CHILDLOOKUPID" Caption="Child Id" DataType="String" />
+      <OutputField Name="CHILDNAME" Caption="Child Name" DataType="String" />
+      <OutputField Name="FINANCIALSPONSORSHIPCOUNT" Caption="Financial Sponsorship Count" DataType="Integer" />
+      <OutputField Name="CORRESPONDENTSPONSORSHIPCOUNT" Caption="Corresponding Sponsorship Count" DataType="Integer" />
+		</OutputFields>
+	</Output>
+
+</QueryViewSpec>
+
