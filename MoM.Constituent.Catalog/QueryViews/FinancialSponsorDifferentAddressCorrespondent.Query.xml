@@ -19,7 +19,8 @@
 	History:
 	Date            Modified By     Comments
 	12-Mar-2018		  MSellers			  Initial version
-	--> 
+  13-Mar-2018     MSellers        Add both addresses to output
+--> 
   
 	<!-- define the view used to return data for the query -->
 	<ViewImplementation ViewName="USR_V_QUERY_FINANCIALSPONSOR_DIFFERENT_ADDRESS_CORRESPONDENT">
@@ -46,7 +47,10 @@ from
 		  left	join dbo.SPONSORSHIPOPPORTUNITYCHILD so_child on s.SPONSORSHIPOPPORTUNITYID = so_child.ID     
 		  where s1.CONSTITUENTID = r.CONSTITUENTID
 		 group by c.ID
-		),0) as CORRESPONDENTSPONSORSHIPCOUNT
+		),0) as CORRESPONDENTSPONSORSHIPCOUNT,
+		dbo.UFN_BUILDFULLADDRESS(fs_address.ID, fs_address.ADDRESSBLOCK,fs_address.CITY,fs_address.STATEID,fs_address.POSTCODE,fs_address.COUNTRYID) as FINANCIALADDRESS,
+		dbo.UFN_BUILDFULLADDRESS(c_address.ID, c_address.ADDRESSBLOCK,c_address.CITY,c_address.STATEID,c_address.POSTCODE,c_address.COUNTRYID) as CORRADDRESS
+    
 	from	
 		dbo.SPONSORSHIP s
 		inner join dbo.SPONSORSHIPOPPORTUNITY so on s.SPONSORSHIPOPPORTUNITYID = so.ID

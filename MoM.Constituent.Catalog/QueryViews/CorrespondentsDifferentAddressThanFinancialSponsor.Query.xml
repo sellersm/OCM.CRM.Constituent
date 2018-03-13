@@ -18,6 +18,8 @@
 	History:
 	Date            Modified By     Comments
 	12-Mar-2018		  MSellers			  Initial version
+  13-Mar-2018     MSellers        Make primarykey ID to be the Correspondent
+                                  Add both addresses to output
 	-->  
   
 	<!-- define the view used to return data for the query -->
@@ -28,7 +30,7 @@ select *
 from 
 (
 	select 
-		financialsponsor.ID as ID, 
+		corr.ID as ID, 
 		financialsponsor.LOOKUPID as FINANCIALSPONSORLOOKUPID, 
 		financialsponsor.NAME as FINANCIALSPONSORNAME,
 		corr.LOOKUPID as CORRESPONDENTID,
@@ -45,7 +47,10 @@ from
 		  left	join dbo.SPONSORSHIPOPPORTUNITYCHILD so_child on s.SPONSORSHIPOPPORTUNITYID = so_child.ID     
 		  where s1.CONSTITUENTID = s.CONSTITUENTID
 		 group by c.ID
-		) as CORRESPONDENTSPONSORSHIPCOUNT
+		) as CORRESPONDENTSPONSORSHIPCOUNT,
+		dbo.UFN_BUILDFULLADDRESS(fs_address.ID, fs_address.ADDRESSBLOCK,fs_address.CITY,fs_address.STATEID,fs_address.POSTCODE,fs_address.COUNTRYID) as FINANCIALADDRESS,
+		dbo.UFN_BUILDFULLADDRESS(c_address.ID, c_address.ADDRESSBLOCK,c_address.CITY,c_address.STATEID,c_address.POSTCODE,c_address.COUNTRYID) as CORRADDRESS
+    
 	from	
 		dbo.SPONSORSHIP s
 		inner join dbo.SPONSORSHIPOPPORTUNITY so on s.SPONSORSHIPOPPORTUNITYID = so.ID
@@ -83,7 +88,9 @@ and CORRESPONDENTSPONSORSHIPCOUNT > 0);
       <OutputField Name="CHILDNAME" Caption="Child Name" DataType="String" />
       <OutputField Name="FINANCIALSPONSORSHIPCOUNT" Caption="Financial Sponsorship Count" DataType="Integer" />
       <OutputField Name="CORRESPONDENTSPONSORSHIPCOUNT" Caption="Corresponding Sponsorship Count" DataType="Integer" />
-		</OutputFields>
+      <OutputField Name="FINANCIALADDRESS" Caption="Financial Address" DataType="String" />
+      <OutputField Name="CORRADDRESS" Caption="Correspondent Address" DataType="String" />      
+    </OutputFields>
 	</Output>
 
 </QueryViewSpec>
