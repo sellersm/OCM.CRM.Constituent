@@ -1,0 +1,109 @@
+﻿<DataListSpec 
+	xmlns="bb_appfx_datalist"
+	xmlns:c="bb_appfx_commontypes" 
+	ID="4ebc09e8-1873-41c3-98dd-cf65cbb5920d" 
+	Name="Active Held Lapsed Non Sponsorship Recurring Gifts"
+	Description="A data list showing active or held or lapsed non-sponsorship RG records." 
+	Author="Mark Sellers"
+	c:SecurityUIFolder="Constituent"
+	>
+
+	<!-- define the SP that returns the data for the datalist -->
+	<SPDataList SPName="USR_USP_DATALIST_CONSTITUENT_ACTIVE_HELD_LAPSED_NON_SPONSORSHIP_RG">
+		<c:CreateProcedureSQL>
+			<![CDATA[
+create procedure dbo.USR_USP_DATALIST_CONSTITUENT_ACTIVE_HELD_LAPSED_NON_SPONSORSHIP_RG
+(
+	@CONTEXTID uniqueidentifier
+)
+as
+	set nocount on;
+
+	select	
+		c.ID,
+		rev.ID as RECURRINGGIFTID,
+		desig.USERID as FUNDID, 
+		coalesce (desig.VANITYNAME, desig.NAME) as FUNDNAME,
+		revschedule.STARTDATE,
+		revschedule.STATUS,
+		rev.Amount as RGAMOUNT,
+		revschedule.FREQUENCY,
+		case when revschedule.NEXTTRANSACTIONDATE > revschedule.ENDDATE then null else revschedule.NEXTTRANSACTIONDATE end as NTD,
+		(select top 1 coalesce([PAYMENT].TRANSACTIONAMOUNT, 0) 
+		   from dbo.RECURRINGGIFTACTIVITY as [RGA]
+		   join dbo.FINANCIALTRANSACTIONLINEITEM as [PAYMENT] on [PAYMENT].ID = [RGA].PAYMENTREVENUEID									
+		   join dbo.FINANCIALTRANSACTION as [REVPAYMENT] on [PAYMENT].FINANCIALTRANSACTIONID = [REVPAYMENT].ID									
+		  where SOURCEREVENUEID = rev.ID -- I removed this beause it might be good to know the last payment was refunded -- and [REVPAYMENT].TRANSACTIONAMOUNT > 0
+		  order by [REVPAYMENT].DATE desc) as LASTPAYMENTAMOUNT,
+
+		(select	top 1 cast (rev_payment.DATE as date)
+		   from	dbo.RECURRINGGIFTACTIVITY rg_act
+		   join dbo.FINANCIALTRANSACTIONLINEITEM as payment on payment.ID = rg_act.PAYMENTREVENUEID									
+		   join dbo.FINANCIALTRANSACTION as rev_payment on payment.FINANCIALTRANSACTIONID = rev_payment.ID									
+		  where	SOURCEREVENUEID = rev.ID -- I removed this beause it might be good to know the last payment was refunded -- and rev_payment.TRANSACTIONAMOUNT > 0
+		  order by rev_payment.DATE desc) as LASTPAYMENTDATE,
+
+		PAYMENTMETHOD,				
+		case 
+			when dbo.USR_UFN_CHECK_RECURRINGGIFT_ISHELD(revsplit.ID) = 1  then 'Yes'
+			else ''
+		end as ISHELD,
+		case
+			when ft_ext.ISEFTDECLINED = 1 then 'Yes'
+			else ''
+		end as ISEFTDECLINED,
+		(select DESCRIPTION from DELAYEFTPAYMENTDUEDATECODE where ID = ft_ext.DELAYEFTPAYMENTDUEDATECODEID) as DELAYEFTPAYMENTDUEDATECODE
+						
+	from	
+		dbo.REVENUE rev 
+		inner join dbo.REVENUESPLIT revsplit on revsplit.REVENUEID = rev.ID
+		left  join dbo.USR_FINANCIALTRANSACTION_EXTENSION ft_ext on rev.ID = ft_ext.ID
+		inner join dbo.DESIGNATION desig on desig.ID = revsplit.DESIGNATIONID
+		inner join dbo.REVENUESCHEDULE revschedule on revschedule.ID = rev.ID --REVENUE.ID		
+		inner join dbo.CONSTITUENT c on rev.CONSTITUENTID = c.ID
+		inner join dbo.REVENUEPAYMENTMETHOD rev_paymethod on rev_paymethod.REVENUEID = revsplit.REVENUEID
+
+	where
+		not exists (select ID from dbo.SPONSORSHIP sp where sp.REVENUESPLITID = revsplit.ID)
+    and revschedule.STATUSCODE in (0,1,5)
+	  and	c.ID = @CONTEXTID
+
+			]]>
+		</c:CreateProcedureSQL>
+	</SPDataList>
+
+	<!-- describe the context ID parameter for the SP (if applicable)-->
+	<Context ContextRecordType="CONSTITUENT" RecordIDParameter="CONTEXTID"/>
+
+	<!-- describe any parameters (other than the context ID) defined on the SP
+	<Parameters>
+		<FormMetaData xmlns="bb_appfx_commontypes">
+			<FormFields>
+				<FormField FieldID="PARAMETER1" Caption="Paramter1" DataType="REPLACE_WITH_DATATYPE"/>
+			</FormFields>
+		</FormMetaData>
+	</Parameters>-->
+
+	<!-- define the output fields in the list -->
+  <Output>
+    <OutputFields>
+      <OutputField FieldID="ID" Caption="ID" DataType="Guid" IsHidden="true" />
+      <OutputField FieldID="RECURRINGGIFTID" Caption="Recurring Gift System ID" DataType="Guid" IsHidden="true" />
+      <OutputField FieldID="FUNDID" Caption="Fund ID" DataType="String" />
+      <OutputField FieldID="FUNDNAME" Caption="Fund Name" DataType="String" />
+      <OutputField FieldID="STARTDATE" Caption="Start date" DataType="Date" />
+      <OutputField FieldID="STATUS" Caption="Gift status" DataType="String" />
+      <OutputField FieldID="RGAMOUNT" Caption="Amount" DataType="Money" />
+      <OutputField FieldID="FREQUENCY" Caption="Frequency" DataType="String" />
+      <OutputField FieldID="NTD" Caption="NTD" DataType="Date" />
+      <OutputField FieldID="LASTPAYMENTAMOUNT" Caption="Last payment" DataType="Money" />
+      <OutputField FieldID="LASTPAYMENTDATE" Caption="Last payment date" DataType="Date" />
+      <OutputField FieldID="PAYMENTMETHOD" Caption="Payment method" DataType="String" />
+      <OutputField FieldID="ISHELD" Caption="Held?" DataType="String" />
+      <OutputField FieldID="ISEFTDECLINED" Caption="Declined?" DataType="String" />
+      <OutputField FieldID="DELAYEFTPAYMENTDUEDATECODE" Caption="Delayed EFT Due Date" DataType="String" />
+
+    </OutputFields>
+  </Output>
+
+</DataListSpec>
